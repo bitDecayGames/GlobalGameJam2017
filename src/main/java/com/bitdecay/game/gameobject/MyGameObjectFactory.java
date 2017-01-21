@@ -27,7 +27,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new OriginComponent(t));
         t.addComponent(new CameraFollowComponent(t));
         t.addComponent(new PredictiveCameraFollowComponent(t));
-        t.addComponent(new VelocityComponent(t,1,0));
+        t.addComponent(new VelocityComponent(t,0.3f,0));
         StaticImageComponent imageComponent = new StaticImageComponent(t, "player/sub");
         imageComponent.reactsToSonar = true;
         t.addComponent(imageComponent);
@@ -47,7 +47,7 @@ public final class MyGameObjectFactory {
         mineImageComponent.reactsToSonar = true;
         t.addComponent(mineImageComponent);
         t.addComponent(new CollisionComponent(t));
-        t.addComponent(new RandomOrbitComponent(t, 50, 20 , 10 ));
+        t.addComponent(new RandomOrbitComponent(t, 50, 20 , 2.5f ));
         t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
