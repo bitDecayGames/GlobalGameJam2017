@@ -5,16 +5,21 @@ addons:
   apt:
     packages:
       - oracle-java8-installer
+env:
+  - PROJECT_NAME: project-name-1.0
 sudo: required
 before_install:
   - sudo apt-get update
   - sudo apt-get install libc6:i386 libstdc++6:i386 lib32z1 lib32ncurses5
+scripts:
+  - java -jar target/${PROJECT_NAME}.jar dev
+  - mvn package
 deploy:
   provider: releases
   api_key: ${GITHUB_OAUTH_TOKEN}
   file:
-    - ./target/project-name-1.0.jar
-    - ./target/project-name-1.0.exe
+    - ./target/${PROJECT_NAME}.jar
+    - ./target/${PROJECT_NAME}.exe
   skip_cleanup: true
   on:
     tags: true
