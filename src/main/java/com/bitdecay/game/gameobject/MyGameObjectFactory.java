@@ -18,11 +18,11 @@ public final class MyGameObjectFactory {
     public static MyGameObject ship(){
         MyGameObject t = new MyGameObject();
         t.addComponent(new PlayerInputComponent(t, 0.75f));
-        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 20));
+        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
         t.addComponent(new PositionComponent(t, 10, 20));
         t.addComponent(new RotationComponent(t, 0));
         t.addComponent(new DesiredRotationComponent(t, 0, 0.01f));
-        t.addComponent(new SizeComponent(t, 20, 20));
+        t.addComponent(new SizeComponent(t, 40, 20));
         t.addComponent(new OriginComponent(t));
         t.addComponent(new CameraFollowComponent(t));
         t.addComponent(new PredictiveCameraFollowComponent(t));
