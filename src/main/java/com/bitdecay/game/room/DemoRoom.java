@@ -36,8 +36,9 @@ public class DemoRoom extends AbstractRoom {
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
-        this.gobs.add(MyGameObjectFactory.ship());
-        this.gobs.add(MyGameObjectFactory.mine());
+        gobs.add(MyGameObjectFactory.ship());
+        gobs.add(MyGameObjectFactory.mine());
+        gobs.addAll(MyGameObjectFactory.demoBackgrounds());
 
 
         // this is required to be at the end here so that the systems have the latest gobs

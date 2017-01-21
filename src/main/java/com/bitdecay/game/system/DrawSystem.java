@@ -55,6 +55,7 @@ public class DrawSystem extends AbstractDrawableSystem {
         spriteBatch.enableBlending();
         spriteBatch.setBlendFunction(Gdx.gl.GL_BLEND_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
 
+
         sonarBuffer.begin();
         Gdx.gl.glClearColor(0.5f, 0.f, 0.0f, 0f); //transparent black
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT); //clear the color buffer
