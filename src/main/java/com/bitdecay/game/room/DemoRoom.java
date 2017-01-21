@@ -1,6 +1,7 @@
 package com.bitdecay.game.room;
 
 
+import com.bitdecay.game.component.RandomOrbitComponent;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.screen.GameScreen;
 import com.bitdecay.game.system.*;
@@ -32,6 +33,7 @@ public class DemoRoom extends AbstractRoom {
         new RemovalSystem(this);
         new RotationFromVelocitySystem(this);
         new ShapeDrawSystem(this);
+        new RandomOrbitSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here

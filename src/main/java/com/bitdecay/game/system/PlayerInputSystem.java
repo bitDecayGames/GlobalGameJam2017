@@ -29,7 +29,9 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
         else if (InputHelper.isKeyPressed(Input.Keys.S, Input.Keys.DOWN)) rotationDirection = 1;
         if (rotationDirection != 0) {
             final float rotationDirectionFinal = rotationDirection;
-            gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi -> gob.forEachComponentDo(DesiredDirectionComponent.class, rot -> rot.addDegrees(rotationDirectionFinal * pi.rotationAmountPerStep))));
+            gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi ->
+                    gob.forEachComponentDo(DesiredDirectionComponent.class, rot ->
+                            rot.addDegrees(rotationDirectionFinal * pi.rotationAmountPerStep))));
         }
 
         if (InputHelper.isKeyJustPressed(Input.Keys.SPACE, Input.Keys.ENTER)) {
