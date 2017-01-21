@@ -24,6 +24,8 @@ public final class MyGameObjectFactory {
         t.addComponent(new DesiredRotationComponent(t, 0));
         t.addComponent(new SizeComponent(t, 10, 10));
         t.addComponent(new CameraFollowComponent(t));
+        t.addComponent(new PredictiveCameraFollowComponent(t));
+        t.addComponent(new ThrustComponent(t, 1f));
         return t;
     }
 }
