@@ -28,6 +28,7 @@ public class DemoRoom extends AbstractRoom {
         new DesiredDirectionSystem(this);
         new VelocitySystem(this);
         new SonarPingSystem(this);
+        new ProximityIlluminationSystem(this);
         new AccelerationSystem(this);
 
         // ////////////////////////////////////////////////
