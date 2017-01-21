@@ -37,10 +37,12 @@ public class DrawSystem extends AbstractDrawableSystem {
     @Override
     public void preDraw(SpriteBatch spriteBatch, OrthographicCamera camera) {
         spriteBatch.setProjectionMatrix(camera.combined);
+        spriteBatch.enableBlending();
+        spriteBatch.setBlendFunction(Gdx.gl.GL_BLEND_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
 
         sonarBuffer.begin();
-        Gdx.gl.glClearColor(0.0f, 0.f, 0.0f, 0f); //transparent black
-        Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT); //clear the color buffer
+        Gdx.gl.glClearColor(0.5f, 0.f, 0.0f, 0f); //transparent black
+        Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT); //clear the color buffer
         spriteBatch.begin();
         gobs.forEach(gob ->
                 gob.forEachComponentDo(DrawableComponent.class, drawable -> {
@@ -88,20 +90,30 @@ public class DrawSystem extends AbstractDrawableSystem {
         defaultProjMatrix.setToOrtho2D(0.0F, 0.0F, (float)Gdx.graphics.getWidth(), (float)Gdx.graphics.getHeight());
         spriteBatch.setProjectionMatrix(defaultProjMatrix);
 
+
+        renderSonarBuffer(spriteBatch);
+
+//        renderProximityBuffer(spriteBatch);
+
+    }
+
+    private void renderProximityBuffer(SpriteBatch spriteBatch) {
         Sprite proximitySprite = new Sprite(proximityBuffer.getColorBufferTexture());
         proximitySprite.flip(false, true);
-        spriteBatch.setShader(null);
         spriteBatch.begin();
         proximitySprite.draw(spriteBatch);
         spriteBatch.end();
+    }
 
-        spriteBatch.setShader(getConfiguredShader());
+    private void renderSonarBuffer(SpriteBatch spriteBatch) {
         Sprite sonarSprite = new Sprite(sonarBuffer.getColorBufferTexture());
         sonarSprite.flip(false, true);
 
         spriteBatch.begin();
+        spriteBatch.setShader(getConfiguredShader());
         sonarSprite.draw(spriteBatch);
         spriteBatch.end();
+        spriteBatch.setShader(null);
     }
 
     public ShaderProgram getConfiguredShader() {
