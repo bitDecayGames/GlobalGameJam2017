@@ -21,12 +21,27 @@ public class DrawSystem extends AbstractDrawableSystem {
     public float sweepFadeDistance = 600f;
     public float colorFadeDistance = 100;
 
+    public static ShaderProgram proximityShader;
+    public static ShaderProgram pingShader;
+
 
     FrameBuffer sonarBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     FrameBuffer proximityBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 
     public DrawSystem(AbstractRoom room) {
         super(room);
+        String vertexShader = Gdx.files.internal("shader/vertex_passthrough.glsl").readString();
+        String fragShader = Gdx.files.internal("shader/frag_proximity.glsl").readString();
+        proximityShader = new ShaderProgram(vertexShader, fragShader);
+        if (!proximityShader.isCompiled()) {
+            throw new RuntimeException("Shader does not compile:\n" + proximityShader.getLog());
+        }
+
+        fragShader = Gdx.files.internal("shader/frag_sweeper.glsl").readString();
+        pingShader = new ShaderProgram(vertexShader, fragShader);
+        if (!pingShader.isCompiled()) {
+            throw new RuntimeException("Shader does not compile:\n" + pingShader.getLog());
+        }
     }
 
     @Override
@@ -93,16 +108,19 @@ public class DrawSystem extends AbstractDrawableSystem {
 
         renderSonarBuffer(spriteBatch);
 
-//        renderProximityBuffer(spriteBatch);
+        renderProximityBuffer(spriteBatch);
 
     }
 
     private void renderProximityBuffer(SpriteBatch spriteBatch) {
         Sprite proximitySprite = new Sprite(proximityBuffer.getColorBufferTexture());
         proximitySprite.flip(false, true);
+
         spriteBatch.begin();
+        spriteBatch.setShader(proximityShader);
         proximitySprite.draw(spriteBatch);
         spriteBatch.end();
+        spriteBatch.setShader(null);
     }
 
     private void renderSonarBuffer(SpriteBatch spriteBatch) {
@@ -117,7 +135,6 @@ public class DrawSystem extends AbstractDrawableSystem {
     }
 
     public ShaderProgram getConfiguredShader() {
-        ShaderProgram pingShader = SonarPingSystem.pingShader;
         pingShader.begin();
         pingShader.setUniformf("f_deltaX", 1f / Gdx.graphics.getWidth());
         pingShader.setUniformf("f_deltaY", 1f / Gdx.graphics.getHeight());

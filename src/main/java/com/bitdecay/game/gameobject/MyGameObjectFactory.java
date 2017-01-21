@@ -32,6 +32,7 @@ public final class MyGameObjectFactory {
         imageComponent.reactsToSonar = true;
         t.addComponent(imageComponent);
         t.addComponent(new CollisionComponent(t));
+        t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
     }
@@ -42,7 +43,9 @@ public final class MyGameObjectFactory {
         t.addComponent(new PositionComponent(t, 50, 20));
         t.addComponent(new SizeComponent(t, 12, 14 ));
         t.addComponent(new OriginComponent(t));
-        t.addComponent(new StaticImageComponent(t, "enemies/mine/mine"));
+        StaticImageComponent mineImageComponent = new StaticImageComponent(t, "enemies/mine/mine");
+        mineImageComponent.reactsToSonar = true;
+        t.addComponent(mineImageComponent);
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new RandomOrbitComponent(t, 50, 20 , 10 ));
         t.addComponent(new VelocityComponent(t));
