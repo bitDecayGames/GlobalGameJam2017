@@ -33,6 +33,20 @@ public class DebugCircleComponent extends AbstractComponent implements IShapeRot
         );
     }
 
+    /**
+     * This is bad practice to put game logic in the component.
+     * The only reason I'm doing it is because the switch that draws
+     * a circle vs a square is between two different method calls on
+     * the shape renderer itself.  This means that I would have to
+     * go the extra distance of creating a shape enum that the
+     * ShapeDrawSystem would then have to switch on to draw the correct
+     * shape.  I'd rather just break the rules a bit and put the game
+     * logic in this component and call it out as bad practice.
+     *
+     * @param shapeRenderer
+     * @param pos
+     * @param rotation
+     */
     @Override
     public void draw(ShapeRenderer shapeRenderer, Vector2 pos, float rotation) {
         shapeRenderer.setColor(color);
