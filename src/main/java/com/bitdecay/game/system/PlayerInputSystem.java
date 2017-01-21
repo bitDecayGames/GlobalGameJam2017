@@ -3,7 +3,9 @@ package com.bitdecay.game.system;
 import com.badlogic.gdx.Input;
 import com.bitdecay.game.component.DesiredRotationComponent;
 import com.bitdecay.game.component.PlayerInputComponent;
+import com.bitdecay.game.component.PositionComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
+import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.system.abstracted.AbstractUpdatableSystem;
 import com.bitdecay.game.util.InputHelper;
@@ -35,6 +37,10 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             // maybe something like:
             // gobs.forEach(gob -> gob.addComponent(SonarPingComponent))
             // which then gets removed when the SonarPingSystem finds it and triggers the ping?
+            log.debug("ADDING PING");
+            gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
+                this.room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
+            }));
         }
     }
 }

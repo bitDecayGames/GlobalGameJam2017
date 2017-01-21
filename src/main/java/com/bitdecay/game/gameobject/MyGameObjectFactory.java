@@ -1,5 +1,6 @@
 package com.bitdecay.game.gameobject;
 
+import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.component.*;
 
 /**
@@ -29,5 +30,15 @@ public final class MyGameObjectFactory {
         t.addComponent(new ThrustComponent(t, 1f));
         t.addComponent(new StaticImageComponent(t, "player/sub"));
         return t;
+    }
+
+    public static MyGameObject ping(Vector2 startPos) {
+        MyGameObject pingObj = new MyGameObject();
+        pingObj.addComponent(new PositionComponent(pingObj, startPos.x, startPos.y));
+        pingObj.addComponent(new SonarPingComponent(pingObj));
+        pingObj.addComponent(new DebugCircleComponent(pingObj, com.badlogic.gdx.graphics.Color.GREEN, 25));
+        pingObj.addComponent(new RotationComponent(pingObj, 0));
+
+        return pingObj;
     }
 }
