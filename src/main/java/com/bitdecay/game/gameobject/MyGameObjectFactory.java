@@ -1,6 +1,7 @@
 package com.bitdecay.game.gameobject;
 
 import com.bitdecay.game.component.*;
+import com.bitdecay.game.room.AbstractRoom;
 
 /**
  * The idea here is to provide a single place for you to add your game objects.  You know that the "Player" game object will have a PositionComponent, a SizeComponent, and a CameraFollowComponent.  So in a static method (maybe called buildPlayer) you want to create a generic MyGameObject and populate it with the correct components.
@@ -30,4 +31,19 @@ public final class MyGameObjectFactory {
         t.addComponent(new StaticImageComponent(t, "player/sub"));
         return t;
     }
+
+    public static MyGameObject splashText(String text, int textSizeMultiplier, int durationMs) {
+        MyGameObject t = new MyGameObject();
+        t.addComponent(new PositionComponent(t, 10, 10));
+        t.addComponent(new TextComponent(t, text, textSizeMultiplier, durationMs));
+        return t;
+    }
+
+    public static MyGameObject globalInputListener(AbstractRoom room) {
+        MyGameObject t = new MyGameObject();
+        t.addComponent(new GlobalInputComponent(t, room));
+        return t;
+    }
+
+
 }
