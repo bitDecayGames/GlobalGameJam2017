@@ -10,7 +10,7 @@ import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.system.abstracted.AbstractDrawableSystem;
 
 /**
- * The draw system is one of the few systems that extends AbstractSystem directly.  The reason for this is that there is a call to spritebatch begin and end within the process method.  You will notice however that the forEach method is called in between the begin and end calls.  When you extend the AbstractForEachUpdatableSystem, that forEach call isn't necessary because it happens behind the scenes in the AbstractForEachUpdatableSystem.process method.
+ * The draw system is one of the few systems that extends AbstractSystem directly.  The reason for this is that there is a call to spritebatch begin and end within the process method.  You will notice however that the forEachComponentDo method is called in between the begin and end calls.  When you extend the AbstractForEachUpdatableSystem, that forEachComponentDo call isn't necessary because it happens behind the scenes in the AbstractForEachUpdatableSystem.process method.
  */
 public class DrawSystem extends AbstractDrawableSystem {
     public DrawSystem(AbstractRoom room) { super(room); }
@@ -25,9 +25,9 @@ public class DrawSystem extends AbstractDrawableSystem {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
         gobs.forEach(gob ->
-                gob.forEach(DrawableComponent.class, drawable ->
-                        gob.forEach(PositionComponent.class, pos ->
-                                gob.forEach(SizeComponent.class, size ->
+                gob.forEachComponentDo(DrawableComponent.class, drawable ->
+                        gob.forEachComponentDo(PositionComponent.class, pos ->
+                                gob.forEachComponentDo(SizeComponent.class, size ->
                                         spriteBatch.draw(drawable.image(), pos.x, pos.y, size.w, size.h)))));
         spriteBatch.end();
     }

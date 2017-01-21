@@ -20,7 +20,7 @@ public class TimerSystem extends AbstractForEachUpdatableSystem {
 
     @Override
     protected void forEach(float delta, MyGameObject gob) {
-        gob.forEach(TimerComponent.class, timer -> {
+        gob.forEachComponentDo(TimerComponent.class, timer -> {
             timer.seconds -= delta;
             if (timer.seconds <= 0){
                 timer.done = true;

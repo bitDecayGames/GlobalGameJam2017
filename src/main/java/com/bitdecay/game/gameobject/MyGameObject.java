@@ -33,7 +33,7 @@ public class MyGameObject implements ICleanup {
         return components.stream().filter(componentClass::isInstance).findFirst().map(componentClass::cast);
     }
 
-    public <T> void forEach(Class<T> componentClass, Consumer<T> doFunc){
+    public <T> void forEachComponentDo(Class<T> componentClass, Consumer<T> doFunc){
         components.stream().filter(componentClass::isInstance).map(componentClass::cast).forEach(doFunc);
     }
 
@@ -77,7 +77,7 @@ public class MyGameObject implements ICleanup {
 
     @Override
     public void cleanup() {
-        forEach(ICleanup.class, ICleanup::cleanup);
+        forEachComponentDo(ICleanup.class, ICleanup::cleanup);
         componentsToRemove.forEach(components::remove);
         componentsToRemove.clear();
         componentsToAdd.forEach(components::add);

@@ -16,7 +16,7 @@ public class InitializationSystem extends AbstractSystem {
     @Override
     protected boolean validateGob(MyGameObject gob) {
         // logic goes here because this method is only called when gobs changes
-        gob.forEach(IInitializable.class, init -> {
+        gob.forEachComponentDo(IInitializable.class, init -> {
             if (! init.isInitialized()) init.initialize(room); // this only gets called once
         });
         return false;

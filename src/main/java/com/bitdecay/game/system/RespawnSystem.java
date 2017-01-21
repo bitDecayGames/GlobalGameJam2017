@@ -32,8 +32,8 @@ public class RespawnSystem extends AbstractForEachUpdatableSystem {
 
     @Override
     protected void forEach(float delta, MyGameObject gob) {
-        gob.forEach(RespawnableComponent.class, res ->
-            gob.forEach(PositionComponent.class, pos -> {
+        gob.forEachComponentDo(RespawnableComponent.class, res ->
+            gob.forEachComponentDo(PositionComponent.class, pos -> {
                 if (pos.x < minWidth || pos.x > maxWidth || pos.y < minHeight || pos.y > maxHeight) {
                     Vector2 resPos = res.toVector2();
                     pos.x = resPos.x;

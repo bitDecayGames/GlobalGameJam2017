@@ -27,8 +27,8 @@ public class ShapeDrawSystem extends AbstractDrawableSystem {
         room.shapeRenderer.setProjectionMatrix(camera.combined);
         room.shapeRenderer.begin();
         gobs.forEach(gob ->
-                gob.forEach(IShapeDraw.class, drawable ->
-                        gob.forEach(PositionComponent.class, positionComponent ->
+                gob.forEachComponentDo(IShapeDraw.class, drawable ->
+                        gob.forEachComponentDo(PositionComponent.class, positionComponent ->
                                 drawable.draw(room.shapeRenderer, positionComponent.toVector2()))));
         room.shapeRenderer.end();
     }

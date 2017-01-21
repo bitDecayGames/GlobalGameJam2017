@@ -18,7 +18,7 @@ public class RemovalSystem extends AbstractSystem {
     protected boolean validateGob(MyGameObject gob) {
         // logic goes here because this method is only called when gobs changes
         if (gob.hasComponent(RemoveNowComponent.class)){
-            gob.forEach(IRemovable.class, removableComponent -> removableComponent.remove(room));
+            gob.forEachComponentDo(IRemovable.class, removableComponent -> removableComponent.remove(room));
             room.getGameObjects().remove(gob);
         }
         return false;

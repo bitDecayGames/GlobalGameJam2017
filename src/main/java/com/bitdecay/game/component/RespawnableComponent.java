@@ -35,7 +35,7 @@ public class RespawnableComponent extends AbstractComponent implements IInitiali
 
     @Override
     public void initialize(AbstractRoom room) {
-        obj.forEach(PositionComponent.class, pos -> {
+        obj.forEachComponentDo(PositionComponent.class, pos -> {
             x = pos.x;
             y = pos.y;
         });

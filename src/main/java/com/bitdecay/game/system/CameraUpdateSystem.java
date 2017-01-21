@@ -21,7 +21,7 @@ public class CameraUpdateSystem extends AbstractForEachUpdatableSystem {
 
     @Override
     protected void forEach(float delta, MyGameObject gob) {
-        gob.forEach(PositionComponent.class, pos -> room.camera.addFollowPoint(pos.toVector2()));
+        gob.forEachComponentDo(PositionComponent.class, pos -> room.camera.addFollowPoint(pos.toVector2()));
     }
 
 }
