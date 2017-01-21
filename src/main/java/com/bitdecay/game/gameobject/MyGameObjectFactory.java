@@ -3,6 +3,9 @@ package com.bitdecay.game.gameobject;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.component.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The idea here is to provide a single place for you to add your game objects.  You know that the "Player" game object will have a PositionComponent, a SizeComponent, and a CameraFollowComponent.  So in a static method (maybe called buildPlayer) you want to create a generic MyGameObject and populate it with the correct components.
  */
@@ -26,11 +29,10 @@ public final class MyGameObjectFactory {
         t.addComponent(new SizeComponent(t, 49, 26));
         t.addComponent(new OriginComponent(t));
         t.addComponent(new CameraFollowComponent(t));
-        t.addComponent(new PredictiveCameraFollowComponent(t));
+        t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
+        t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
         t.addComponent(new VelocityComponent(t,0.3f,0));
-        StaticImageComponent imageComponent = new StaticImageComponent(t, "player/sub");
-        imageComponent.reactsToSonar = true;
-        t.addComponent(imageComponent);
+        t.addComponent(new StaticImageComponent(t, "player/sub").setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
@@ -43,9 +45,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new PositionComponent(t, 50, 20));
         t.addComponent(new SizeComponent(t, 12, 14 ));
         t.addComponent(new OriginComponent(t));
-        StaticImageComponent mineImageComponent = new StaticImageComponent(t, "enemies/mine/mine");
-        mineImageComponent.reactsToSonar = true;
-        t.addComponent(mineImageComponent);
+        t.addComponent(new StaticImageComponent(t, "enemies/mine/mine").setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new RandomOrbitComponent(t, 50, 20 , 2.5f ));
         t.addComponent(new VelocityComponent(t));
@@ -61,5 +61,17 @@ public final class MyGameObjectFactory {
         pingObj.addComponent(new RotationComponent(pingObj, 0));
 
         return pingObj;
+    }
+
+    public static List<MyGameObject> demoBackgrounds(){
+        List<MyGameObject> gobs = new ArrayList<>();
+        for (int i = 0; i < 11; i ++){
+            MyGameObject o = new MyGameObject();
+            o.addComponent(new PositionComponent(o, 600 * i, 0));
+            o.addComponent(new SizeComponent(o, 600, 600));
+            o.addComponent(new StaticImageComponent(o, "levelSegments/A/" + i).setReactsToSonar(true));
+            gobs.add(o);
+        }
+        return gobs;
     }
 }
