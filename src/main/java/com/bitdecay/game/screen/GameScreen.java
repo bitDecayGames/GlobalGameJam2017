@@ -64,7 +64,7 @@ public class GameScreen implements Screen, EditorHook, IHasScreenSize, ICanSetSc
         }
     }
 
-    Vector2 center = new Vector2(.3f, .5f);
+    Vector2 center = new Vector2(.4f, .35f);
     float largeRadius = 0;
     float smallRadius = 0;
     float fullColorStopRadius = 0;
@@ -74,43 +74,25 @@ public class GameScreen implements Screen, EditorHook, IHasScreenSize, ICanSetSc
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        float largeStepSize = 0.01f;
-        float smallStepSize = 0.01f;
-        float fullColorDelay = 0.2f;
+        float sweepStepSize = 0.01f;
 
-        float stopRange = 2f;
+        float maxSweepRange = 3f;
 
-        float donutWidth = 1f;
+        float sweepFadeDistance = 1f;
+        float colorFadeDistance = 0.2f;
 
-        largeRadius += largeStepSize;
+        largeRadius += sweepStepSize;
 
-        if (largeRadius > donutWidth) {
-            smallRadius += smallStepSize;
-        }
-
-        if (largeRadius > fullColorDelay) {
-            fullColorStopRadius += largeStepSize;
-        }
-
-        if (largeRadius > stopRange) {
-            largeRadius = stopRange;
-        }
-
-        if (fullColorStopRadius > stopRange) {
-            fullColorStopRadius = stopRange;
-        }
-
-        if (smallRadius >= stopRange) {
+        if (largeRadius > maxSweepRange) {
             largeRadius = 0;
-            fullColorStopRadius = 0;
-            smallRadius = 0;
         }
 
         shader.begin();
         shader.setUniformf("v_center", center.x, center.y);
-        shader.setUniformf("f_largeRadius", largeRadius);
-        shader.setUniformf("f_smallRadius", smallRadius);
-        shader.setUniformf("f_fullColorStopRadius", fullColorStopRadius);
+        shader.setUniformf("f_sweepRadius", largeRadius);
+        shader.setUniformf("f_delta", .002f);
+        shader.setUniformf("f_sweepFadeDistance", sweepFadeDistance);
+        shader.setUniformf("f_colorFadeDistance", colorFadeDistance);
         shader.end();
         batch.setShader(shader);
         batch.begin();
