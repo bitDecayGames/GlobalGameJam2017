@@ -13,9 +13,10 @@ public class DemoRoom extends AbstractRoom {
     public DemoRoom(GameScreen gameScreen, Level level) {
         super(gameScreen, level);
 
+        // ////////////////////////////////////////////////
         // systems must be added before game objects
+        // ////////////////////////////////////////////////
         new InitializationSystem(this);
-        new PhysicsSystem(this);
         new TimerSystem(this);
         new CameraUpdateSystem(this);
         new RespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
@@ -24,8 +25,12 @@ public class DemoRoom extends AbstractRoom {
         new DrawSystem(this);
         new RemovalSystem(this);
 
+        // ////////////////////////////////////////////////
+        // put game objects here
+        // ////////////////////////////////////////////////
+
+
         // this is required to be at the end here so that the systems have the latest gobs
         systemManager.cleanup();
-        levelChanged(level);
     }
 }
