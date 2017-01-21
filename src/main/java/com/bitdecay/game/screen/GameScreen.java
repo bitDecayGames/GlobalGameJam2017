@@ -4,11 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.bitdecay.game.Launcher;
 import com.bitdecay.game.MyGame;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
-import com.bitdecay.game.room.DemoRoom;
 import com.bitdecay.game.trait.ICanSetRoom;
 import com.bitdecay.game.trait.ICanSetScreen;
 import com.bitdecay.game.trait.IHasScreenSize;
@@ -17,7 +20,6 @@ import com.bitdecay.game.util.Tilesets;
 import com.bitdecay.jump.collision.BitWorld;
 import com.bitdecay.jump.gdx.level.EditorIdentifierObject;
 import com.bitdecay.jump.gdx.level.RenderableLevelObject;
-import com.bitdecay.jump.level.FileUtils;
 import com.bitdecay.jump.level.Level;
 import com.bitdecay.jump.leveleditor.EditorHook;
 
@@ -33,25 +35,71 @@ public class GameScreen implements Screen, EditorHook, IHasScreenSize, ICanSetSc
 
     private com.bitdecay.game.room.AbstractRoom room;
 
-    public GameScreen(MyGame game){
+    private Texture edgeTestImage;
+    private String vertexShader;
+    private String fragShader;
+    private ShaderProgram shader;
+
+    private SpriteBatch batch = new SpriteBatch();
+
+    public GameScreen(MyGame game) {
         this.game = game;
-        setRoom(new DemoRoom(this, FileUtils.loadFileAs(Level.class, Gdx.files.classpath("level/simple.level").readString())));
+//        setRoom(new DemoRoom(this, FileUtils.loadFileAs(Level.class, Gdx.files.classpath("level/simple.level").readString())));
     }
-    public GameScreen(MyGame game, com.bitdecay.game.room.AbstractRoom room){
+
+    public GameScreen(MyGame game, com.bitdecay.game.room.AbstractRoom room) {
         this.game = game;
-        setRoom(room);
+//        setRoom(room);
     }
 
     @Override
     public void show() {
         SoundLibrary.stopMusic(Launcher.conf.getString("splash.music"));
+        edgeTestImage = new Texture(Gdx.files.internal("EdgeTest.png"));
+        vertexShader = Gdx.files.internal("vertex_passthrough.glsl").readString();
+        fragShader = Gdx.files.internal("frag_passthrough.glsl").readString();
+        shader = new ShaderProgram(vertexShader, fragShader);
+        if (!shader.isCompiled()) {
+            throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
+        }
     }
+
+    Vector2 center = new Vector2(0, 0);
+    float largeRadius = 0;
+    float smallRadius = 0;
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if (room != null) room.render(delta);
+
+        float largeStepSize = 0.02f;
+        float smallStepSize = 0.005f;
+        float donutWidth = 0.3f;
+
+        largeRadius += largeStepSize;
+
+        if (largeRadius > donutWidth) {
+            smallRadius += smallStepSize;
+        }
+
+        if (largeRadius > 2f) {
+            largeRadius = 2f;
+        }
+        if (smallRadius >= 1f) {
+            largeRadius = 0;
+            smallRadius = 0;
+        }
+
+        shader.begin();
+        shader.setUniformf("f_largeRadius", largeRadius);
+        shader.setUniformf("f_smallRadius", smallRadius);
+        shader.setUniformf("v_center", center.x, center.y);
+        shader.end();
+        batch.setShader(shader);
+        batch.begin();
+        batch.draw(edgeTestImage, 0, 0);
+        batch.end();
     }
 
     @Override
@@ -126,7 +174,9 @@ public class GameScreen implements Screen, EditorHook, IHasScreenSize, ICanSetSc
     }
 
     @Override
-    public List<EditorIdentifierObject> getThemes() { return Collections.emptyList(); }
+    public List<EditorIdentifierObject> getThemes() {
+        return Collections.emptyList();
+    }
 
     @Override
     public void levelChanged(Level level) {

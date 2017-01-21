@@ -32,9 +32,9 @@ public class MyGame extends Game implements ICanSetScreen{
 
     @Override
     public void create() {
-        queueAssetsForLoad();
-        ASSET_MANAGER.finishLoading();
-        ATLAS = ASSET_MANAGER.get("img/packed/main.atlas", AnimagicTextureAtlas.class);
+//        queueAssetsForLoad();
+//        ASSET_MANAGER.finishLoading();
+//        ATLAS = ASSET_MANAGER.get("img/packed/main.atlas", AnimagicTextureAtlas.class);
 
         if (RUN_MODE == RunMode.DEV) setScreen(new GameScreen(this));
         else if (RUN_MODE == RunMode.PROD) setScreen(new SplashScreen(this));
