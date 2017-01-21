@@ -4,12 +4,22 @@ precision mediump float;
 varying vec4 v_color;
 varying vec2 v_texCoords;
 
+// screen resolution. Used to normalize position for proper rendering
+uniform vec2 v_resolution;
+
+// sonar ping origin
 uniform vec2 v_center;
+
+// the forward edge of the ping
 uniform float f_sweepRadius;
 
+// distance to look for neighbor pixels. Larger values will result in thicker sweep lines
 uniform float f_delta;
 
+// distance sweep lines should fade over
 uniform float f_sweepFadeDistance;
+
+// distance full color should fade over
 uniform float f_colorFadeDistance;
 
 uniform sampler2D u_texture;
@@ -30,7 +40,14 @@ void main()
     vec4 left = texture2D( u_texture, vec2(v_texCoords.x - f_delta, v_texCoords.y) );
 
     // find our distance from the center point
-    float distance =  distance(v_texCoords, v_center);
+    vec2 screenPosition = gl_FragCoord.xy / v_resolution;
+
+    // make sure our distance is circle-relative. Maths to get it back to a circle since
+    // the screen resolution is not 1:1 aspect ratio
+    float ratio = v_resolution.x / v_resolution.y;
+    screenPosition.x *= ratio;
+
+    float distance = distance( screenPosition, v_center );
 
     if ( abs(distance - f_sweepRadius) < f_delta / 2.0 ) {
         gl_FragColor = vec4( 0.0, 0.3, 0.0, 1.0 );
