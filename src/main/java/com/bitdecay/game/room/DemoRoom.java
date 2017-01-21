@@ -1,6 +1,7 @@
 package com.bitdecay.game.room;
 
 
+import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.screen.GameScreen;
 import com.bitdecay.game.system.*;
 
@@ -27,6 +28,7 @@ public class DemoRoom extends AbstractRoom {
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
+        this.gobs.add(MyGameObjectFactory.ship());
 
 
         // this is required to be at the end here so that the systems have the latest gobs
