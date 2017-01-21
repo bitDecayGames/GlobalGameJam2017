@@ -4,16 +4,27 @@ precision mediump float;
 varying vec4 v_color;
 varying vec2 v_texCoords;
 
+// screen resolution. Used to normalize position for proper rendering
+uniform vec2 v_resolution;
+
+// sonar ping origin
 uniform vec2 v_center;
-uniform float f_largeRadius;
-uniform float f_smallRadius;
-uniform float f_fullColorStopRadius;
+
+// the forward edge of the ping
+uniform float f_sweepRadius;
+
+// distance to look for neighbor pixels. Larger values will result in thicker sweep lines
+uniform float f_delta;
+
+// distance sweep lines should fade over
+uniform float f_sweepFadeDistance;
+
+// distance full color should fade over
+uniform float f_colorFadeDistance;
 
 uniform sampler2D u_texture;
 void main()
 {
-    float delta = 0.002;
-
     gl_FragColor = v_color * texture2D(u_texture, v_texCoords);
 
     // track if we were on a non-transparent pixel
@@ -23,24 +34,30 @@ void main()
     gl_FragColor.a = 0.0;
 
     // check our neighbors
-    vec4 top = texture2D( u_texture, vec2(v_texCoords.x, v_texCoords.y + delta) );
-    vec4 bottom = texture2D( u_texture, vec2(v_texCoords.x, v_texCoords.y - delta) );
-    vec4 right = texture2D( u_texture, vec2(v_texCoords.x + delta, v_texCoords.y) );
-    vec4 left = texture2D( u_texture, vec2(v_texCoords.x - delta, v_texCoords.y) );
+    vec4 top = texture2D( u_texture, vec2(v_texCoords.x, v_texCoords.y + f_delta) );
+    vec4 bottom = texture2D( u_texture, vec2(v_texCoords.x, v_texCoords.y - f_delta) );
+    vec4 right = texture2D( u_texture, vec2(v_texCoords.x + f_delta, v_texCoords.y) );
+    vec4 left = texture2D( u_texture, vec2(v_texCoords.x - f_delta, v_texCoords.y) );
 
     // find our distance from the center point
-    float distance =  distance(v_texCoords, v_center);
+    vec2 screenPosition = gl_FragCoord.xy / v_resolution;
 
-    if ( abs(distance - f_largeRadius) < delta / 2.0 ) {
+    // make sure our distance is circle-relative. Maths to get it back to a circle since
+    // the screen resolution is not 1:1 aspect ratio
+    float ratio = v_resolution.x / v_resolution.y;
+    screenPosition.x *= ratio;
+
+    float distance = distance( screenPosition, v_center );
+
+    if ( abs(distance - f_sweepRadius) < f_delta / 2.0 ) {
         gl_FragColor = vec4( 0.0, 0.3, 0.0, 1.0 );
     }
 
     // if we are inside the sweep donut
-    if ( distance >= f_smallRadius && distance <= f_largeRadius ) {
-        float donutWidth = f_largeRadius - f_smallRadius;
-        float pointPosition = f_largeRadius - distance;
+    if ( distance <= f_sweepRadius ) {
+        float pointPosition = f_sweepRadius - distance;
 
-        float percentBrightness = 1.0 - (pointPosition / donutWidth);
+        float percentBrightness = 1.0 - (pointPosition / f_sweepFadeDistance);
 
         if ( nonTransparent )
         {
@@ -48,8 +65,7 @@ void main()
             {
                 gl_FragColor = vec4(0.0, 1.0 * percentBrightness, 0.0, 1.0);
             } else {
-                float colorDonutWidth = f_largeRadius - f_fullColorStopRadius;
-                percentBrightness = 1.0 - (pointPosition / colorDonutWidth);
+                percentBrightness = 1.0 - (pointPosition / f_colorFadeDistance);
 
                 gl_FragColor.r *= percentBrightness;
                 gl_FragColor.g *= percentBrightness;
