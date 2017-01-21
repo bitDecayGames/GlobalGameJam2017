@@ -7,5 +7,10 @@ import com.bitdecay.game.gameobject.MyGameObject;
  */
 public class PlayerInputComponent extends AbstractComponent {
 
-    public PlayerInputComponent(MyGameObject obj){super(obj);}
+    public float rotationAmountPerStep = 0;
+
+    public PlayerInputComponent(MyGameObject obj, float rotationAmountPerStep){
+        super(obj);
+        this.rotationAmountPerStep = rotationAmountPerStep;
+    }
 }

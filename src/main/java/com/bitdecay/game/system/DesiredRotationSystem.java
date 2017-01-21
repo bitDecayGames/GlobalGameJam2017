@@ -10,18 +10,8 @@ import com.bitdecay.game.system.abstracted.AbstractForEachUpdatableSystem;
  * This system is in charge of updating the rotation of an object to be closer to the desired rotation
  */
 public class DesiredRotationSystem extends AbstractForEachUpdatableSystem {
-    private float rotationSpeed = 1;
 
-
-    /**
-     *
-     * @param room
-     * @param rotationSpeed the closer this is to 1 the closer that the rotation is to the desired rotation
-     */
-    public DesiredRotationSystem(AbstractRoom room, float rotationSpeed) {
-        super(room);
-        this.rotationSpeed =  Math.min(Math.abs(rotationSpeed), 1f); // limit between 0 and 1
-    }
+    public DesiredRotationSystem(AbstractRoom room) { super(room); }
 
     @Override
     protected boolean validateGob(MyGameObject gob) {
@@ -30,7 +20,7 @@ public class DesiredRotationSystem extends AbstractForEachUpdatableSystem {
 
     @Override
     protected void forEach(float delta, MyGameObject gob) {
-        gob.forEachComponentDo(DesiredRotationComponent.class, desired -> gob.forEachComponentDo(RotationComponent.class, rot -> rot.degrees += rotationSpeed * (desired.degrees - rot.degrees)));
+        gob.forEachComponentDo(DesiredRotationComponent.class, desired -> gob.forEachComponentDo(RotationComponent.class, rot -> rot.degrees += desired.rotationSpeed * (desired.degrees - rot.degrees)));
     }
 
 }

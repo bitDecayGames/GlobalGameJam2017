@@ -25,8 +25,8 @@ public class DemoRoom extends AbstractRoom {
         new ShapeDrawSystem(this);
         new DrawSystem(this);
         new RemovalSystem(this);
-        new PlayerInputSystem(this, 0.75f);
-        new DesiredRotationSystem(this, 0.01f);
+        new PlayerInputSystem(this);
+        new DesiredRotationSystem(this);
         new ConstantThrustSystem(this);
 
         // ////////////////////////////////////////////////

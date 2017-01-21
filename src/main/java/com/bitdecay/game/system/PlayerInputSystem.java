@@ -12,11 +12,8 @@ import com.bitdecay.game.util.InputHelper;
  * This system will handle player keyboard input to modify the rotation of the player
  */
 public class PlayerInputSystem extends AbstractUpdatableSystem {
-    private float rotationAmountPerStep = 0;
-    public PlayerInputSystem(AbstractRoom room, float rotationAmountPerStep) {
-        super(room);
-        this.rotationAmountPerStep = rotationAmountPerStep;
-    }
+
+    public PlayerInputSystem(AbstractRoom room) { super(room); }
 
     @Override
     protected boolean validateGob(MyGameObject gob) {
@@ -30,7 +27,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
         else if (InputHelper.isKeyPressed(Input.Keys.S, Input.Keys.DOWN)) rotationDirection = 1;
         if (rotationDirection != 0) {
             final float rotationDirectionFinal = rotationDirection;
-            gobs.forEach(gob -> gob.forEachComponentDo(DesiredRotationComponent.class, rot -> rot.degrees += rotationDirectionFinal * rotationAmountPerStep));
+            gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi -> gob.forEachComponentDo(DesiredRotationComponent.class, rot -> rot.degrees += rotationDirectionFinal * pi.rotationAmountPerStep)));
         }
     }
 }
