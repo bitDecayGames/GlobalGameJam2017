@@ -29,6 +29,7 @@ public class DemoRoom extends AbstractRoom {
         new VelocitySystem(this);
         new SonarPingSystem(this);
         new AccelerationSystem(this);
+        new RemovalSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here
