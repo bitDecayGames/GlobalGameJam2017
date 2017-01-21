@@ -55,27 +55,32 @@ public class GameScreen implements Screen, EditorHook, IHasScreenSize, ICanSetSc
     @Override
     public void show() {
         SoundLibrary.stopMusic(Launcher.conf.getString("splash.music"));
-        edgeTestImage = new Texture(Gdx.files.internal("EdgeTest.png"));
-        vertexShader = Gdx.files.internal("vertex_passthrough.glsl").readString();
-        fragShader = Gdx.files.internal("frag_passthrough.glsl").readString();
+        edgeTestImage = new Texture(Gdx.files.internal("shader/EdgeTest.png"));
+        vertexShader = Gdx.files.internal("shader/vertex_passthrough.glsl").readString();
+        fragShader = Gdx.files.internal("shader/frag_sweeper.glsl").readString();
         shader = new ShaderProgram(vertexShader, fragShader);
         if (!shader.isCompiled()) {
             throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
         }
     }
 
-    Vector2 center = new Vector2(0, 0);
+    Vector2 center = new Vector2(.3f, .5f);
     float largeRadius = 0;
     float smallRadius = 0;
+    float fullColorStopRadius = 0;
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        float largeStepSize = 0.02f;
-        float smallStepSize = 0.005f;
-        float donutWidth = 0.3f;
+        float largeStepSize = 0.01f;
+        float smallStepSize = 0.01f;
+        float fullColorDelay = 0.2f;
+
+        float stopRange = 2f;
+
+        float donutWidth = 1f;
 
         largeRadius += largeStepSize;
 
@@ -83,22 +88,33 @@ public class GameScreen implements Screen, EditorHook, IHasScreenSize, ICanSetSc
             smallRadius += smallStepSize;
         }
 
-        if (largeRadius > 2f) {
-            largeRadius = 2f;
+        if (largeRadius > fullColorDelay) {
+            fullColorStopRadius += largeStepSize;
         }
-        if (smallRadius >= 1f) {
+
+        if (largeRadius > stopRange) {
+            largeRadius = stopRange;
+        }
+
+        if (fullColorStopRadius > stopRange) {
+            fullColorStopRadius = stopRange;
+        }
+
+        if (smallRadius >= stopRange) {
             largeRadius = 0;
+            fullColorStopRadius = 0;
             smallRadius = 0;
         }
 
         shader.begin();
+        shader.setUniformf("v_center", center.x, center.y);
         shader.setUniformf("f_largeRadius", largeRadius);
         shader.setUniformf("f_smallRadius", smallRadius);
-        shader.setUniformf("v_center", center.x, center.y);
+        shader.setUniformf("f_fullColorStopRadius", fullColorStopRadius);
         shader.end();
         batch.setShader(shader);
         batch.begin();
-        batch.draw(edgeTestImage, 0, 0);
+        batch.draw(edgeTestImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
     }
 
