@@ -1,5 +1,6 @@
 package com.bitdecay.game.gameobject;
 
+import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.component.*;
 
 /**
