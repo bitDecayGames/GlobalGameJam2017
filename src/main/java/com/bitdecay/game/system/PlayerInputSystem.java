@@ -29,5 +29,12 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             final float rotationDirectionFinal = rotationDirection;
             gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi -> gob.forEachComponentDo(DesiredRotationComponent.class, rot -> rot.degrees += rotationDirectionFinal * pi.rotationAmountPerStep)));
         }
+
+        if (InputHelper.isKeyJustPressed(Input.Keys.SPACE, Input.Keys.ENTER)) {
+            // TODO: add trigger to sonar ping
+            // maybe something like:
+            // gobs.forEach(gob -> gob.addComponent(SonarPingComponent))
+            // which then gets removed when the SonarPingSystem finds it and triggers the ping?
+        }
     }
 }
