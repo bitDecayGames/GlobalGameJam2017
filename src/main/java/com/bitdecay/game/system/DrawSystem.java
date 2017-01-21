@@ -2,9 +2,8 @@ package com.bitdecay.game.system;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.bitdecay.game.component.DrawableComponent;
-import com.bitdecay.game.component.PositionComponent;
-import com.bitdecay.game.component.SizeComponent;
+import com.badlogic.gdx.math.Vector3;
+import com.bitdecay.game.component.*;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.system.abstracted.AbstractDrawableSystem;
@@ -27,8 +26,12 @@ public class DrawSystem extends AbstractDrawableSystem {
         gobs.forEach(gob ->
                 gob.forEachComponentDo(DrawableComponent.class, drawable ->
                         gob.forEachComponentDo(PositionComponent.class, pos ->
-                                gob.forEachComponentDo(SizeComponent.class, size ->
-                                        spriteBatch.draw(drawable.image(), pos.x, pos.y, size.w, size.h)))));
+                                gob.forEachComponentDo(SizeComponent.class, size ->{
+                                    Vector3 drawPos = new Vector3();
+                                    gob.forEachComponentDo(OriginComponent.class, org -> drawPos.add(size.w * org.x, size.h * org.y, 0));
+                                    gob.forEachComponentDo(RotationComponent.class, rot -> drawPos.z = rot.degrees);
+                                    spriteBatch.draw(drawable.image(), pos.x - drawPos.x, pos.y - drawPos.y, drawPos.x, drawPos.y, size.w, size.h, 1, 1, drawPos.z);
+                                }))));
         spriteBatch.end();
     }
 }

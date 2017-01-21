@@ -22,10 +22,12 @@ public final class MyGameObjectFactory {
         t.addComponent(new PositionComponent(t, 10, 20));
         t.addComponent(new RotationComponent(t, 0));
         t.addComponent(new DesiredRotationComponent(t, 0));
-        t.addComponent(new SizeComponent(t, 10, 10));
+        t.addComponent(new SizeComponent(t, 20, 20));
+        t.addComponent(new OriginComponent(t));
         t.addComponent(new CameraFollowComponent(t));
         t.addComponent(new PredictiveCameraFollowComponent(t));
         t.addComponent(new ThrustComponent(t, 1f));
+        t.addComponent(new StaticImageComponent(t, "player/sub"));
         return t;
     }
 }
