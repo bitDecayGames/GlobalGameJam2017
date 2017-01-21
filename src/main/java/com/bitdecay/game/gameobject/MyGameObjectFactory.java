@@ -27,7 +27,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new OriginComponent(t));
         t.addComponent(new CameraFollowComponent(t));
         t.addComponent(new PredictiveCameraFollowComponent(t));
-        t.addComponent(new ThrustComponent(t, 0f));
+        t.addComponent(new ThrustComponent(t, 1f));
         StaticImageComponent imageComponent = new StaticImageComponent(t, "player/sub");
         imageComponent.reactsToSonar = true;
         t.addComponent(imageComponent);
