@@ -1,8 +1,6 @@
 package com.bitdecay.game.room;
 
 
-import com.bitdecay.game.MyGame;
-import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.screen.GameScreen;
 import com.bitdecay.game.system.*;
@@ -28,8 +26,9 @@ public class DemoRoom extends AbstractRoom {
         new DrawSystem(this);
         new RemovalSystem(this);
         new PlayerInputSystem(this);
-        new DesiredRotationSystem(this);
-        new ConstantThrustSystem(this);
+        new DesiredDirectionSystem(this);
+        new VelocitySystem(this);
+        new AccelerationSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here
