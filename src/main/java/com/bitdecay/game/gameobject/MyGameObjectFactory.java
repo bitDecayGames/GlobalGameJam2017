@@ -1,5 +1,6 @@
 package com.bitdecay.game.gameobject;
 
+import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.component.*;
 
 /**
@@ -18,7 +19,7 @@ public final class MyGameObjectFactory {
     public static MyGameObject ship(){
         MyGameObject t = new MyGameObject();
         t.addComponent(new PlayerInputComponent(t, 0.75f));
-        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
+//        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
         t.addComponent(new PositionComponent(t, 10, 20));
         t.addComponent(new RotationComponent(t, 0));
         t.addComponent(new DesiredDirectionComponent(t, 0, 0.01f));
@@ -27,7 +28,9 @@ public final class MyGameObjectFactory {
         t.addComponent(new CameraFollowComponent(t));
         t.addComponent(new PredictiveCameraFollowComponent(t));
         t.addComponent(new VelocityComponent(t,1,0));
-        t.addComponent(new StaticImageComponent(t, "player/sub"));
+        StaticImageComponent imageComponent = new StaticImageComponent(t, "player/sub");
+        imageComponent.reactsToSonar = true;
+        t.addComponent(imageComponent);
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
@@ -45,5 +48,15 @@ public final class MyGameObjectFactory {
         t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
+    }
+
+    public static MyGameObject ping(Vector2 startPos) {
+        MyGameObject pingObj = new MyGameObject();
+        pingObj.addComponent(new PositionComponent(pingObj, startPos.x, startPos.y));
+        pingObj.addComponent(new SonarPingComponent(pingObj));
+//        pingObj.addComponent(new DebugCircleComponent(pingObj, com.badlogic.gdx.graphics.Color.GREEN, 25));
+        pingObj.addComponent(new RotationComponent(pingObj, 0));
+
+        return pingObj;
     }
 }

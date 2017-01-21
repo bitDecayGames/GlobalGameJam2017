@@ -8,6 +8,9 @@ import com.bitdecay.game.gameobject.MyGameObject;
  */
 public abstract class DrawableComponent extends AbstractComponent {
 
+    public boolean reactsToSonar = false;
+    public boolean proximityRender = true;
+
     public DrawableComponent(MyGameObject obj) {
         super(obj);
     }

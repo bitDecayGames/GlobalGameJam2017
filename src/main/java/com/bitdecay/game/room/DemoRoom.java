@@ -24,10 +24,10 @@ public class DemoRoom extends AbstractRoom {
         new DespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new ShapeDrawSystem(this);
         new DrawSystem(this);
-        new RemovalSystem(this);
         new PlayerInputSystem(this);
         new DesiredDirectionSystem(this);
         new VelocitySystem(this);
+        new SonarPingSystem(this);
         new AccelerationSystem(this);
 
         // ////////////////////////////////////////////////

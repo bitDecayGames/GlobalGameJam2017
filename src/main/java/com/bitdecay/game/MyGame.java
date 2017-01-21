@@ -1,6 +1,7 @@
 package com.bitdecay.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.bitdecay.game.screen.GameScreen;
@@ -32,6 +33,8 @@ public class MyGame extends Game implements ICanSetScreen{
 
     @Override
     public void create() {
+        Gdx.gl.glEnable(Gdx.gl20.GL_BLEND);
+        Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
         queueAssetsForLoad();
         ASSET_MANAGER.finishLoading();
         ATLAS = ASSET_MANAGER.get("img/packed/main.atlas", AnimagicTextureAtlas.class);

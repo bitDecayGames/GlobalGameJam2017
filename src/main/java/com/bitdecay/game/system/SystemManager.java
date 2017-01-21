@@ -70,9 +70,23 @@ public class SystemManager implements ICleanup, IRefreshable, IUpdate, IDrawWith
     }
 
     @Override
+    public void preDraw(SpriteBatch spriteBatch, OrthographicCamera camera) {
+        systems.forEach(sys -> {
+            if (sys instanceof IDrawWithCamera) ((IDrawWithCamera) sys).preDraw(spriteBatch, camera);
+        });
+    }
+
+    @Override
     public void draw(SpriteBatch spriteBatch, OrthographicCamera camera) {
         systems.forEach(sys -> {
             if (sys instanceof IDrawWithCamera) ((IDrawWithCamera) sys).draw(spriteBatch, camera);
+        });
+    }
+
+    @Override
+    public void postDraw(SpriteBatch spriteBatch, OrthographicCamera camera) {
+        systems.forEach(sys -> {
+            if (sys instanceof IDrawWithCamera) ((IDrawWithCamera) sys).postDraw(spriteBatch, camera);
         });
     }
 }
