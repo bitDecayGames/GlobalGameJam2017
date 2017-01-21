@@ -25,7 +25,6 @@ public class Launcher {
         config.height = Launcher.conf.getInt("resolution.default.height");
         config.title = Launcher.conf.getString("title");
         config.resizable = false;
-        config.useGL30 = true;
 
         RunMode runMode = RunMode.PROD;
         if (args != null && args.length > 0) {
