@@ -1,8 +1,8 @@
 package com.bitdecay.game.system;
 
+
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.component.DesiredDirectionComponent;
-import com.bitdecay.game.component.RotationComponent;
 import com.bitdecay.game.component.VelocityComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;
@@ -26,7 +26,7 @@ public class DesiredDirectionSystem extends AbstractForEachUpdatableSystem {
         gob.forEachComponentDo(DesiredDirectionComponent.class, desired ->
                 gob.forEachComponentDo(VelocityComponent.class, velocity-> {
                     Vector2 currentDirection = velocity.toVector2().nor();
-                    float rotationDifference = desired.toDegrees() - VectorMath.angleInDegrees(currentDirection, new Vector2(1, 0));
+                    float rotationDifference = VectorMath.angleInDegrees(currentDirection, desired.toVector2());
                     float rotationToAdd = rotationDifference * desired.rotationSpeed;
                     Vector2 newDirection = VectorMath.rotatePointByDegreesAroundZero(currentDirection, rotationToAdd).scl(velocity.toVector2().len());
                     velocity.x = newDirection.x;

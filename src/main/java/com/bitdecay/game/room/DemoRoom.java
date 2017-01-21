@@ -22,14 +22,16 @@ public class DemoRoom extends AbstractRoom {
         new CameraPredictiveSystem(this, 100);
         new RespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
-        new ShapeDrawSystem(this);
         new DrawSystem(this);
         new PlayerInputSystem(this);
         new DesiredDirectionSystem(this);
         new VelocitySystem(this);
         new SonarPingSystem(this);
+        new ProximityIlluminationSystem(this);
         new AccelerationSystem(this);
         new RemovalSystem(this);
+        new RotationFromVelocitySystem(this);
+        new ShapeDrawSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here

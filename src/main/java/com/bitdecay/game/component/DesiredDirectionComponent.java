@@ -1,6 +1,8 @@
 package com.bitdecay.game.component;
 
+import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.gameobject.MyGameObject;
+import com.bitdecay.game.util.VectorMath;
 
 /**
  * The component in charge of tracking the desired rotation of the object (0 degrees SHOULD be facing right... don't quote me)
@@ -31,12 +33,15 @@ public class DesiredDirectionComponent extends AbstractComponent {
 
     public void addDegrees(float degreesToAdd){
         degrees += degreesToAdd;
-        // todo: snap degrees to 180 +-
-        if (degrees > 180) degrees = -180 + (degrees - 180);
-        else if (degrees < -180) degrees = 180 + (degrees + 180);
+//        if (degrees > 180) degrees = -180 + (degrees - 180);
+//        else if (degrees < -180) degrees = 180 + (degrees + 180);
     }
 
     public void addRadians(float radians){
         addDegrees((float) Math.toRadians(radians));
+    }
+
+    public Vector2 toVector2(){
+        return VectorMath.rotatePointByDegreesAroundZero(1, 0, degrees);
     }
 }
