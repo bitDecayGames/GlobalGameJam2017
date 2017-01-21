@@ -11,8 +11,6 @@ import com.bitdecay.game.trait.ICanSetRoom;
 import com.bitdecay.game.trait.ICanSetScreen;
 import com.bitdecay.game.trait.IHasScreenSize;
 import com.bitdecay.game.util.SoundLibrary;
-import com.bitdecay.jump.level.FileUtils;
-import com.bitdecay.jump.level.Level;
 
 /**
  * The game screen USED to be the main source of game logic.  It is now more just like any other screen.  It allows for the game to switch to it, but the main logic is moved into the Room class.  In the same way you can switch from screen to screen with a reference to the MyGame object, you can switch from room to room with the GameScreen object.
@@ -25,7 +23,7 @@ public class GameScreen implements Screen, IHasScreenSize, ICanSetScreen, ICanSe
 
     public GameScreen(MyGame game){
         this.game = game;
-        setRoom(new DemoRoom(this, FileUtils.loadFileAs(Level.class, Gdx.files.classpath("level/simple.level").readString())));
+        setRoom(new DemoRoom(this));
     }
     public GameScreen(MyGame game, com.bitdecay.game.room.AbstractRoom room){
         this.game = game;

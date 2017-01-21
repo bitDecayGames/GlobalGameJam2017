@@ -16,7 +16,6 @@
         <mainClass>com.bitdecay.game.Launcher</mainClass>
 
         <!-- these will change based on what the current version of the tools are -->
-        <jumpVersion>2.0</jumpVersion>
         <animagicVersion>1.0</animagicVersion>
 
         <!-- these probably shouldn't change much -->
@@ -175,26 +174,6 @@
         </dependency>
         <!-- END CONFIG DEPENDENCIES -->
         <!-- START CUSTOM TOOLS DEPENDENCIES -->
-        <dependency>
-            <groupId>com.bitdecay</groupId>
-            <artifactId>jump-common</artifactId>
-            <version>${jumpVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.bitdecay</groupId>
-            <artifactId>jump-core</artifactId>
-            <version>${jumpVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.bitdecay</groupId>
-            <artifactId>jump-gdx</artifactId>
-            <version>${jumpVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.bitdecay</groupId>
-            <artifactId>jump-leveleditor</artifactId>
-            <version>${jumpVersion}</version>
-        </dependency>
         <dependency>
             <groupId>com.bytebreakstudios</groupId>
             <artifactId>animagic</artifactId>

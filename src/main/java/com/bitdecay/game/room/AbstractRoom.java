@@ -10,7 +10,6 @@ import com.bitdecay.game.gameobject.MyGameObjects;
 import com.bitdecay.game.screen.GameScreen;
 import com.bitdecay.game.system.SystemManager;
 import com.bitdecay.game.trait.*;
-import com.bitdecay.jump.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +28,7 @@ public abstract class AbstractRoom implements IUpdate, IDraw, IHasScreenSize, IC
     public final ShapeRenderer shapeRenderer = new ShapeRenderer();
     public final FollowOrthoCamera camera = new FollowOrthoCamera(Launcher.conf.getInt("resolution.camera.width"), Launcher.conf.getInt("resolution.camera.height"));
 
-    public AbstractRoom(GameScreen gameScreen, Level level){
+    public AbstractRoom(GameScreen gameScreen){
         this.gameScreen = gameScreen;
 
         camera.maxZoom = (float) Launcher.conf.getDouble("resolution.camera.maxZoom");
