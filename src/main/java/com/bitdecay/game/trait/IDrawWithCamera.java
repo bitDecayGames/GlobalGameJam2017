@@ -7,5 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Allows object to draw itself using SpriteBatch and a camera
  */
 public interface IDrawWithCamera {
+
+    void preDraw(SpriteBatch spriteBatch, OrthographicCamera camera);
+
     void draw(SpriteBatch spriteBatch, OrthographicCamera camera);
+
+    void postDraw(SpriteBatch spriteBatch, OrthographicCamera camera);
 }
