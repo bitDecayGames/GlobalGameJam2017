@@ -3,7 +3,7 @@ package com.bitdecay.game.system;
 import com.bitdecay.game.component.PositionComponent;
 import com.bitdecay.game.component.PredictiveCameraFollowComponent;
 import com.bitdecay.game.component.RotationComponent;
-import com.bitdecay.game.component.ThrustComponent;
+import com.bitdecay.game.component.VelocityComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.system.abstracted.AbstractForEachUpdatableSystem;
@@ -21,13 +21,15 @@ public class CameraPredictiveSystem extends AbstractForEachUpdatableSystem {
 
     @Override
     protected boolean validateGob(MyGameObject gob) {
-        return gob.hasComponents(PredictiveCameraFollowComponent.class, PositionComponent.class, RotationComponent.class, ThrustComponent.class);
+        return gob.hasComponents(PredictiveCameraFollowComponent.class, PositionComponent.class, VelocityComponent.class);
     }
 
     @Override
     protected void forEach(float delta, MyGameObject gob) {
         // room.camera.addFollowPoint(pos.toVector2())
-        gob.forEachComponentDo(PositionComponent.class, pos -> gob.forEachComponentDo(RotationComponent.class, rot -> gob.forEachComponentDo(ThrustComponent.class, thrust -> room.camera.addFollowPoint(VectorMath.rotatePointByDegreesAroundZero(1, 0, rot.degrees).scl(thrust.power * leadDistance).add(pos.toVector2())))));
+        gob.forEachComponentDo(PositionComponent.class, pos ->
+                        gob.forEachComponentDo(VelocityComponent.class, velocity ->
+                                room.camera.addFollowPoint(velocity.toVector2().nor().scl(leadDistance).add(pos.toVector2()))));
     }
 
 }

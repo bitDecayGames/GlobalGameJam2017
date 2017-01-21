@@ -25,15 +25,16 @@ public class DemoRoom extends AbstractRoom {
         new ShapeDrawSystem(this);
         new DrawSystem(this);
         new PlayerInputSystem(this);
-        new DesiredRotationSystem(this);
-        new ConstantThrustSystem(this);
+        new DesiredDirectionSystem(this);
+        new VelocitySystem(this);
         new SonarPingSystem(this);
-        new RemovalSystem(this);
+        new AccelerationSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
         this.gobs.add(MyGameObjectFactory.ship());
+        this.gobs.add(MyGameObjectFactory.mine());
 
 
         // this is required to be at the end here so that the systems have the latest gobs
