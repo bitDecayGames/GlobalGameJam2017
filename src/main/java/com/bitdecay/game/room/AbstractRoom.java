@@ -60,7 +60,9 @@ public abstract class AbstractRoom implements IUpdate, IDraw, IHasScreenSize, IC
 
     @Override
     public void draw(SpriteBatch spriteBatch) {
+        systemManager.preDraw(spriteBatch, camera);
         systemManager.draw(spriteBatch, camera);
+        systemManager.postDraw(spriteBatch, camera);
     }
 
     @Override

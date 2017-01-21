@@ -19,7 +19,7 @@ public final class MyGameObjectFactory {
     public static MyGameObject ship(){
         MyGameObject t = new MyGameObject();
         t.addComponent(new PlayerInputComponent(t, 0.75f));
-        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
+//        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
         t.addComponent(new PositionComponent(t, 10, 20));
         t.addComponent(new RotationComponent(t, 0));
         t.addComponent(new DesiredRotationComponent(t, 0, 0.01f));
@@ -27,8 +27,10 @@ public final class MyGameObjectFactory {
         t.addComponent(new OriginComponent(t));
         t.addComponent(new CameraFollowComponent(t));
         t.addComponent(new PredictiveCameraFollowComponent(t));
-        t.addComponent(new ThrustComponent(t, 1f));
-        t.addComponent(new StaticImageComponent(t, "player/sub"));
+        t.addComponent(new ThrustComponent(t, 0f));
+        StaticImageComponent imageComponent = new StaticImageComponent(t, "player/sub");
+        imageComponent.reactsToSonar = true;
+        t.addComponent(imageComponent);
         return t;
     }
 
@@ -36,7 +38,7 @@ public final class MyGameObjectFactory {
         MyGameObject pingObj = new MyGameObject();
         pingObj.addComponent(new PositionComponent(pingObj, startPos.x, startPos.y));
         pingObj.addComponent(new SonarPingComponent(pingObj));
-        pingObj.addComponent(new DebugCircleComponent(pingObj, com.badlogic.gdx.graphics.Color.GREEN, 25));
+//        pingObj.addComponent(new DebugCircleComponent(pingObj, com.badlogic.gdx.graphics.Color.GREEN, 25));
         pingObj.addComponent(new RotationComponent(pingObj, 0));
 
         return pingObj;

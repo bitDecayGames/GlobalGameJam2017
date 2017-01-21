@@ -1,7 +1,7 @@
 package com.bitdecay.game.system;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
@@ -10,16 +10,16 @@ import com.bitdecay.game.component.RemoveNowComponent;
 import com.bitdecay.game.component.SonarPingComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;
-import com.bitdecay.game.system.abstracted.AbstractPreDrawSystem;
+import com.bitdecay.game.system.abstracted.AbstractDrawableSystem;
 
 /**
  * Created by Monday on 1/21/2017.
  */
-public class SonarPingSystem extends AbstractPreDrawSystem {
-    public float propagationSpeed = 5f;
+public class SonarPingSystem extends AbstractDrawableSystem {
+    public float propagationSpeed = 6f;
     public float maxSonarRange = 2000f;
 
-    ShaderProgram pingShader;
+    public static ShaderProgram pingShader;
 
     public SonarPingSystem(AbstractRoom room) {
         super(room);
@@ -37,7 +37,7 @@ public class SonarPingSystem extends AbstractPreDrawSystem {
     }
 
     @Override
-    public void preDraw(SpriteBatch spriteBatch, Camera camera) {
+    public void preDraw(SpriteBatch spriteBatch, OrthographicCamera camera) {
         pingShader.begin();
         gobs.forEach(gob -> {
             gob.forEachComponentDo(SonarPingComponent.class, ping -> {
@@ -51,14 +51,15 @@ public class SonarPingSystem extends AbstractPreDrawSystem {
 
             gob.forEachComponentDo(PositionComponent.class, pos -> {
                 Vector3 projected = camera.project(new Vector3(pos.x + 20, pos.y, 0));
+//                log.debug("projected: " + projected);
                 pingShader.setUniformf("v_center",projected.x, projected.y);
             });
         });
-        pingShader.setUniformf("f_deltaX", .001f);
-        pingShader.setUniformf("f_deltaY", .001f);
-        pingShader.setUniformf("f_sweepFadeDistance", 600f);
-        pingShader.setUniformf("f_colorFadeDistance", 100f);
         pingShader.end();
-        spriteBatch.setShader(pingShader);
+    }
+
+    @Override
+    public void draw(SpriteBatch spriteBatch, OrthographicCamera camera) {
+        // no op
     }
 }

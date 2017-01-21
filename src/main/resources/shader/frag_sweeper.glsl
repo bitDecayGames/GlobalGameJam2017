@@ -1,5 +1,5 @@
 #ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 varying vec4 v_color;
 varying vec2 v_texCoords;
@@ -64,7 +64,10 @@ void main()
                 gl_FragColor.r *= percentBrightness;
                 gl_FragColor.g *= percentBrightness;
                 gl_FragColor.b *= percentBrightness;
-                gl_FragColor.a = 1.0;
+                gl_FragColor.a = percentBrightness ;
+                if ( percentBrightness < 0.01 ) {
+                    gl_FragColor.a = 0.0;
+                }
             }
         }
     }

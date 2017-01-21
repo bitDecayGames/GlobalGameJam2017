@@ -4,7 +4,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.system.abstracted.AbstractSystem;
-import com.bitdecay.game.trait.*;
+import com.bitdecay.game.trait.ICleanup;
+import com.bitdecay.game.trait.IDrawWithCamera;
+import com.bitdecay.game.trait.IRefreshable;
+import com.bitdecay.game.trait.IUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,12 +70,23 @@ public class SystemManager implements ICleanup, IRefreshable, IUpdate, IDrawWith
     }
 
     @Override
+    public void preDraw(SpriteBatch spriteBatch, OrthographicCamera camera) {
+        systems.forEach(sys -> {
+            if (sys instanceof IDrawWithCamera) ((IDrawWithCamera) sys).preDraw(spriteBatch, camera);
+        });
+    }
+
+    @Override
     public void draw(SpriteBatch spriteBatch, OrthographicCamera camera) {
         systems.forEach(sys -> {
-            if (sys instanceof IPreDraw) ((IPreDraw) sys).preDraw(spriteBatch, camera);
-        });
-        systems.forEach(sys -> {
             if (sys instanceof IDrawWithCamera) ((IDrawWithCamera) sys).draw(spriteBatch, camera);
+        });
+    }
+
+    @Override
+    public void postDraw(SpriteBatch spriteBatch, OrthographicCamera camera) {
+        systems.forEach(sys -> {
+            if (sys instanceof IDrawWithCamera) ((IDrawWithCamera) sys).postDraw(spriteBatch, camera);
         });
     }
 }
