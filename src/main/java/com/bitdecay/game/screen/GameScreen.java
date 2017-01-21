@@ -93,13 +93,16 @@ public class GameScreen implements Screen, EditorHook, IHasScreenSize, ICanSetSc
         shader.begin();
         shader.setUniformf("v_center", center.x, center.y);
         shader.setUniformf("f_sweepRadius", largeRadius);
-        shader.setUniformf("f_delta", .002f);
+        shader.setUniformf("f_delta", .003f);
         shader.setUniformf("f_sweepFadeDistance", sweepFadeDistance);
         shader.setUniformf("f_colorFadeDistance", colorFadeDistance);
+        shader.setUniformf("v_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         shader.end();
         batch.setShader(shader);
         batch.begin();
-        batch.draw(edgeTestImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        batch.draw(edgeTestImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(edgeTestImage, 0, 0);
+        batch.draw(edgeTestImage, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         batch.end();
     }
 
