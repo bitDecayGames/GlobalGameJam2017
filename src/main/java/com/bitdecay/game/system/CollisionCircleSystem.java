@@ -9,6 +9,7 @@ import com.bitdecay.game.component.RotationComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.system.abstracted.AbstractForEachUpdatableSystem;
+import com.bitdecay.game.util.VectorMath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,7 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
         for (Circle circle1 : geom1.collisionCircles) {
             circle1 = new Circle(circle1);
             if (rot1 != null) {
-                Vector2 rotated = getRotatedPoint(circle1.x, circle1.y, rot1.toRadians(), Vector2.Zero);
+                Vector2 rotated = VectorMath.getRotatedPoint(circle1.x, circle1.y, rot1.toRadians(), Vector2.Zero);
                 circle1.x = rotated.x;
                 circle1.y = rotated.y;
             }
@@ -93,7 +94,7 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
             for (Circle circle2 : geom2.collisionCircles) {
                 circle2 = new Circle(circle2);
                 if (rot2 != null) {
-                    Vector2 rotated = getRotatedPoint(circle2.x, circle2.y, rot2.toRadians(), Vector2.Zero);
+                    Vector2 rotated = VectorMath.getRotatedPoint(circle2.x, circle2.y, rot2.toRadians(), Vector2.Zero);
                     circle2.x = rotated.x;
                     circle2.y = rotated.y;
                 }
@@ -108,29 +109,6 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
             }
         }
         return collisionFound;
-    }
-
-    /**
-     * Given a working point and a reference point, rotate the working point by
-     * the given angle around the reference point.
-     */
-    private static Vector2 getRotatedPoint(float x, float y, float angle, Vector2 around) {
-        Vector2 rotated = new Vector2(x, y);
-        double s = Math.sin(angle);
-        double c = Math.cos(angle);
-
-        // translate point back to origin:
-        rotated.x -= around.x;
-        rotated.y -= around.y;
-
-        // rotate point
-        double xnew = rotated.x * c - rotated.y * s;
-        double ynew = rotated.x * s + rotated.y * c;
-
-        // translate point back:
-        rotated.x = (float) (xnew + around.x);
-        rotated.y = (float) (ynew + around.y);
-        return rotated;
     }
 
     @Override
