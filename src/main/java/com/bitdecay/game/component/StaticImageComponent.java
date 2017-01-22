@@ -25,9 +25,10 @@ public class StaticImageComponent extends DrawableComponent {
     }
 
     // USE WITH CAUTION YA SCALLYWAGS
-    public void prepareData() {
+    public StaticImageComponent prepareData() {
         TextureData textureData = image.getTexture().getTextureData();
         textureData.prepare();
         pixmap = textureData.consumePixmap();
+        return this;
     }
 }
