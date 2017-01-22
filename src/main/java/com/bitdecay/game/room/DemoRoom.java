@@ -52,6 +52,7 @@ public class DemoRoom extends AbstractRoom {
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.mine());
         camera.maxZoom = 0.1f;
+        gobs.add(MyGameObjectFactory.jelly());
         gobs.addAll(MyGameObjectFactory.demoBackgrounds(Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds")));
 
         // this is required to be at the end here so that the systems have the latest gobs
