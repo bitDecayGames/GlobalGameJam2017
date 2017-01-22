@@ -67,7 +67,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             }));
         }
 
-        if (InputHelper.isKeyJustPressed(Input.Keys.SPACE, Input.Keys.ENTER)) {
+        if (InputHelper.isKeyJustPressed(Input.Keys.SPACE, Input.Keys.ENTER, Input.Keys.Z)) {
             // TODO: add trigger to sonar ping
             // maybe something like:
             // gobs.forEach(gob -> gob.addComponent(SonarPingComponent))
@@ -84,7 +84,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             }
         }
 
-        if (InputHelper.isKeyJustPressed(Input.Keys.CONTROL_RIGHT) || InputHelper.isKeyJustPressed(Input.Keys.CONTROL_LEFT)){
+        if (InputHelper.isKeyJustPressed(Input.Keys.CONTROL_RIGHT) || InputHelper.isKeyJustPressed(Input.Keys.CONTROL_LEFT) || InputHelper.isKeyJustPressed(Input.Keys.X)){
             float[] coords = new float[3];
             gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi -> {
                 gob.forEachComponentDo(CanShootComponent.class, shooter -> {

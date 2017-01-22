@@ -49,9 +49,10 @@ public class DemoRoom extends AbstractRoom {
         new ManageAnimationSystem(this);
         new EnemyPopulationSystem(this);
         new RelativePositionSystem(this);
-        new KrakenSystem(this);
+//        new KrakenSystem(this);
         new ParticleSystem(this);
         new SoundEffectSystem(this);
+//        new DebugOutputSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here
@@ -59,7 +60,7 @@ public class DemoRoom extends AbstractRoom {
         gobs.addAll(MyGameObjectFactory.demoBackgrounds(Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds")));
         MyGameObject player = MyGameObjectFactory.ship(this, new Vector2(Launcher.conf.getInt("player.startingPosition.x"), Launcher.conf.getInt("player.startingPosition.y")));
         gobs.add(player);
-        gobs.addAll(MyGameObjectFactory._____RELEASE___THE___KRAKEN_____(player));
+//        gobs.addAll(MyGameObjectFactory._____RELEASE___THE___KRAKEN_____(player));
         gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500, 10, 10));
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.jelly(300,300));
