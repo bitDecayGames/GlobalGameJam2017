@@ -51,7 +51,7 @@ public class DemoRoom extends AbstractRoom {
         new RelativePositionSystem(this);
 //        new KrakenSystem(this);
         new ParticleSystem(this);
-        new DebugOutputSystem(this);
+//        new DebugOutputSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here

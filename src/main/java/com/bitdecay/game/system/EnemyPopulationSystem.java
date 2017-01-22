@@ -17,8 +17,8 @@ import java.util.HashSet;
 public class EnemyPopulationSystem extends AbstractUpdatableSystem {
 
     HashSet<Integer> populatedSegments = new HashSet<>();
-    int jellyfishPerSegment = 5;
-    int minesPerSegment = 2;
+    int jellyfishPerSegment = 6;
+    int minesPerSegment = 3;
 
     public EnemyPopulationSystem(AbstractRoom room) {
         super(room);
