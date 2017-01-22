@@ -38,6 +38,14 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
                             rot.addDegrees(rotationDirectionFinal * pi.rotationAmountPerStep))));
         }
 
+        if (canPing(gobs)) {
+            gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pos -> {
+                if (gob.hasComponent(AnimationComponent.class)) {
+                    gob.removeComponent(AnimationComponent.class);
+                }
+            }));
+        }
+
         if (InputHelper.isKeyJustPressed(Input.Keys.SPACE, Input.Keys.ENTER)) {
             // TODO: add trigger to sonar ping
             // maybe something like:
@@ -46,6 +54,8 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             if (canPing(gobs)) {
                 gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
                     room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
+                    gob.addComponent(new AnimationComponent(gob, "player/charge", 0.5f));
+
                 }));
                 gobs.forEach(gob-> gob.forEachComponentDo(CanPingComponent.class, cpc ->{
                     gob.removeComponent(CanPingComponent.class);
@@ -73,6 +83,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
                     }));
                 });
             }));
+//            this.room.gobs.add(MyGameObjectFactory.splashText("Torpedo!!", 4, 1000, (int)coords[0], (int)coords[1]));
         }
     }
 }

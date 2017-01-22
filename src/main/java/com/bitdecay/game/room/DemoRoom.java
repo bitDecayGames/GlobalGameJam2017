@@ -35,21 +35,24 @@ public class DemoRoom extends AbstractRoom {
         new RotationFromVelocitySystem(this);
         new ShapeDrawSystem(this);
         new CollisionCircleSystem(this);
+        new CircleLevelCollisionSystem(this);
         new CollisionResolutionSystem(this);
         new RandomOrbitSystem(this);
         new TextDrawSystem(this);
         new GlobalInputSystem(this);
         new ImpulseSystem(this);
         new DragSystem(this);
+        new ManageAnimationSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
-        gobs.add(MyGameObjectFactory.ship());
-        gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500));
+        gobs.add(MyGameObjectFactory.ship(this));
+        gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500, 10, 10));
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.mine());
         gobs.add(MyGameObjectFactory.jelly(300,300));
+        camera.maxZoom = 0.1f;
         gobs.addAll(MyGameObjectFactory.demoBackgrounds(Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds")));
 
         // this is required to be at the end here so that the systems have the latest gobs

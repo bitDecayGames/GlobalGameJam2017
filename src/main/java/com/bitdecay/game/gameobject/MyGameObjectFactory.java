@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.Launcher;
 import com.bitdecay.game.component.*;
-import com.typesafe.config.Config;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.util.VectorMath;
+import com.typesafe.config.Config;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,11 +26,12 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject ship(){
+    public static MyGameObject ship(AbstractRoom room){
         Config conf = Launcher.conf.getConfig("player");
         MyGameObject t = new MyGameObject();
+        PositionComponent positionComp = new PositionComponent(t, conf.getInt("startingPosition.x"), conf.getInt("startingPosition.y"));
         t.addComponent(new PlayerInputComponent(t, (float) conf.getDouble("desiredDegreeRotationAmountPerStep")));
-        t.addComponent(new PositionComponent(t, conf.getInt("startingPosition.x"), conf.getInt("startingPosition.y")));
+        t.addComponent(positionComp);
         t.addComponent(new RotationComponent(t));
         t.addComponent(new DesiredDirectionComponent(t, 0, (float) conf.getDouble("actualRotationSpeedScalar")));
         t.addComponent(new SizeComponent(t, conf.getInt("size.w"), conf.getInt("size.h")));
@@ -45,13 +46,17 @@ public final class MyGameObjectFactory {
         t.addComponent(new CameraFollowComponent(t));
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
-        t.addComponent(new VelocityComponent(t, (float) conf.getDouble("moveSpeed"), 0));
         t.addComponent(new StaticImageComponent(t, conf.getString("imagePath")).setReactsToSonar(true));
+        t.addComponent(new VelocityComponent(t, (float) conf.getDouble("moveSpeed"), 0));
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new CanPingComponent(t));
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
         t.addComponent(new CanShootComponent(t));
+
+        // Add initial starting ping.
+        room.getGameObjects().add(MyGameObjectFactory.ping(positionComp.toVector2()));
+
         return t;
     }
 
@@ -59,7 +64,7 @@ public final class MyGameObjectFactory {
         MyGameObject t = new MyGameObject();
         t.addComponent(new ObjectNameComponent(t,"mine"));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, 100, 20));
+        t.addComponent(new PositionComponent(t, -200, 20));
         t.addComponent(new SizeComponent(t, 12, 14 ));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(0, 0, 7));
@@ -68,7 +73,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/mine/mine").setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
-        t.addComponent(new RandomOrbitComponent(t, 100, 20 , 2.5f ));
+        t.addComponent(new RandomOrbitComponent(t, -200, 20 , 2.5f ));
         t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
@@ -86,6 +91,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/jelly/0").setReactsToSonar(true));
+        t.addComponent(new AnimationComponent(t, "enemies/jelly", 0.2f));
         t.addComponent(new CollisionComponent(t));
         Random r = new Random();
         int low = 45;
@@ -97,9 +103,9 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject splashText(String text, int textSizeMultiplier, int durationMs) {
+    public static MyGameObject splashText(String text, int textSizeMultiplier, int durationMs, int x, int y) {
         MyGameObject t = new MyGameObject();
-        t.addComponent(new PositionComponent(t, 10, 10));
+        t.addComponent(new PositionComponent(t, x, y));
         t.addComponent(new TextComponent(t, text, textSizeMultiplier, durationMs));
         return t;
     }
@@ -148,6 +154,7 @@ public final class MyGameObjectFactory {
             MyGameObject o = new MyGameObject();
             o.addComponent(new PositionComponent(o, 600 * i, 0));
             o.addComponent(new SizeComponent(o, 600, 600));
+            o.addComponent(new ImageCollisionComponent(o));
 
             if (maxNewb > 0) {
                 maxNewb--;
@@ -160,7 +167,7 @@ public final class MyGameObjectFactory {
             else if (name.startsWith("BC/")) name = names.stream().filter(s -> s.startsWith("C/")).findFirst().get();
             else if (name.startsWith("C/")) name = names.stream().filter(s -> s.startsWith("C/") || s.startsWith("CB/")).findFirst().get();
             else if (name.startsWith("CB/")) name = names.stream().filter(s -> s.startsWith("B/")).findFirst().get();
-            o.addComponent(new StaticImageComponent(o, "levelSegments/" + name).setReactsToSonar(true));
+            o.addComponent(new StaticImageComponent(o, "levelSegments/" + name).prepareData().setReactsToSonar(true));
             gobs.add(o);
             Collections.shuffle(names);
         }
@@ -179,6 +186,7 @@ public final class MyGameObjectFactory {
         StaticImageComponent imageComponent = new StaticImageComponent(t, "player/torpedo/0");
         imageComponent.reactsToSonar = true;
         t.addComponent(imageComponent);
+        t.addComponent(new AnimationComponent(t, "player/torpedo", .1f));
         RotationComponent rotationComponent = new RotationComponent(t, rot);
         rotationComponent.rotationFromVelocity = false;
         t.addComponent(rotationComponent);
