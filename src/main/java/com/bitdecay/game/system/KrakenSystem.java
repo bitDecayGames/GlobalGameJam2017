@@ -29,8 +29,6 @@ public class KrakenSystem extends AbstractUpdatableSystem {
         gobs.stream().filter(gob -> gob.hasComponent(PlayerInputComponent.class)).findFirst().ifPresent(playerObj -> gobs.forEach(gob -> gob.forEachComponentDo(KrakenComponent.class, kraken -> gob.forEachComponentDo(RelativePositionComponent.class, rel ->{
             rel.other = playerObj;
             kraken.player = playerObj;
-
-            if (playerObj)
         }))));
         gobs.forEach(gob -> gob.forEachComponentDo(KrakenComponent.class, kraken ->
                 gob.forEachComponentDo(RelativePositionComponent.class, relPos -> {
