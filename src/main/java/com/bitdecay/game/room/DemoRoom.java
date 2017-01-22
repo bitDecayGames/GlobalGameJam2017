@@ -47,7 +47,7 @@ public class DemoRoom extends AbstractRoom {
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
-        gobs.add(MyGameObjectFactory.ship());
+        gobs.add(MyGameObjectFactory.ship(this));
         gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500, 10, 10));
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.mine());
