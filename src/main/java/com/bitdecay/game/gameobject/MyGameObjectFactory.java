@@ -196,6 +196,10 @@ public final class MyGameObjectFactory {
             myGameObject.forEachComponentDo(RotationComponent.class, rotat -> {
                 myGameObject.addComponent(new AccelerationComponent(myGameObject, rotat.toVector2().scl(0.45f), 5f));
                 myGameObject.addComponent(new ImpulseComponent(myGameObject, perp.cpy().scl(-2.5f)));
+                ParticleEffectComponent particle = new ParticleEffectComponent(myGameObject, "particle/bubbleJet2.p", "particle");
+                particle.fx.scaleEffect(.1f);
+                particle.offset = new Vector2(-20, 0);
+                myGameObject.addComponent(particle);
             }
         )));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
@@ -204,6 +208,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new DragComponent(t, 0.09f, 0.4f));
         t.addComponent(new ImpulseComponent(t, perp.cpy().scl(4)));
+
 
         return t;
     }
