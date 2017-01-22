@@ -26,7 +26,8 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                     case JELLY:
                         gob.removeComponent(CollidedWithLevelComponent.class);
                         GameUtil.generateDirection(gob);
-                        break;
+                        // Need to return to prevent adding removal component.
+                        return;
                     case SHIP:
                         if (!playerExploded) {
                             playerExploded = true;

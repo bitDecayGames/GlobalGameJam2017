@@ -26,6 +26,6 @@ public class RespawnRecorderComponent extends AbstractComponent {
     }
 
     public Vector2 last(){
-        return positions.get(0);
+        return positions.size() > 0 ? positions.get(0) : null;
     }
 }
