@@ -6,13 +6,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.Launcher;
 import com.bitdecay.game.component.*;
 import com.bitdecay.game.room.AbstractRoom;
+import com.bitdecay.game.util.GameUtil;
 import com.bitdecay.game.util.VectorMath;
 import com.typesafe.config.Config;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * The idea here is to provide a single place for you to add your game objects.  You know that the "Player" game object will have a PositionComponent, a SizeComponent, and a CameraFollowComponent.  So in a static method (maybe called buildPlayer) you want to create a generic MyGameObject and populate it with the correct components.
@@ -75,9 +75,9 @@ public final class MyGameObjectFactory {
 
     public static MyGameObject jelly(int x, int y) {
         MyGameObject t = new MyGameObject();
-        t.addComponent(new ObjectNameComponent(t, "jelly"));
+        t.addComponent(new ObjectNameComponent(t, GameObjectNames.JELLY));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, x, x));
+        t.addComponent(new PositionComponent(t, x, y));
         t.addComponent(new SizeComponent(t, 27, 20));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(0, 4, 5));
@@ -87,13 +87,10 @@ public final class MyGameObjectFactory {
         t.addComponent(new StaticImageComponent(t, "enemies/jelly/0").setReactsToSonar(true));
         t.addComponent(new AnimationComponent(t, "enemies/jelly", 0.2f, Animation.PlayMode.LOOP));
         t.addComponent(new CollisionComponent(t));
-        Random r = new Random();
-        int low = 45;
-        int high = 135;
-        int results = r.nextInt(high-low) + low;
-        Vector2 targetV = VectorMath.degreesToVector2(results).scl(0.5f);
-        t.addComponent(new VelocityComponent(t,targetV.x,targetV.y));
         t.addComponent(new AccelerationComponent(t));
+
+        GameUtil.generateDirection(t);
+
         return t;
     }
 
