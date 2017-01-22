@@ -16,7 +16,7 @@ mvn install
 ## Run Locally
 
 ```bash
-java -jar target/project-name-1.0.jar dev
+java -jar target/deep-1.0.jar dev
 ```
 
 The above must be run once to compile image assets. The run again to play.
