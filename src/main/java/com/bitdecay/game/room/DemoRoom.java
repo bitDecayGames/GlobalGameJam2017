@@ -38,7 +38,7 @@ public class DemoRoom extends AbstractRoom {
         new GlobalInputSystem(this);
         new ImpulseSystem(this);
         new DragSystem(this);
-        new DrawAnimationSystem(this);
+        new ManageAnimationSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here
@@ -49,7 +49,6 @@ public class DemoRoom extends AbstractRoom {
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.mine());
         gobs.addAll(MyGameObjectFactory.demoBackgrounds());
-        gobs.add(MyGameObjectFactory.sonarStatusAnimation());
 
         camera.maxZoom = 0.1f;
 

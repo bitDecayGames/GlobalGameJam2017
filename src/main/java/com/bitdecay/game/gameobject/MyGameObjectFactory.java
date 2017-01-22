@@ -41,7 +41,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
         t.addComponent(new VelocityComponent(t,0.3f,0));
-        t.addComponent(new StaticImageComponent(t, "player/sub").setReactsToSonar(true));
+        t.addComponent(new StaticImageComponent(t, "player/sub2").setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
@@ -123,13 +123,6 @@ public final class MyGameObjectFactory {
         t.addComponent(new DragComponent(t, 0.09f, 0.4f));
         t.addComponent(new ImpulseComponent(t, perp.cpy().scl(4)));
 
-        return t;
-    }
-
-    public static MyGameObject sonarStatusAnimation() {
-        MyGameObject t = new MyGameObject();
-        t.addComponent(new AnimationComponent(t, "img/standalone/splash/bitDecay.png"));
-        t.addComponent(new PositionComponent(t, 10, 10));
         return t;
     }
 }

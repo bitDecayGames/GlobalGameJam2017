@@ -39,6 +39,14 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
                             rot.addDegrees(rotationDirectionFinal * pi.rotationAmountPerStep))));
         }
 
+        if (canPing(gobs)) {
+            gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pos -> {
+                if (gob.hasComponent(AnimationComponent.class)) {
+                    gob.removeComponent(AnimationComponent.class);
+                }
+            }));
+        }
+
         if (InputHelper.isKeyJustPressed(Input.Keys.SPACE, Input.Keys.ENTER)) {
             // TODO: add trigger to sonar ping
             // maybe something like:
@@ -48,6 +56,8 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
                 log.debug("ADDING PING");
                 gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
                     room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
+                    gob.addComponent(new AnimationComponent(gob, "img/packable/main/player/sub_charging_anim.png").setReactsToSonar(true));
+
                 }));
             }
         }
