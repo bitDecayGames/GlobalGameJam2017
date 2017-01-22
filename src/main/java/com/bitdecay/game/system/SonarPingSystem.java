@@ -14,7 +14,7 @@ import com.bitdecay.game.system.abstracted.AbstractDrawableSystem;
  * Created by Monday on 1/21/2017.
  */
 public class SonarPingSystem extends AbstractDrawableSystem {
-    public float propagationSpeed = 6f;
+    public float propagationSpeed = 7f;
     public float maxSonarRange = 4000f;
 
     public SonarPingSystem(AbstractRoom room) {
