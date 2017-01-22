@@ -6,7 +6,7 @@ addons:
     packages:
       - oracle-java8-installer
 env:
-  - PROJECT_NAME: project-name-1.0
+  - PROJECT_NAME: deep-1.0
 cache:
   directories:
   - $HOME/.m2
