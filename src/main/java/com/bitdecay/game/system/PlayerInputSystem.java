@@ -34,8 +34,12 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
         if (rotationDirection != 0) {
             final float rotationDirectionFinal = rotationDirection;
             gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi ->
-                    gob.forEachComponentDo(DesiredDirectionComponent.class, rot ->
-                            rot.addDegrees(rotationDirectionFinal * pi.rotationAmountPerStep))));
+                    gob.forEachComponentDo(DesiredDirectionComponent.class, rot -> {
+                        rot.addDegrees(rotationDirectionFinal * pi.rotationAmountPerStep);
+                        float degs = rot.toDegrees();
+                        if (degs > pi.maxDegrees) rot.setDegrees(pi.maxDegrees);
+                        else if (degs < pi.minDegrees) rot.setDegrees(pi.minDegrees);
+                    })));
         }
 
         if (canPing(gobs)) {

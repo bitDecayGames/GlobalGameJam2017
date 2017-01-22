@@ -33,8 +33,10 @@ public class DesiredDirectionComponent extends AbstractComponent {
 
     public void addDegrees(float degreesToAdd){
         degrees += degreesToAdd;
-//        if (degrees > 180) degrees = -180 + (degrees - 180);
-//        else if (degrees < -180) degrees = 180 + (degrees + 180);
+    }
+
+    public void setDegrees(float degreesToSet){
+        degrees = degreesToSet;
     }
 
     public void addRadians(float radians){
