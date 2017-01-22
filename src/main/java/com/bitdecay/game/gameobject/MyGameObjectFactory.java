@@ -55,11 +55,11 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject mine() {
+    public static MyGameObject mine(int x, int y) {
         MyGameObject t = new MyGameObject();
         t.addComponent(new ObjectNameComponent(t, GameObjectNames.MINE));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, 350,300 ));
+        t.addComponent(new PositionComponent(t, x,y ));
         t.addComponent(new SizeComponent(t, 12, 14 ));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(0, 0, 7));
@@ -68,7 +68,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/mine/mine").setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
-        t.addComponent(new RandomOrbitComponent(t, 350, 300 , 2.5f ));
+        t.addComponent(new RandomOrbitComponent(t, x, y , 2.5f ));
         t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
@@ -161,6 +161,7 @@ public final class MyGameObjectFactory {
             else if (name.startsWith("C/")) name = names.stream().filter(s -> s.startsWith("C/") || s.startsWith("CB/")).findFirst().get();
             else if (name.startsWith("CB/")) name = names.stream().filter(s -> s.startsWith("B/")).findFirst().get();
             o.addComponent(new StaticImageComponent(o, "levelSegments/" + name).prepareData().setReactsToSonar(true));
+            o.addComponent(new LevelImageComponent(o));
             gobs.add(o);
             Collections.shuffle(names);
         }
@@ -208,7 +209,7 @@ public final class MyGameObjectFactory {
     public static MyGameObject releaseTheKraken() {
         MyGameObject t = new MyGameObject();
         t.addComponent(new CameraFollowComponent(t));
-        t.addComponent(new StaticImageComponent(t, ""));
+        t.addComponent(new StaticImageComponent(t, "cracker"));
         t.addComponent(new VelocityComponent(t, 0.3f, 0));
 
         return t;

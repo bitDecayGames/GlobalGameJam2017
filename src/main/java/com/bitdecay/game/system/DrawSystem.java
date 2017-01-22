@@ -47,6 +47,11 @@ public class DrawSystem extends AbstractDrawableSystem {
 
     @Override
     protected boolean validateGob(MyGameObject gob) {
+        gob.forEachComponentDo(StaticImageComponent.class, d -> {
+            if (d.image() == null) {
+                throw new RuntimeException("Image cannot be null: " + d.name());
+            }
+        });
         return gob.hasComponents(DrawableComponent.class, PositionComponent.class, SizeComponent.class) || gob.hasComponents(AnimationComponent.class, PositionComponent.class, SizeComponent.class);
     }
 

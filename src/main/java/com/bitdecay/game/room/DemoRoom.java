@@ -46,6 +46,7 @@ public class DemoRoom extends AbstractRoom {
         new ImpulseSystem(this);
         new DragSystem(this);
         new ManageAnimationSystem(this);
+        new EnemyPopulationSystem(this);
         new RelativePositionSystem(this);
         new KrakenSystem(this);
         new ParticleSystem(this);
@@ -59,7 +60,6 @@ public class DemoRoom extends AbstractRoom {
         gobs.addAll(MyGameObjectFactory._____RELEASE___THE___KRAKEN_____(player));
         gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500, 10, 10));
         gobs.add(MyGameObjectFactory.globalInputListener(this));
-        gobs.add(MyGameObjectFactory.mine());
         gobs.add(MyGameObjectFactory.jelly(300,300));
 
         // this is required to be at the end here so that the systems have the latest gobs

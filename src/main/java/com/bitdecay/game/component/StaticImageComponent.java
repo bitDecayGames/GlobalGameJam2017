@@ -13,15 +13,22 @@ public class StaticImageComponent extends DrawableComponent {
 
     public TextureRegion image;
     public Pixmap pixmap;
+    public String name;
 
     public StaticImageComponent(MyGameObject obj, String name) {
         super(obj);
+        this.name = name;
         image = MyGame.ATLAS.findRegion(name);
     }
 
     @Override
     public TextureRegion image() {
         return image;
+    }
+
+    @Override
+    public String name() {
+        return name;
     }
 
     // USE WITH CAUTION YA SCALLYWAGS
