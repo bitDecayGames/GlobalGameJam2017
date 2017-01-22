@@ -35,8 +35,8 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                         }
                        break;
                     default:
+                        gob.addComponent(new RemoveNowComponent(gob));
                 }
-                gob.addComponent(new RemoveNowComponent(gob));
             });
         });
 
