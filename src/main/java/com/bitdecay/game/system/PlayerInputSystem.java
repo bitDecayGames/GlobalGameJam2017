@@ -46,7 +46,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
         updateCanShoot(delta);
 
         float rotationDirection = 0;
-        if (InputHelper.isKeyPressed(Input.Keys.S, Input.Keys.UP, Input.Keys.RIGHT)) rotationDirection = -1;
+        if (InputHelper.isKeyPressed(Input.Keys.W, Input.Keys.UP, Input.Keys.RIGHT)) rotationDirection = -1;
         else if (InputHelper.isKeyPressed(Input.Keys.S, Input.Keys.DOWN, Input.Keys.LEFT)) rotationDirection = 1;
         if (rotationDirection != 0) {
             final float rotationDirectionFinal = rotationDirection;
