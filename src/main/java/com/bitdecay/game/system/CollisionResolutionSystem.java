@@ -16,11 +16,12 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
 
     @Override
     protected void forEach(float delta, MyGameObject gob) {
-        gob.forEachComponentDo(CollisionResponseComponent.class, colRep ->{
+        gob.forEachComponentDo(CollisionResponseComponent.class, colRep ->
+            gob.forEachComponentDo(ObjectNameComponent.class, gobName -> {
                if(colRep.collidedWith.isEmpty()) {
                   return;
                }
-               for(MyGameObject collidedGob :colRep.collidedWith ){
+               for(MyGameObject collidedGob : colRep.collidedWith){
                    collidedGob.forEachComponentDo(ObjectNameComponent.class, nameComp ->{
                        switch (nameComp.objectName){
                            case "mine":
@@ -29,15 +30,23 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                                //remove player from game ie.death
                                gob.addComponent(new RemoveNowComponent(gob));
                                break;
-//                           case "torpedo":
+                           case "torpedo":
 //                               //remove torpedo from the game, ie.SPLOSION!!
-//                               collidedGob.addComponent(new RemoveNowComponent(collidedGob));
+                               if(gobName.objectName != "ship") {
+                                   collidedGob.addComponent(new RemoveNowComponent(collidedGob));
 //                               //remove mine from game ie.death
-//                               gob.addComponent(new RemoveNowComponent(gob));
+                                   gob.addComponent(new RemoveNowComponent(gob));
+                               }
+                               break;
+                           case "jelly":
+                               if(gobName.objectName == "ship"){
+
+                               }
+                               break;
                        }
                    });
-               };
-            }
+               }
+            })
         );
     }
 

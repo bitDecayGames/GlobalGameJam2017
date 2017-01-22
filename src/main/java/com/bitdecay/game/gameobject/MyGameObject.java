@@ -33,6 +33,10 @@ public class MyGameObject implements ICleanup {
         return components.stream().filter(componentClass::isInstance).findFirst().map(componentClass::cast);
     }
 
+    public Optional<AbstractComponent> getComponent(AbstractComponent component){
+        return components.stream().filter(component::equals).findFirst();
+    }
+
     public <T> void forEachComponentDo(Class<T> componentClass, Consumer<T> doFunc){
         components.stream().filter(componentClass::isInstance).map(componentClass::cast).forEach(doFunc);
     }
@@ -63,6 +67,14 @@ public class MyGameObject implements ICleanup {
      */
     public <T extends AbstractComponent> Optional<T> removeComponent(Class<T> componentClass){
         Optional<T> comp = getComponent(componentClass);
+        if (comp.isPresent()) {
+            componentsToRemove.add(comp.get());
+            dirty = true;
+        }
+        return comp;
+    }
+    public Optional<AbstractComponent> removeComponent(AbstractComponent component){
+        Optional<AbstractComponent> comp = getComponent(component);
         if (comp.isPresent()) {
             componentsToRemove.add(comp.get());
             dirty = true;

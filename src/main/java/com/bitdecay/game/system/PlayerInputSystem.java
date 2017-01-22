@@ -18,7 +18,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
     public PlayerInputSystem(AbstractRoom room) { super(room); }
 
     private boolean canPing(List<MyGameObject> gobs) {
-        return ! gobs.stream().anyMatch(gameObj -> gameObj.hasComponent(SonarPingComponent.class));
+        return gobs.stream().anyMatch(gameObj -> gameObj.hasComponent(CanPingComponent.class));
     }
 
     @Override
@@ -47,6 +47,12 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
                 gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
                     room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
                 }));
+                gobs.forEach(gob-> gob.forEachComponentDo(CanPingComponent.class, cpc ->{
+                    gob.removeComponent(CanPingComponent.class);
+                    gob.addComponent(new RemovableTimerComponent(gob,6, myGameObject ->{
+                        myGameObject.addComponent(new CanPingComponent(myGameObject));
+                    }));
+                }));
             }
         }
 
@@ -62,9 +68,8 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
                             coords[2] = rota.degrees);
                     this.room.getGameObjects().add(MyGameObjectFactory.torpedo(coords[0], coords[1], coords[2]));
                     gob.removeComponent(CanShootComponent.class);
-                    gob.addComponent(new TimerComponent (gob, 2f, myGameObject -> {
+                    gob.addComponent(new RemovableTimerComponent (gob, 2f, myGameObject -> {
                         myGameObject.addComponent(new CanShootComponent(myGameObject));
-                        myGameObject.removeComponent(TimerComponent.class);
                     }));
                 });
             }));
