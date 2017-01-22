@@ -16,4 +16,14 @@ public abstract class DrawableComponent extends AbstractComponent {
     }
 
     public abstract TextureRegion image();
+
+    public DrawableComponent setReactsToSonar(boolean reactsToSonar){
+        this.reactsToSonar = reactsToSonar;
+        return this;
+    }
+
+    public DrawableComponent setProximityRender(boolean proximityRender){
+        this.proximityRender = proximityRender;
+        return this;
+    }
 }

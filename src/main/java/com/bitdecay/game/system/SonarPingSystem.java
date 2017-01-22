@@ -19,7 +19,6 @@ public class SonarPingSystem extends AbstractDrawableSystem {
 
     public SonarPingSystem(AbstractRoom room) {
         super(room);
-
     }
 
     @Override
