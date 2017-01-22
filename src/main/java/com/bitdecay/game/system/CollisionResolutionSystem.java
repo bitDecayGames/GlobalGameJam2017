@@ -44,7 +44,7 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                                break;
                            case "jelly":
                                if(gobName.objectName == "ship"){
-
+                                   gob.forEachComponentDo(CanPingComponent.class, cpc -> cpc.timer = PlayerInputSystem.PING_DELAY);
                                }
                                break;
 

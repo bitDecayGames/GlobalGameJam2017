@@ -86,7 +86,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new PositionComponent(t, x, x));
         t.addComponent(new SizeComponent(t, 27, 20));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
-        collision.collisionCircles.add(new Circle(0, 0, 6));
+        collision.collisionCircles.add(new Circle(0, 4, 5));
         t.addComponent(collision);
         t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new OriginComponent(t));
