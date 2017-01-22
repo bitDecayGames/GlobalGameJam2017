@@ -4,6 +4,7 @@ import com.bitdecay.game.component.*;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.room.AbstractRoom;
+import com.bitdecay.game.room.DemoRoom;
 import com.bitdecay.game.system.abstracted.AbstractForEachUpdatableSystem;
 
 /**
@@ -23,6 +24,7 @@ public class RespawnSystem extends AbstractForEachUpdatableSystem {
                gob.forEachComponentDo(RespawnRecorderComponent.class, rec -> {
                    if (rec.lastPos() != null) {
                        MyGameObject player = MyGameObjectFactory.ship(room, rec.lastPos(), rec.lastVel(), rec.lastDesiredRotation());
+                       DemoRoom.player = player;
                        room.getGameObjects().add(player);
                    }
             });

@@ -35,10 +35,12 @@ public class KrakenSystem extends AbstractUpdatableSystem {
     @Override
     public void update(float delta) {
         int numSegments = Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds");
-        float playerX = DemoRoom.player.getComponent(PositionComponent.class).get().toVector2().x;
-        if (playerX > (numSegments + 1) * 600) {
-            if (!isKrakenAdded) {
-                addKraken();
+        if (DemoRoom.player.hasComponent(PositionComponent.class)) {
+            float playerX = DemoRoom.player.getComponent(PositionComponent.class).get().toVector2().x;
+            if (playerX > (numSegments + 1) * 600) {
+                if (!isKrakenAdded) {
+                    addKraken();
+                }
             }
         }
 
