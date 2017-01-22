@@ -1,5 +1,6 @@
 package com.bitdecay.game.system;
 
+import com.bitdecay.game.component.ObjectNameComponent;
 import com.bitdecay.game.component.RemoveNowComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;

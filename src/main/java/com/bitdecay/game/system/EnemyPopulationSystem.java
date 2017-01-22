@@ -2,6 +2,7 @@ package com.bitdecay.game.system;
 
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.component.*;
+import com.bitdecay.game.gameobject.GameObjectNames;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.room.AbstractRoom;
@@ -16,8 +17,8 @@ import java.util.HashSet;
 public class EnemyPopulationSystem extends AbstractUpdatableSystem {
 
     HashSet<Integer> populatedSegments = new HashSet<>();
-    int jellyfishPerSegment = 20;
-    int minesPerSegment = 10;
+    int jellyfishPerSegment = 5;
+    int minesPerSegment = 2;
 
     public EnemyPopulationSystem(AbstractRoom room) {
         super(room);
@@ -104,7 +105,7 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
         room.gobs.forEach(gob -> {
             gob.forEachComponentDo(ObjectNameComponent.class, obName -> {
                 gob.forEachComponentDo(PositionComponent.class, pos -> {
-                    if(obName.objectName.equals("jelly") || obName.objectName.equals("mine")){
+                    if(obName.objectName.equals(GameObjectNames.JELLY) || obName.objectName.equals(GameObjectNames.MINE)){
                         if (pos.x <= xCutoff) {
                             gob.addComponent(new RemoveNowComponent(gob));
                         }
