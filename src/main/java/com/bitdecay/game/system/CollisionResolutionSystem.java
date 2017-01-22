@@ -28,7 +28,7 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                     default:
                         // no-op
                 }
-            }
+            });
             gob.addComponent(new RemoveNowComponent(gob));
         });
 
