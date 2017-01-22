@@ -75,6 +75,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             if (canPing(gobs)) {
                 gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
                     room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
+                    gob.addComponent(new SoundEffectComponent(gob, "sonar1", 2));
                 }));
                 gobs.forEach(gob-> gob.forEachComponentDo(CanPingComponent.class, cpc ->{
                     cpc.timer = PING_DELAY;
