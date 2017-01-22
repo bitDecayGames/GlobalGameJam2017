@@ -34,6 +34,9 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                             explodePlayer(gob);
                         }
                        break;
+                    case TORPEDO:
+                        gob.addComponent(new RemoveNowComponent(gob));
+                        exploderTorpedo(gob);
                     default:
                         gob.addComponent(new RemoveNowComponent(gob));
                 }
