@@ -8,6 +8,8 @@ import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.system.abstracted.AbstractForEachUpdatableSystem;
 import com.bitdecay.game.util.GameUtil;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
 
     public CollisionResolutionSystem(AbstractRoom room){
@@ -69,6 +71,15 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                                            cpc.timer = PlayerInputSystem.PING_DELAY;
                                            cpc.justLostSonar = true;
                                        });
+                                       AtomicBoolean hasJellySonarSound = new AtomicBoolean(false);
+                                       gob.forEachComponentDo(SoundEffectComponent.class, sound -> {
+                                           if (sound.name.equals("FishesTakeMaSonar")) {
+                                                hasJellySonarSound.set(true);
+                                           }
+                                       });
+                                       if(!hasJellySonarSound.get()) {
+                                           gob.addComponent(new SoundEffectComponent(gob, "FishesTakeMaSonar", 1));
+                                       }
 
                                        break;
                                    default:
