@@ -155,6 +155,7 @@ public final class MyGameObjectFactory {
             else if (name.startsWith("C/")) name = names.stream().filter(s -> s.startsWith("C/") || s.startsWith("CB/")).findFirst().get();
             else if (name.startsWith("CB/")) name = names.stream().filter(s -> s.startsWith("B/")).findFirst().get();
             o.addComponent(new StaticImageComponent(o, "levelSegments/" + name).prepareData().setReactsToSonar(true));
+            o.addComponent(new LevelImageComponent(o));
             gobs.add(o);
             Collections.shuffle(names);
         }
