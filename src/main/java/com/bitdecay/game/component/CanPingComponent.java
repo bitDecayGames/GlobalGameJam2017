@@ -7,6 +7,8 @@ import com.bitdecay.game.gameobject.MyGameObject;
  */
 public class CanPingComponent extends AbstractComponent {
     public float timer = 0;
+    public boolean justLostSonar = false;
+
     public CanPingComponent(MyGameObject obj) {
         super(obj);
     }

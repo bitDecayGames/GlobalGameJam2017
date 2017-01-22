@@ -21,10 +21,10 @@ import java.util.List;
 public final class MyGameObjectFactory {
     private MyGameObjectFactory(){}
 
-    public static MyGameObject ship(AbstractRoom room){
+    public static MyGameObject ship(AbstractRoom room, Vector2 position){
         Config conf = Launcher.conf.getConfig("player");
         MyGameObject t = new MyGameObject();
-        PositionComponent positionComp = new PositionComponent(t, conf.getInt("startingPosition.x"), conf.getInt("startingPosition.y"));
+        PositionComponent positionComp = new PositionComponent(t, position);
         t.addComponent(new PlayerInputComponent(t, (float) conf.getDouble("desiredDegreeRotationAmountPerStep"), (float) conf.getDouble("maxDegrees"), (float) conf.getDouble("minDegrees")));
         t.addComponent(positionComp);
         t.addComponent(new RotationComponent(t));
@@ -48,6 +48,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
         t.addComponent(new CanShootComponent(t));
+        t.addComponent(new RespawnRecorderComponent(t, 5));
 
         return t;
     }
@@ -205,11 +206,17 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject releaseTheKraken() {
+    public static MyGameObject shipExplode (Vector2 position) {
         MyGameObject t = new MyGameObject();
-        t.addComponent(new CameraFollowComponent(t));
-        t.addComponent(new StaticImageComponent(t, "cracker"));
-        t.addComponent(new VelocityComponent(t, 0.3f, 0));
+        t.addComponent(new ObjectNameComponent(t,GameObjectNames.SHIP_EXPLOSION));
+        t.addComponent(new DespawnableComponent(t));
+        t.addComponent(new PositionComponent(t, position));
+        SizeComponent size = new SizeComponent(t, 57 * 2, 103 * 2);
+        size.addSelfToGameObject();
+        t.addComponent(new OriginComponent(t, 0.5f, 0.3f));
+        t.addComponent(new AnimationComponent(t, "player/playerExplode", .07f, Animation.PlayMode.NORMAL));
+        t.addComponent(new StaticImageComponent(t, "player/playerExplode/0"));
+        t.addComponent(new TimerComponent(t, 1, obj -> obj.addComponent(new RemoveNowComponent(obj))));
 
         return t;
     }
