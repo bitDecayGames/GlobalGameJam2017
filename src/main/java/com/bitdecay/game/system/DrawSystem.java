@@ -118,7 +118,7 @@ public class DrawSystem extends AbstractDrawableSystem {
         proximitySprite.flip(false, true);
 
         spriteBatch.begin();
-        spriteBatch.setShader(proximityShader);
+        //spriteBatch.setShader(proximityShader);
         proximitySprite.draw(spriteBatch);
         spriteBatch.end();
         spriteBatch.setShader(null);
@@ -129,7 +129,7 @@ public class DrawSystem extends AbstractDrawableSystem {
         sonarSprite.flip(false, true);
 
         spriteBatch.begin();
-        spriteBatch.setShader(getConfiguredShader());
+        //spriteBatch.setShader(getConfiguredShader());
         sonarSprite.draw(spriteBatch);
         spriteBatch.end();
         spriteBatch.setShader(null);
