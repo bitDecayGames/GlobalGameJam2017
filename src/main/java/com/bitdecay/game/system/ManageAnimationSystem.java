@@ -1,6 +1,5 @@
 package com.bitdecay.game.system;
 
-import com.badlogic.gdx.Gdx;
 import com.bitdecay.game.component.AnimationComponent;
 import com.bitdecay.game.component.PositionComponent;
 import com.bitdecay.game.component.StaticImageComponent;

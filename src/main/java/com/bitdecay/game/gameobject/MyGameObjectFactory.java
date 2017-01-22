@@ -11,6 +11,7 @@ import com.bitdecay.game.util.VectorMath;
 import com.typesafe.config.Config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new RotationComponent(t));
         t.addComponent(new DesiredDirectionComponent(t, 0, (float) conf.getDouble("actualRotationSpeedScalar")));
         t.addComponent(new SizeComponent(t, conf.getInt("size.w"), conf.getInt("size.h")));
-        t.addComponent(new ObjectNameComponent(t,"ship"));
+        t.addComponent(new ObjectNameComponent(t,GameObjectNames.SHIP));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(16, 1.5f, 8));
         collision.collisionCircles.add(new Circle(4, 0, 11));
@@ -54,11 +55,11 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject mine() {
+    public static MyGameObject mine(int x, int y) {
         MyGameObject t = new MyGameObject();
-        t.addComponent(new ObjectNameComponent(t,"mine"));
+        t.addComponent(new ObjectNameComponent(t, GameObjectNames.MINE));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, 350,300 ));
+        t.addComponent(new PositionComponent(t, x,y ));
         t.addComponent(new SizeComponent(t, 12, 14 ));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(0, 0, 7));
@@ -67,7 +68,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/mine/mine").setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
-        t.addComponent(new RandomOrbitComponent(t, 350, 300 , 2.5f ));
+        t.addComponent(new RandomOrbitComponent(t, x, y , 2.5f ));
         t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
@@ -160,6 +161,7 @@ public final class MyGameObjectFactory {
             else if (name.startsWith("C/")) name = names.stream().filter(s -> s.startsWith("C/") || s.startsWith("CB/")).findFirst().get();
             else if (name.startsWith("CB/")) name = names.stream().filter(s -> s.startsWith("B/")).findFirst().get();
             o.addComponent(new StaticImageComponent(o, "levelSegments/" + name).prepareData().setReactsToSonar(true));
+            o.addComponent(new LevelImageComponent(o));
             gobs.add(o);
             Collections.shuffle(names);
         }
@@ -168,7 +170,7 @@ public final class MyGameObjectFactory {
 
     public static MyGameObject torpedo (float x, float y, float rot) {
         MyGameObject t = new MyGameObject();
-        t.addComponent(new ObjectNameComponent(t,"torpedo"));
+        t.addComponent(new ObjectNameComponent(t,GameObjectNames.TORPEDO));
         Vector2 direction = VectorMath.degreesToVector2(rot).nor();
         Vector2 perp = new Vector2(direction.y, -direction.x);
 //        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.RED, 25));
@@ -207,9 +209,76 @@ public final class MyGameObjectFactory {
     public static MyGameObject releaseTheKraken() {
         MyGameObject t = new MyGameObject();
         t.addComponent(new CameraFollowComponent(t));
-        t.addComponent(new StaticImageComponent(t, ""));
+        t.addComponent(new StaticImageComponent(t, "cracker"));
         t.addComponent(new VelocityComponent(t, 0.3f, 0));
 
         return t;
+    }
+
+    public static List<MyGameObject> _____RELEASE___THE___KRAKEN_____(MyGameObject player){
+        MyGameObject o = new MyGameObject();
+        KrakenComponent k = new KrakenComponent(o);
+        k.addSelfToGameObject();
+        k.player = player;
+        new PositionComponent(o).addSelfToGameObject();
+        new RelativePositionComponent(o, k.player, 300, 0).addSelfToGameObject();
+
+        // face
+        k.face = new MyGameObject();
+        new PositionComponent(k.face).addSelfToGameObject();
+        new OriginComponent(k.face).addSelfToGameObject();
+        new RelativePositionComponent(k.face, o).addSelfToGameObject();
+        new StaticImageComponent(k.face, "enemies/krakken/face/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.face, 142, 187).addSelfToGameObject();
+
+        // left eye
+        k.leftEye = new MyGameObject();
+        new PositionComponent(k.leftEye).addSelfToGameObject();
+        new OriginComponent(k.leftEye).addSelfToGameObject();
+        new RelativePositionComponent(k.leftEye, o, -45, 20).addSelfToGameObject();
+        new StaticImageComponent(k.leftEye, "enemies/krakken/lEye/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.leftEye, 31, 34).addSelfToGameObject();
+
+        // right eye
+        k.rightEye = new MyGameObject();
+        new PositionComponent(k.rightEye).addSelfToGameObject();
+        new OriginComponent(k.rightEye).addSelfToGameObject();
+        new RelativePositionComponent(k.rightEye, o, 45, 20).addSelfToGameObject();
+        new StaticImageComponent(k.rightEye, "enemies/krakken/rEye/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.rightEye, 33, 35).addSelfToGameObject();
+
+        // head
+        k.head = new MyGameObject();
+        new PositionComponent(k.head).addSelfToGameObject();
+        new OriginComponent(k.head).addSelfToGameObject();
+        new RelativePositionComponent(k.head, o, 30, 245).addSelfToGameObject();
+        new StaticImageComponent(k.head, "enemies/krakken/head/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.head, 277, 399).addSelfToGameObject();
+
+        // left tentacle
+        k.leftTentacle = new MyGameObject();
+        new PositionComponent(k.leftTentacle).addSelfToGameObject();
+        new OriginComponent(k.leftTentacle).addSelfToGameObject();
+        new RelativePositionComponent(k.leftTentacle, o, -113, -14).addSelfToGameObject();
+        new StaticImageComponent(k.leftTentacle, "enemies/krakken/lTentacle/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.leftTentacle, 97, 232).addSelfToGameObject();
+
+        // right tentacle
+        k.rightTentacle = new MyGameObject();
+        new PositionComponent(k.rightTentacle).addSelfToGameObject();
+        new OriginComponent(k.rightTentacle).addSelfToGameObject();
+        new RelativePositionComponent(k.rightTentacle, o, 94, -8).addSelfToGameObject();
+        new StaticImageComponent(k.rightTentacle, "enemies/krakken/rTentacle/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.rightTentacle, 119, 275).addSelfToGameObject();
+
+        // short tentacles
+        k.shortTentacles = new MyGameObject();
+        new PositionComponent(k.shortTentacles).addSelfToGameObject();
+        new OriginComponent(k.shortTentacles).addSelfToGameObject();
+        new RelativePositionComponent(k.shortTentacles, o, -33, -105).addSelfToGameObject();
+        new StaticImageComponent(k.shortTentacles, "enemies/krakken/squiglies/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.shortTentacles, 121, 101).addSelfToGameObject();
+
+        return Arrays.asList(o, k.head, k.shortTentacles, k.leftTentacle, k.rightTentacle, k.face, k.leftEye, k.rightEye);
     }
 }

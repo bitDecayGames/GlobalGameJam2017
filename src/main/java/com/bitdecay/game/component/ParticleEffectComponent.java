@@ -26,4 +26,9 @@ public class ParticleEffectComponent extends SelfDrawComponent {
     public void drawToBatch(SpriteBatch batch) {
         fx.draw(batch);
     }
+
+    @Override
+    public String name() {
+        return null;
+    }
 }

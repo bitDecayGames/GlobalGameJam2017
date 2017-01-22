@@ -14,22 +14,26 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
         super(room);
     }
 
+    boolean playerExploded = false;
+
     @Override
     protected void forEach(float delta, MyGameObject gob) {
         gob.forEachComponentDo(CollidedWithLevelComponent.class, colLevel -> {
             gob.forEachComponentDo(ObjectNameComponent.class, objectNameComponent -> {
                 switch (objectNameComponent.objectName) {
-                    case GameObjectNames.JELLY:
+                    case JELLY:
                        GameUtil.generateDirection(gob);
                        break;
-                    case "ship":
-                       explodePlayer(gob);
+                    case SHIP:
+                        if (!playerExploded) {
+                            playerExploded = true;
+                            explodePlayer(gob);
+                        }
                        break;
                     default:
-                        // no-op
+                        gob.addComponent(new RemoveNowComponent(gob));
                 }
             });
-            gob.addComponent(new RemoveNowComponent(gob));
         });
 
         gob.forEachComponentDo(CollisionResponseComponent.class, colRep ->
@@ -40,26 +44,26 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                for(MyGameObject collidedGob : colRep.collidedWith){
                    collidedGob.forEachComponentDo(ObjectNameComponent.class, nameComp ->{
                        switch (nameComp.objectName){
-                           case "mine":
+                           case MINE:
                                //remove mine from the game, ie.SPLOSION!!
                                collidedGob.addComponent(new RemoveNowComponent(collidedGob));
                                //remove player from game ie.death
                                explodePlayer(gob);
                                break;
-                           case "torpedo":
+                           case TORPEDO:
 //                               //remove torpedo from the game, ie.SPLOSION!!
-                               if(gobName.objectName != "ship") {
+                               if(gobName.objectName != GameObjectNames.SHIP) {
                                    collidedGob.addComponent(new RemoveNowComponent(collidedGob));
 //                               //remove mine from game ie.death
                                    gob.addComponent(new RemoveNowComponent(gob));
                                }
                                break;
-                           case GameObjectNames.JELLY:
+                           case JELLY:
                                switch (gobName.objectName) {
-                                   case GameObjectNames.JELLY:
+                                   case JELLY:
                                        GameUtil.generateDirection(gob);
                                        break;
-                                   case "ship":
+                                   case SHIP:
                                        gob.forEachComponentDo(CanPingComponent.class, cpc -> cpc.timer = PlayerInputSystem.PING_DELAY);
                                        break;
                                    default:
@@ -74,9 +78,10 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
     }
 
     private void explodePlayer(MyGameObject gob) {
+        log.debug("BOOM");
         gob.removeComponent(AnimationComponent.class);
         gob.addComponent(new AnimationComponent(gob, "player/playerExplode", .05f, Animation.PlayMode.NORMAL));
-        // this is changing the size of the ship. If we need to restart the level, make sure it's a brand new ship
+//         this is changing the size of the ship. If we need to restart the level, make sure it's a brand new ship
         gob.forEachComponentDo(SizeComponent.class, size -> size.h *= 1.5);
 
         gob.removeComponent(CollisionCirclesComponent.class);
