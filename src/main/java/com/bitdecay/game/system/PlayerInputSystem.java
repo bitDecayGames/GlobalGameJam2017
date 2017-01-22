@@ -1,6 +1,7 @@
 package com.bitdecay.game.system;
 
 import com.badlogic.gdx.Input;
+import com.bitdecay.game.MyGame;
 import com.bitdecay.game.component.*;
 import com.badlogic.gdx.utils.Array;
 import com.bitdecay.game.gameobject.MyGameObject;
@@ -56,6 +57,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
 
                 }));
 
+            this.room.gobs.add(MyGameObjectFactory.splashText("Torpedo!!", 4, 1000, (int)coords[0], (int)coords[1]));
             this.room.getGameObjects().add(MyGameObjectFactory.torpedo(coords[0], coords[1], coords[2]));
         }
     }

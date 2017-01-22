@@ -54,9 +54,9 @@ public final class MyGameObjectFactory {
         t.addComponent(new AccelerationComponent(t));
         return t;
     }
-    public static MyGameObject splashText(String text, int textSizeMultiplier, int durationMs) {
+    public static MyGameObject splashText(String text, int textSizeMultiplier, int durationMs, int x, int y) {
         MyGameObject t = new MyGameObject();
-        t.addComponent(new PositionComponent(t, 10, 10));
+        t.addComponent(new PositionComponent(t, x, y));
         t.addComponent(new TextComponent(t, text, textSizeMultiplier, durationMs));
         return t;
     }
@@ -112,6 +112,13 @@ public final class MyGameObjectFactory {
         t.addComponent(new DragComponent(t, 0.09f, 0.4f));
         t.addComponent(new ImpulseComponent(t, perp.cpy().scl(4)));
 
+        return t;
+    }
+
+    public static MyGameObject sonarStatusAnimation() {
+        MyGameObject t = new MyGameObject();
+        t.addComponent(new AnimationComponent(t, "img/standalone/splash/bitDecay.png"));
+        t.addComponent(new PositionComponent(t, 10, 10));
         return t;
     }
 }
