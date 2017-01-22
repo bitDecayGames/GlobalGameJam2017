@@ -21,10 +21,10 @@ import java.util.List;
 public final class MyGameObjectFactory {
     private MyGameObjectFactory(){}
 
-    public static MyGameObject ship(AbstractRoom room){
+    public static MyGameObject ship(AbstractRoom room, Vector2 position){
         Config conf = Launcher.conf.getConfig("player");
         MyGameObject t = new MyGameObject();
-        PositionComponent positionComp = new PositionComponent(t, conf.getInt("startingPosition.x"), conf.getInt("startingPosition.y"));
+        PositionComponent positionComp = new PositionComponent(t, position);
         t.addComponent(new PlayerInputComponent(t, (float) conf.getDouble("desiredDegreeRotationAmountPerStep"), (float) conf.getDouble("maxDegrees"), (float) conf.getDouble("minDegrees")));
         t.addComponent(positionComp);
         t.addComponent(new RotationComponent(t));
@@ -48,6 +48,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
         t.addComponent(new CanShootComponent(t));
+        t.addComponent(new RespawnRecorderComponent(t, 5));
 
         return t;
     }
@@ -199,15 +200,6 @@ public final class MyGameObjectFactory {
         t.addComponent(new DragComponent(t, 0.09f, 0.4f));
         t.addComponent(new ImpulseComponent(t, perp.cpy().scl(4)));
 
-
-        return t;
-    }
-
-    public static MyGameObject releaseTheKraken() {
-        MyGameObject t = new MyGameObject();
-        t.addComponent(new CameraFollowComponent(t));
-        t.addComponent(new StaticImageComponent(t, "cracker"));
-        t.addComponent(new VelocityComponent(t, 0.3f, 0));
 
         return t;
     }
