@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -52,8 +51,8 @@ public class ControlScreen implements Screen {
         lblControls = new Label("\n\n\n\n\n\n\n\n\n\n\n" +
                 "Move Sub Up:   'S' or '<-'             \n" +
                 "Move Sub Down: 'W' or '->'             \n" +
-                "Use  Sonar:    'SPACE'               \n" +
-                " Fire  Torpedo:  'CTRL'                 \n", skin);
+                "Use  Sonar:    'SPACE' or Z          \n" +
+                "Fire  Torpedo:  'CTRL' or X           \n", skin);
         lblControls.setFontScale(3);
         lblControls.setFillParent(true);
         lblControls.setAlignment(Align.top, Align.center);
