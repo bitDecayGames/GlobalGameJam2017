@@ -16,11 +16,12 @@ public class AccelerationSystem extends AbstractForEachUpdatableSystem {
 
     @Override
     protected void forEach(float delta, MyGameObject gob) {
-        gob.forEachComponentDo(AccelerationComponent.class, accel -> gob.forEachComponentDo(VelocityComponent.class, vel ->  {
-            Vector2 newVel = vel.toVector2().add(accel.toVector2());
-            vel.x = newVel.x;
-            vel.y = newVel.y;
-    }));
+        gob.forEachComponentDo(AccelerationComponent.class, accel ->
+                gob.forEachComponentDo(VelocityComponent.class, vel ->  {
+                    Vector2 newVel = vel.toVector2().add(accel.toVector2());
+                    vel.x = newVel.x;
+                    vel.y = newVel.y;
+                }));
     }
 
     @Override

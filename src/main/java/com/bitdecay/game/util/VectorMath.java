@@ -333,4 +333,8 @@ public class VectorMath
     {
         return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
     }
+
+    public static Vector2 degreesToVector2(float degrees){
+        return VectorMath.rotatePointByDegreesAroundZero(1, 0, degrees);
+    }
 }

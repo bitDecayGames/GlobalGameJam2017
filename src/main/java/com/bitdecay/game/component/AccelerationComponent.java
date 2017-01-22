@@ -16,6 +16,9 @@ public class AccelerationComponent extends AbstractComponent {
         this.x = x;
         this.y = y;
     }
+    public AccelerationComponent(MyGameObject obj, Vector2 vector2){
+        this(obj, vector2.x, vector2.y);
+    }
 
     /**
      * Immutable

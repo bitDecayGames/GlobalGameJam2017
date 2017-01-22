@@ -37,6 +37,8 @@ public class DemoRoom extends AbstractRoom {
         new RandomOrbitSystem(this);
         new TextDrawSystem(this);
         new GlobalInputSystem(this);
+        new ImpulseSystem(this);
+        new DragSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here

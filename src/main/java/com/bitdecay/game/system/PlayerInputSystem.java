@@ -1,9 +1,8 @@
 package com.bitdecay.game.system;
 
 import com.badlogic.gdx.Input;
-import com.bitdecay.game.component.DesiredDirectionComponent;
-import com.bitdecay.game.component.PlayerInputComponent;
-import com.bitdecay.game.component.PositionComponent;
+import com.bitdecay.game.component.*;
+import com.badlogic.gdx.utils.Array;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.room.AbstractRoom;
@@ -43,6 +42,21 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
                 this.room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
             }));
+        }
+
+        if (InputHelper.isKeyJustPressed(Input.Keys.CONTROL_RIGHT)){
+            float[] coords = new float[5];
+            gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi -> {
+                gob.forEachComponentDo(PositionComponent.class, pos -> {
+                    coords[0] = pos.x - 2;
+                    coords[1] = pos.y - 5;
+                });
+                gob.forEachComponentDo(RotationComponent.class, rota ->
+                    coords[2] = rota.degrees);
+
+                }));
+
+            this.room.getGameObjects().add(MyGameObjectFactory.torpedo(coords[0], coords[1], coords[2]));
         }
     }
 }
