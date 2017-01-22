@@ -122,6 +122,7 @@ public final class MyGameObjectFactory {
             MyGameObject o = new MyGameObject();
             o.addComponent(new PositionComponent(o, 600 * i, 0));
             o.addComponent(new SizeComponent(o, 600, 600));
+            o.addComponent(new ImageCollisionComponent(o));
 
             if (maxNewb > 0) {
                 maxNewb--;
@@ -134,7 +135,7 @@ public final class MyGameObjectFactory {
             else if (name.startsWith("BC/")) name = names.stream().filter(s -> s.startsWith("C/")).findFirst().get();
             else if (name.startsWith("C/")) name = names.stream().filter(s -> s.startsWith("C/") || s.startsWith("CB/")).findFirst().get();
             else if (name.startsWith("CB/")) name = names.stream().filter(s -> s.startsWith("B/")).findFirst().get();
-            o.addComponent(new StaticImageComponent(o, "levelSegments/" + name).setReactsToSonar(true));
+            o.addComponent(new StaticImageComponent(o, "levelSegments/" + name).prepareData().setReactsToSonar(true));
             gobs.add(o);
             Collections.shuffle(names);
         }

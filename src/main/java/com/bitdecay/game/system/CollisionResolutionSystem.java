@@ -16,6 +16,10 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
 
     @Override
     protected void forEach(float delta, MyGameObject gob) {
+        gob.forEachComponentDo(CollidedWithLevelComponent.class, colLevel -> {
+            gob.addComponent(new RemoveNowComponent(gob));
+        });
+
         gob.forEachComponentDo(CollisionResponseComponent.class, colRep ->{
                if(colRep.collidedWith.isEmpty()) {
                   return;
@@ -34,6 +38,7 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
 //                               collidedGob.addComponent(new RemoveNowComponent(collidedGob));
 //                               //remove mine from game ie.death
 //                               gob.addComponent(new RemoveNowComponent(gob));
+//                               break;
                        }
                    });
                };
@@ -43,6 +48,7 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
 
     @Override
     protected boolean validateGob(MyGameObject gob) {
-        return gob.hasComponents(PositionComponent.class, CollisionCirclesComponent.class, CollisionResponseComponent.class);
+        return gob.hasComponents(PositionComponent.class, CollisionCirclesComponent.class, CollisionResponseComponent.class) ||
+                gob.hasComponent(CollidedWithLevelComponent.class);
     }
 }

@@ -2,6 +2,7 @@ package com.bitdecay.game.system;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.bitdecay.game.MyGame;
 import com.bitdecay.game.component.CollisionCirclesComponent;
 import com.bitdecay.game.component.CollisionResponseComponent;
 import com.bitdecay.game.component.PositionComponent;
@@ -9,6 +10,7 @@ import com.bitdecay.game.component.RotationComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.system.abstracted.AbstractForEachUpdatableSystem;
+import com.bitdecay.game.util.RunMode;
 import com.bitdecay.game.util.VectorMath;
 
 import java.util.ArrayList;
@@ -27,8 +29,10 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
     @Override
     public void before() {
         collisionObjects.clear();
-//        room.shapeRenderer.setProjectionMatrix(room.camera.combined);
-//        room.shapeRenderer.begin();
+        if (MyGame.RUN_MODE == RunMode.DEV) {
+            room.shapeRenderer.setProjectionMatrix(room.camera.combined);
+            room.shapeRenderer.begin();
+        }
     }
 
     @Override
@@ -49,7 +53,9 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
                 }
             }
         }
-//        room.shapeRenderer.end();
+        if (MyGame.RUN_MODE == RunMode.DEV) {
+            room.shapeRenderer.end();
+        }
     }
 
     private boolean checkCollision(MyGameObject object1, MyGameObject object2) {
@@ -89,7 +95,9 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
             circle1.x += pos1.x;
             circle1.y += pos1.y;
 
-//            room.shapeRenderer.circle(circle1.x, circle1.y, circle1.radius);
+            if (MyGame.RUN_MODE == RunMode.DEV) {
+                room.shapeRenderer.circle(circle1.x, circle1.y, circle1.radius);
+            }
 
             for (Circle circle2 : geom2.collisionCircles) {
                 circle2 = new Circle(circle2);
@@ -101,7 +109,9 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
                 circle2.x += pos2.x;
                 circle2.y += pos2.y;
 
-//                room.shapeRenderer.circle(circle2.x, circle2.y, circle2.radius);
+                if (MyGame.RUN_MODE == RunMode.DEV) {
+                    room.shapeRenderer.circle(circle2.x, circle2.y, circle2.radius);
+                }
 
                 if (new Vector2(circle1.x, circle1.y).sub(circle2.x, circle2.y).len() < circle1.radius + circle2.radius) {
                     collisionFound = true;
