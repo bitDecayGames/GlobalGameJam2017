@@ -58,7 +58,7 @@ public class DrawSystem extends AbstractDrawableSystem {
 
 
         sonarBuffer.begin();
-        Gdx.gl.glClearColor(0.5f, 0.f, 0.0f, 0f); //transparent black
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); //transparent black
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT); //clear the color buffer
         spriteBatch.begin();
         gobs.forEach(gob ->
@@ -80,7 +80,7 @@ public class DrawSystem extends AbstractDrawableSystem {
         sonarBuffer.end();
 
         proximityBuffer.begin();
-        Gdx.gl.glClearColor(0f, 0f, 0f, 0f); //transparent black
+        Gdx.gl.glClearColor(0.0f, 0.1f, 0.15f, 1.0f);
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT); //clear the color buffer
         spriteBatch.begin();
         gobs.forEach(gob ->
@@ -107,11 +107,8 @@ public class DrawSystem extends AbstractDrawableSystem {
         defaultProjMatrix.setToOrtho2D(0.0F, 0.0F, (float)Gdx.graphics.getWidth(), (float)Gdx.graphics.getHeight());
         spriteBatch.setProjectionMatrix(defaultProjMatrix);
 
-
-        renderSonarBuffer(spriteBatch);
-
         renderProximityBuffer(spriteBatch);
-
+        renderSonarBuffer(spriteBatch);
     }
 
     private void renderProximityBuffer(SpriteBatch spriteBatch) {
