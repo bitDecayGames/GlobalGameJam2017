@@ -43,13 +43,14 @@ void main()
         }
     }
 
-    if ( abs(distance - ( f_clearRadius + f_fadeRange) ) < 1.0 ) {
-        // render the outer limit
-        gl_FragColor = vec4( 0.0, 0.3, 0.0, 1.0 );
-    }
-
-    if ( abs(distance - f_clearRadius ) < 1.0 ) {
-            // render the close range
-            gl_FragColor = vec4( 0.0, 0.3, 0.0, 1.0 );
-        }
+// These are just debugging circles for the light
+//    if ( abs(distance - ( f_clearRadius + f_fadeRange) ) < 1.0 ) {
+//        // render the outer limit
+//        gl_FragColor = vec4( 0.0, 0.3, 0.0, 1.0 );
+//    }
+//
+//    if ( abs(distance - f_clearRadius ) < 1.0 ) {
+//            // render the close range
+//            gl_FragColor = vec4( 0.0, 0.3, 0.0, 1.0 );
+//        }
 }

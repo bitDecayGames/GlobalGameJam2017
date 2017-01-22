@@ -3,10 +3,7 @@ package com.bitdecay.game.gameobject;
 import com.bitdecay.game.trait.ICleanup;
 import com.bitdecay.game.trait.IRefreshable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -27,6 +24,12 @@ public class MyGameObjects implements ICleanup {
 
     public MyGameObjects add(MyGameObject gob){
         gobsToAdd.add(gob);
+        dirty = true;
+        return this;
+    }
+
+    public MyGameObjects addAll(Collection<MyGameObject> gobs){
+        gobsToAdd.addAll(gobs);
         dirty = true;
         return this;
     }
