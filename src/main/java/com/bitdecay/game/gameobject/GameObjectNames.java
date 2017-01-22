@@ -4,5 +4,6 @@ public enum GameObjectNames {
     JELLY,
     SHIP,
     TORPEDO,
-    MINE
+    MINE,
+    SHIP_EXPLOSION
 }
