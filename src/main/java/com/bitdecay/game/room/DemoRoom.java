@@ -34,6 +34,8 @@ public class DemoRoom extends AbstractRoom {
         new RotationFromVelocitySystem(this);
         new ShapeDrawSystem(this);
         new RandomOrbitSystem(this);
+        new ImpulseSystem(this);
+        new DragSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here
@@ -43,7 +45,6 @@ public class DemoRoom extends AbstractRoom {
         gobs.addAll(MyGameObjectFactory.demoBackgrounds());
 
         camera.maxZoom = 0.1f;
-
 
         // this is required to be at the end here so that the systems have the latest gobs
         systemManager.cleanup();
