@@ -50,7 +50,6 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
             cleanupOldEnemies(segmentAheadOfSub, levelSegment);
             for (int i = 0; i < enemiesPerSegment; i++) {
                 Vector2 coordinatesToAddEnemy = getValidSegmentCoordinates(segmentAheadOfSub, levelSegment);
-                System.out.println("Spawning jelly at (" + coordinatesToAddEnemy.x + ", " + coordinatesToAddEnemy.y + ")");
                 addEnemyToRoom(coordinatesToAddEnemy);
             }
         }
@@ -74,12 +73,8 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
     }
 
     public void addEnemyToRoom(Vector2 coordinatesToAddEnemy) {
-        MyGameObject jelly = MyGameObjectFactory.jelly();
+        MyGameObject jelly = MyGameObjectFactory.jelly((int)coordinatesToAddEnemy.x, (int)coordinatesToAddEnemy.y);
         jelly.cleanup();
-        jelly.forEachComponentDo(PositionComponent.class, pos -> {
-          pos.x = coordinatesToAddEnemy.x;
-          pos.y = coordinatesToAddEnemy.y;
-        });
         room.gobs.add(jelly);
     }
 
@@ -99,10 +94,7 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
             gob.forEachComponentDo(ObjectNameComponent.class, obName -> {
                 gob.forEachComponentDo(PositionComponent.class, pos -> {
                     if(obName.objectName.equals("jelly")){
-                        System.out.println("Found a jelly! Comparing its location");
-                        System.out.println("Location: " + pos.x + ". Cutoff: " + xCutoff);
                         if (pos.x <= xCutoff) {
-                            System.out.println("Removing jelly from location (" + pos.x + ", " + pos.y + ")");
                             gob.addComponent(new RemoveNowComponent(gob));
                         }
                     }

@@ -208,7 +208,7 @@ public final class MyGameObjectFactory {
     public static MyGameObject releaseTheKraken() {
         MyGameObject t = new MyGameObject();
         t.addComponent(new CameraFollowComponent(t));
-        t.addComponent(new StaticImageComponent(t, ""));
+        t.addComponent(new StaticImageComponent(t, "cracker"));
         t.addComponent(new VelocityComponent(t, 0.3f, 0));
 
         return t;

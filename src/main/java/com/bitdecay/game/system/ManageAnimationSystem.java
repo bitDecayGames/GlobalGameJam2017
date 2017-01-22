@@ -23,7 +23,7 @@ public class ManageAnimationSystem extends AbstractForEachUpdatableSystem {
             gob.forEachComponentDo(PositionComponent.class, pos -> {
                 animation.elapsedTime += delta;
                 gob.forEachComponentDo(StaticImageComponent.class, image -> {
-                    image.image = animation.animationFrames.getKeyFrame(animation.elapsedTime);
+//                    image.image = animation.animationFrames.getKeyFrame(animation.elapsedTime);
                 });
             });
         });
