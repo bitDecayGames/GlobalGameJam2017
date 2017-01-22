@@ -3,7 +3,6 @@ package com.bitdecay.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -13,16 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.bitdecay.game.util.RunMode;
 import com.bitdecay.game.util.SoundLibrary;
-import com.bitdecay.game.util.TexturePackerUtils;
-import com.sun.deploy.util.ArrayUtil;
 import org.apache.log4j.BasicConfigurator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Maveric on 1/21/2017.
