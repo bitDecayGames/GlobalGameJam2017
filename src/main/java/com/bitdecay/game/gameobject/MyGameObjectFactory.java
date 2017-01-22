@@ -21,14 +21,14 @@ import java.util.List;
 public final class MyGameObjectFactory {
     private MyGameObjectFactory(){}
 
-    public static MyGameObject ship(AbstractRoom room, Vector2 position){
+    public static MyGameObject ship(AbstractRoom room, Vector2 position, Vector2 velocity, float rotation){
         Config conf = Launcher.conf.getConfig("player");
         MyGameObject t = new MyGameObject();
         PositionComponent positionComp = new PositionComponent(t, position);
         t.addComponent(new PlayerInputComponent(t, (float) conf.getDouble("desiredDegreeRotationAmountPerStep"), (float) conf.getDouble("maxDegrees"), (float) conf.getDouble("minDegrees")));
         t.addComponent(positionComp);
-        t.addComponent(new RotationComponent(t));
-        t.addComponent(new DesiredDirectionComponent(t, 0, (float) conf.getDouble("actualRotationSpeedScalar")));
+        t.addComponent(new RotationComponent(t, rotation));
+        t.addComponent(new DesiredDirectionComponent(t, rotation, (float) conf.getDouble("actualRotationSpeedScalar")));
         t.addComponent(new SizeComponent(t, conf.getInt("size.w"), conf.getInt("size.h")));
         t.addComponent(new ObjectNameComponent(t,GameObjectNames.SHIP));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
@@ -42,13 +42,13 @@ public final class MyGameObjectFactory {
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
         t.addComponent(new StaticImageComponent(t, conf.getString("imagePath")).setReactsToSonar(true));
-        t.addComponent(new VelocityComponent(t, (float) conf.getDouble("moveSpeed"), 0));
+        t.addComponent(new VelocityComponent(t, velocity));
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new CanPingComponent(t));
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
         t.addComponent(new CanShootComponent(t));
-        t.addComponent(new RespawnRecorderComponent(t, 5));
+        t.addComponent(new RespawnRecorderComponent(t, conf.getInt("respawnSecondsBack")));
 
         return t;
     }

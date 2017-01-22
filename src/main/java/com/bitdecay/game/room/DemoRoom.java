@@ -58,7 +58,7 @@ public class DemoRoom extends AbstractRoom {
         // put game objects here
         // ////////////////////////////////////////////////
         gobs.addAll(MyGameObjectFactory.demoBackgrounds(Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds")));
-        MyGameObject player = MyGameObjectFactory.ship(this, new Vector2(Launcher.conf.getInt("player.startingPosition.x"), Launcher.conf.getInt("player.startingPosition.y")));
+        MyGameObject player = MyGameObjectFactory.ship(this, new Vector2(Launcher.conf.getInt("player.startingPosition.x"), Launcher.conf.getInt("player.startingPosition.y")), new Vector2((float) Launcher.conf.getDouble("player.moveSpeed"), 0), 0);
         gobs.add(player);
 //        gobs.addAll(MyGameObjectFactory._____RELEASE___THE___KRAKEN_____(player));
         gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500, 10, 10));
