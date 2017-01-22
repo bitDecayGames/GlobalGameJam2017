@@ -30,9 +30,7 @@ void main()
         // if we are in the fade zone, figure out how faded
         float pointPosition = abs(distance - f_clearRadius);
 
-        float percentBrightness;
-
-        percentBrightness = 1.0 - (pointPosition / f_fadeRange);
+        float percentBrightness = 1.0 - (pointPosition / f_fadeRange * 5.0);
 
         gl_FragColor.r *= percentBrightness;
         gl_FragColor.g *= percentBrightness;

@@ -7,6 +7,7 @@ import com.bitdecay.game.component.*;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.util.VectorMath;
 import com.typesafe.config.Config;
+import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,11 +26,12 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject ship(){
+    public static MyGameObject ship(AbstractRoom room){
         Config conf = Launcher.conf.getConfig("player");
         MyGameObject t = new MyGameObject();
+        PositionComponent positionComp = new PositionComponent(t, conf.getInt("startingPosition.x"), conf.getInt("startingPosition.y"));
         t.addComponent(new PlayerInputComponent(t, (float) conf.getDouble("desiredDegreeRotationAmountPerStep")));
-        t.addComponent(new PositionComponent(t, conf.getInt("startingPosition.x"), conf.getInt("startingPosition.y")));
+        t.addComponent(positionComp);
         t.addComponent(new RotationComponent(t));
         t.addComponent(new DesiredDirectionComponent(t, 0, (float) conf.getDouble("actualRotationSpeedScalar")));
         t.addComponent(new SizeComponent(t, conf.getInt("size.w"), conf.getInt("size.h")));
@@ -50,6 +52,10 @@ public final class MyGameObjectFactory {
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
         t.addComponent(new CanShootComponent(t));
+
+        // Add initial starting ping.
+        room.getGameObjects().add(MyGameObjectFactory.ping(positionComp.toVector2()));
+
         return t;
     }
 
