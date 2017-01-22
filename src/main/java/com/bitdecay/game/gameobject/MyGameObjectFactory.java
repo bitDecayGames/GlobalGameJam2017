@@ -30,7 +30,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new RotationComponent(t));
         t.addComponent(new DesiredDirectionComponent(t, 0, (float) conf.getDouble("actualRotationSpeedScalar")));
         t.addComponent(new SizeComponent(t, conf.getInt("size.w"), conf.getInt("size.h")));
-        t.addComponent(new ObjectNameComponent(t,"ship"));
+        t.addComponent(new ObjectNameComponent(t,GameObjectNames.SHIP));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(16, 1.5f, 8));
         collision.collisionCircles.add(new Circle(4, 0, 11));
@@ -57,7 +57,7 @@ public final class MyGameObjectFactory {
 
     public static MyGameObject mine() {
         MyGameObject t = new MyGameObject();
-        t.addComponent(new ObjectNameComponent(t,"mine"));
+        t.addComponent(new ObjectNameComponent(t, GameObjectNames.MINE));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
         t.addComponent(new PositionComponent(t, 350,300 ));
         t.addComponent(new SizeComponent(t, 12, 14 ));
@@ -169,7 +169,7 @@ public final class MyGameObjectFactory {
 
     public static MyGameObject torpedo (float x, float y, float rot) {
         MyGameObject t = new MyGameObject();
-        t.addComponent(new ObjectNameComponent(t,"torpedo"));
+        t.addComponent(new ObjectNameComponent(t,GameObjectNames.TORPEDO));
         Vector2 direction = VectorMath.degreesToVector2(rot).nor();
         Vector2 perp = new Vector2(direction.y, -direction.x);
 //        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.RED, 25));
