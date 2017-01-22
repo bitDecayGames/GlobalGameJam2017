@@ -11,6 +11,7 @@ import com.bitdecay.game.util.VectorMath;
 import com.typesafe.config.Config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -211,5 +212,72 @@ public final class MyGameObjectFactory {
         t.addComponent(new VelocityComponent(t, 0.3f, 0));
 
         return t;
+    }
+
+    public static List<MyGameObject> _____RELEASE___THE___KRAKEN_____(MyGameObject player){
+        MyGameObject o = new MyGameObject();
+        KrakenComponent k = new KrakenComponent(o);
+        k.addSelfToGameObject();
+        k.player = player;
+        new PositionComponent(o).addSelfToGameObject();
+        new RelativePositionComponent(o, k.player, 300, 0).addSelfToGameObject();
+
+        // face
+        k.face = new MyGameObject();
+        new PositionComponent(k.face).addSelfToGameObject();
+        new OriginComponent(k.face).addSelfToGameObject();
+        new RelativePositionComponent(k.face, o).addSelfToGameObject();
+        new StaticImageComponent(k.face, "enemies/krakken/face/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.face, 142, 187).addSelfToGameObject();
+
+        // left eye
+        k.leftEye = new MyGameObject();
+        new PositionComponent(k.leftEye).addSelfToGameObject();
+        new OriginComponent(k.leftEye).addSelfToGameObject();
+        new RelativePositionComponent(k.leftEye, o, -45, 20).addSelfToGameObject();
+        new StaticImageComponent(k.leftEye, "enemies/krakken/lEye/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.leftEye, 31, 34).addSelfToGameObject();
+
+        // right eye
+        k.rightEye = new MyGameObject();
+        new PositionComponent(k.rightEye).addSelfToGameObject();
+        new OriginComponent(k.rightEye).addSelfToGameObject();
+        new RelativePositionComponent(k.rightEye, o, 45, 20).addSelfToGameObject();
+        new StaticImageComponent(k.rightEye, "enemies/krakken/rEye/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.rightEye, 33, 35).addSelfToGameObject();
+
+        // head
+        k.head = new MyGameObject();
+        new PositionComponent(k.head).addSelfToGameObject();
+        new OriginComponent(k.head).addSelfToGameObject();
+        new RelativePositionComponent(k.head, o, 30, 245).addSelfToGameObject();
+        new StaticImageComponent(k.head, "enemies/krakken/head/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.head, 277, 399).addSelfToGameObject();
+
+        // left tentacle
+        k.leftTentacle = new MyGameObject();
+        new PositionComponent(k.leftTentacle).addSelfToGameObject();
+        new OriginComponent(k.leftTentacle).addSelfToGameObject();
+        new RelativePositionComponent(k.leftTentacle, o, -113, -14).addSelfToGameObject();
+        new StaticImageComponent(k.leftTentacle, "enemies/krakken/lTentacle/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.leftTentacle, 97, 232).addSelfToGameObject();
+
+        // right tentacle
+        k.rightTentacle = new MyGameObject();
+        new PositionComponent(k.rightTentacle).addSelfToGameObject();
+        new OriginComponent(k.rightTentacle).addSelfToGameObject();
+        new RelativePositionComponent(k.rightTentacle, o, 94, -8).addSelfToGameObject();
+        new StaticImageComponent(k.rightTentacle, "enemies/krakken/rTentacle/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.rightTentacle, 119, 275).addSelfToGameObject();
+
+        // short tentacles
+        k.shortTentacles = new MyGameObject();
+        new PositionComponent(k.shortTentacles).addSelfToGameObject();
+        new OriginComponent(k.shortTentacles).addSelfToGameObject();
+        new RelativePositionComponent(k.shortTentacles, o, -33, -105).addSelfToGameObject();
+        new StaticImageComponent(k.shortTentacles, "enemies/krakken/squiglies/0").setReactsToSonar(true).addSelfToGameObject();
+        new SizeComponent(k.shortTentacles, 121, 101).addSelfToGameObject();
+
+        return Arrays.asList(o, k.head, k.shortTentacles, k.leftTentacle, k.rightTentacle, k.face, k.leftEye, k.rightEye);
     }
 }

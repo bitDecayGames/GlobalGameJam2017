@@ -59,6 +59,7 @@ public class PauseScreen implements Screen {
         // Here is where you add more menu options
         // ////////////////////////////////////////////////
         menu.add(buildNewMenuOption("Resume", this::resumeGame)).height(60).padBottom(20).padTop(150).row();
+        menu.add(buildNewMenuOption("Quit To Main Menu", this::quitToMainMenu)).height(60).padBottom(20).row();
         menu.add(buildNewMenuOption("Quit", this::exitGame)).height(60).padBottom(20).row();
 
         menu.align(Align.center);
@@ -116,6 +117,10 @@ public class PauseScreen implements Screen {
 
     private void resumeGame() {
         game.setScreen(gameScreen);
+    }
+
+    private void quitToMainMenu() {
+        game.setScreen(new MainMenuScreen(game));
     }
 
     private void exitGame() {
