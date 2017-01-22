@@ -17,6 +17,7 @@ public class MyGameObject implements ICleanup {
 
     protected boolean dirty = false;
 
+    // TODO Make this a HashMap of some sort for faster lookups.
     private List<AbstractComponent> components = new ArrayList<>();
     private List<AbstractComponent> componentsToAdd = new ArrayList<>();
     private List<AbstractComponent> componentsToRemove = new ArrayList<>();

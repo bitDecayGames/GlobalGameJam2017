@@ -4,16 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.bitdecay.ludum.dare.interfaces.IDraw;
-import com.bitdecay.ludum.dare.interfaces.IUpdate;
+import com.bitdecay.game.component.BackgroundComponent;
+import com.bitdecay.game.gameobject.MyGameObject;
+import com.bitdecay.game.room.AbstractRoom;
+import com.bitdecay.game.system.abstracted.AbstractDrawableSystem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Manager for the background of the game.
+ * System for the background of the game.
  */
-public class BackgroundSystem implements IUpdate, IDraw {
+public class BackgroundSystem extends AbstractDrawableSystem {
     // Controls distortion of parallax on backgrounds.
     private static final float PARALLAX_EFFECT = 0.2f;
 
@@ -21,11 +23,9 @@ public class BackgroundSystem implements IUpdate, IDraw {
 
     // Camera to render parallax effect.
     private OrthographicCamera backgroundCamera;
-    // Camera of character we're following.
-    private OrthographicCamera characterCamera;
 
-    public BackgroundSystem(OrthographicCamera characterCamera) {
-        this.characterCamera = characterCamera;
+    public BackgroundSystem(AbstractRoom room) {
+        super(room);
 
         initDimensions();
 
@@ -35,47 +35,56 @@ public class BackgroundSystem implements IUpdate, IDraw {
         // Space
         layers.add(
                 BackgroundLayer.create()
-                        .addBackground("space")
-                        .addBackground("space")
+                        .addBackground("background1")
+//                        .addBackground("space")
+//        );
+//        // Mountains
+//        layers.add(
+//                BackgroundLayer.create()
+//                        .addBackground("hillsFar")
+//        );
+//        layers.add(
+//                BackgroundLayer.create()
+//                        .addBackground("hillsMiddle")
+//        );
+//        layers.add(
+//                BackgroundLayer.create()
+//                        .addBackground("hillsClose")
+//        );
+//        // Underground
+//        layers.add(
+//                BackgroundLayer.create()
+//                        .setVerticalOffsetIndex(-1)
+//                        .setDirection(BackgroundLayerDirection.DOWN)
+//                        .setVerticalOffset(300 * PARALLAX_EFFECT)
+//                        .addBackground("startUnderground")
+//                        .addBackground("underground")
         );
-        // Mountains
-        layers.add(
-                BackgroundLayer.create()
-                        .addBackground("hillsFar")
-        );
-        layers.add(
-                BackgroundLayer.create()
-                        .addBackground("hillsMiddle")
-        );
-        layers.add(
-                BackgroundLayer.create()
-                        .addBackground("hillsClose")
-        );
-        // Underground
-        layers.add(
-                BackgroundLayer.create()
-                        .setVerticalOffsetIndex(-1)
-                        .setDirection(BackgroundLayerDirection.DOWN)
-                        .setVerticalOffset(300 * PARALLAX_EFFECT)
-                        .addBackground("startUnderground")
-                        .addBackground("underground")
-        );
+    }
 
-        backgroundCamera = new OrthographicCamera(characterCamera.viewportWidth, characterCamera.viewportHeight);
+    // Sets initial layer specs.
+    private void initDimensions() {
+        TextureRegion mainTile = BackgroundUtil.getBackground("background1");
+        BackgroundLayer.setTileWidth(mainTile.getRegionWidth());
+        BackgroundLayer.setTileHeight(mainTile.getRegionHeight());
+        BackgroundLayer.setHorizontalSize(10);
     }
 
     @Override
-    public void update(float delta) {
-        // Sync with character camera.
+    public void preDraw(SpriteBatch spriteBatch, OrthographicCamera camera) {
+        backgroundCamera = new OrthographicCamera(camera.viewportWidth, camera.viewportHeight);
         backgroundCamera.position.set(
-                characterCamera.position.x * PARALLAX_EFFECT + Gdx.graphics.getWidth() / 3,
-                characterCamera.position.y * PARALLAX_EFFECT + Gdx.graphics.getHeight() / 3,
+                camera.position.x * PARALLAX_EFFECT + Gdx.graphics.getWidth() / 3,
+                camera.position.y * PARALLAX_EFFECT + Gdx.graphics.getHeight() / 3,
                 0);
     }
 
     @Override
-    public void draw(SpriteBatch spriteBatch) {
+    public void draw(SpriteBatch spriteBatch, OrthographicCamera camera) {
         final float parallax = 1 + PARALLAX_EFFECT;
+
+        spriteBatch.begin();
+
         for (BackgroundLayer l : layers) {
             // Increase move value as we move from background to foreground.
             backgroundCamera.position.set(
@@ -87,13 +96,12 @@ public class BackgroundSystem implements IUpdate, IDraw {
             spriteBatch.setProjectionMatrix(backgroundCamera.combined);
             l.draw(spriteBatch);
         }
+
+        spriteBatch.end();
     }
 
-    // Sets initial layer specs.
-    private void initDimensions() {
-        TextureRegion mainTile = BackgroundUtil.getBackground("space");
-        BackgroundLayer.setTileWidth(mainTile.getRegionWidth());
-        BackgroundLayer.setTileHeight(mainTile.getRegionHeight());
-        BackgroundLayer.setHorizontalSize(10);
+    @Override
+    protected boolean validateGob(MyGameObject gob) {
+        return gob.hasComponent(BackgroundComponent.class);
     }
 }

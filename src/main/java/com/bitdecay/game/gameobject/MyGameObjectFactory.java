@@ -12,14 +12,14 @@ import java.util.List;
 public final class MyGameObjectFactory {
     private MyGameObjectFactory(){}
 
-    public static MyGameObject demoThing(){
+    public static MyGameObject demoThing() {
         MyGameObject t = new MyGameObject();
         t.addComponent(new PositionComponent(t, 0, 0));
         t.addComponent(new SizeComponent(t, 10, 10));
         return t;
     }
 
-    public static MyGameObject ship(){
+    public static MyGameObject ship() {
         MyGameObject t = new MyGameObject();
         t.addComponent(new PlayerInputComponent(t, 0.75f));
 //        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
@@ -39,7 +39,7 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject mine(){
+    public static MyGameObject mine() {
         MyGameObject t = new MyGameObject();
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
         t.addComponent(new PositionComponent(t, 50, 20));

@@ -2,7 +2,6 @@ package com.bitdecay.game.system.background;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.bitdecay.ludum.dare.interfaces.IDraw;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * Vertical layer of parallax background.
  */
-public class BackgroundLayer implements IDraw {
+public class BackgroundLayer {
     // Width of standard background tiles.
     private static float tileWidth = 0;
     // Height of standard background tile.
@@ -31,7 +30,6 @@ public class BackgroundLayer implements IDraw {
         backgrounds = new ArrayList<>();
     }
 
-    @Override
     public void draw(SpriteBatch spriteBatch) {
         float verticalIndex = verticalOffsetIndex;
 

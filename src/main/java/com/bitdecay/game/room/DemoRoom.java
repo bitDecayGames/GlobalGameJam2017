@@ -1,10 +1,9 @@
 package com.bitdecay.game.room;
 
-
-import com.bitdecay.game.component.RandomOrbitComponent;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.screen.GameScreen;
 import com.bitdecay.game.system.*;
+import com.bitdecay.game.system.background.BackgroundSystem;
 
 /**
  * The demo room is just a super simple example of how to add systems and game objects to a room.
@@ -23,6 +22,7 @@ public class DemoRoom extends AbstractRoom {
         new CameraPredictiveSystem(this, 200);
         new RespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
+        new BackgroundSystem(this);
         new DrawSystem(this);
         new PlayerInputSystem(this);
         new DesiredDirectionSystem(this);
@@ -38,12 +38,11 @@ public class DemoRoom extends AbstractRoom {
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
+        gobs.addAll(MyGameObjectFactory.demoBackgrounds());
         gobs.add(MyGameObjectFactory.ship());
         gobs.add(MyGameObjectFactory.mine());
-        gobs.addAll(MyGameObjectFactory.demoBackgrounds());
 
         camera.maxZoom = 0.1f;
-
 
         // this is required to be at the end here so that the systems have the latest gobs
         systemManager.cleanup();
