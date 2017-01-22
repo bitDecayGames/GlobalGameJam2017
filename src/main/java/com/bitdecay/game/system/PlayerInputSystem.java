@@ -44,7 +44,6 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             // gobs.forEach(gob -> gob.addComponent(SonarPingComponent))
             // which then gets removed when the SonarPingSystem finds it and triggers the ping?
             if (canPing(gobs)) {
-                log.debug("ADDING PING");
                 gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
                     room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
                 }));

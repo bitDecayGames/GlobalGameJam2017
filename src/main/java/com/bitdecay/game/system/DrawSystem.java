@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.bitdecay.game.Launcher;
 import com.bitdecay.game.component.*;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;
@@ -118,7 +119,7 @@ public class DrawSystem extends AbstractDrawableSystem {
         proximitySprite.flip(false, true);
 
         spriteBatch.begin();
-        //spriteBatch.setShader(proximityShader);
+        if (!Launcher.conf.getBoolean("turnOffShader")) spriteBatch.setShader(proximityShader);
         proximitySprite.draw(spriteBatch);
         spriteBatch.end();
         spriteBatch.setShader(null);
@@ -129,7 +130,7 @@ public class DrawSystem extends AbstractDrawableSystem {
         sonarSprite.flip(false, true);
 
         spriteBatch.begin();
-        //spriteBatch.setShader(getConfiguredShader());
+        if (!Launcher.conf.getBoolean("turnOffShader")) spriteBatch.setShader(getConfiguredShader());
         sonarSprite.draw(spriteBatch);
         spriteBatch.end();
         spriteBatch.setShader(null);
