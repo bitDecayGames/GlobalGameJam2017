@@ -34,9 +34,6 @@ void main()
 
         percentBrightness = 1.0 - (pointPosition / f_fadeRange);
 
-        gl_FragColor.r *= percentBrightness;
-        gl_FragColor.g *= percentBrightness;
-        gl_FragColor.b *= percentBrightness;
         gl_FragColor.a = percentBrightness;
         if ( percentBrightness < 0.01 ) {
             gl_FragColor.a = 0.0;
