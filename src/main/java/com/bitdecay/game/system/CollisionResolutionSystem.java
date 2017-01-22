@@ -62,6 +62,7 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                                    collidedGob.addComponent(new RemoveNowComponent(collidedGob));
 //                               //remove mine from game ie.death
                                    gob.addComponent(new RemoveNowComponent(gob));
+                                   exploderTorpedo(gob);
                                }
                                break;
                            case JELLY:
@@ -108,6 +109,14 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
         gob.removeComponent(PlayerInputComponent.class);
 
         gob.addComponent(new TimerComponent(gob, 2, gameobj -> gameobj.addComponent(new RemoveNowComponent(gameobj))));
+    }
+
+    private void exploderTorpedo(MyGameObject gob) {
+        gob.removeComponent(AnimationComponent.class);
+        gob.removeComponent(VelocityComponent.class);
+        gob.removeComponent(CollidedWithLevelComponent.class);
+        gob.addComponent(new SoundEffectComponent(gob, "asplosion", (long)1.5));
+        gob.addComponent(new TimerComponent(gob, 2, myGameObject -> myGameObject.addComponent(new RemoveNowComponent(myGameObject))));
     }
 
     @Override
