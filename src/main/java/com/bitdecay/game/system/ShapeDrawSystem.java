@@ -2,7 +2,7 @@ package com.bitdecay.game.system;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.bitdecay.game.component.DesiredRotationComponent;
+import com.bitdecay.game.component.DesiredDirectionComponent;
 import com.bitdecay.game.component.PositionComponent;
 import com.bitdecay.game.component.RotationComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
@@ -34,7 +34,7 @@ public class ShapeDrawSystem extends AbstractDrawableSystem {
             gob.forEachComponentDo(IShapeRotatableDraw.class, drawable -> {
                 gob.forEachComponentDo(RotationComponent.class, rotationComponent ->
                         drawable.draw(room.shapeRenderer, positionComponent.toVector2(), rotationComponent.degrees));
-                gob.forEachComponentDo(DesiredRotationComponent.class, des -> drawable.draw(room.shapeRenderer, positionComponent.toVector2(), des.degrees));
+                gob.forEachComponentDo(DesiredDirectionComponent.class, des -> drawable.draw(room.shapeRenderer, positionComponent.toVector2(), des.toDegrees()));
             });
         }));
         room.shapeRenderer.end();

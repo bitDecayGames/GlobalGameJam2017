@@ -246,15 +246,22 @@ public class VectorMath
     /**
      * Gets the angle between two Vector2's in radians
      *
-     * @param v1
-     * @param v2
+     * @param vec1
+     * @param vec2
      * @return
      */
-    public static float angleInRadians(Vector2 v1, Vector2 v2)
+    public static float angleInRadians(Vector2 vec1, Vector2 vec2)
     {
-        // float perpDot = (v1.x * v2.x) - (v1.y * v2.y);
-        // return (float) Math.atan2(perpDot, v1.dot(v2));
-        return (float) (Math.atan2(v2.y, v2.x) - Math.atan2(v1.y, v1.x));
+        Vector2 v1 = vec1.cpy().nor();
+        Vector2 v2 = vec2.cpy().nor();
+        double atan2v1 = Math.atan2(v1.y, v1.x);
+        double atan2v2 = Math.atan2(v2.y, v2.x);
+        double angle = atan2v2 - atan2v1;
+        if (v1.x < 0 && v2.x < 0){
+            if (v1.y > 0 && v2.y < 0) angle += 2 * Math.PI;
+            else if (v1.y < 0 && v2.y > 0) angle -= 2 * Math.PI;
+        }
+        return (float) angle;
     }
 
 
@@ -266,46 +273,6 @@ public class VectorMath
      * @return
      */
     public static float angleInDegrees(Vector2 v1, Vector2 v2)
-    {
-        return (float) Math.toDegrees(angleInRadians(v1, v2));
-    }
-
-
-    /**
-     * Gets the angle between two Vector3's in radians
-     *
-     * @param v1
-     * @param v2
-     * @return
-     */
-    public static float angleInRadians(Vector3 v1, Vector3 v2)
-    {
-        if (v1 == Vector3.Zero || v2 == Vector3.Zero)
-        {
-            return 0;
-        }
-        Vector3 v1N = v1;
-        v1N.nor();
-        Vector3 v2N = v2;
-        v2N.nor();
-        if (v1N == v2N)
-        {
-            return 0;
-        }
-        float dot = v1N.dot(v2N);
-        float angle = (float) Math.acos(dot);
-        return angle;
-    }
-
-
-    /**
-     * Gets the angle between two Vector3's in degrees
-     *
-     * @param v1
-     * @param v2
-     * @return
-     */
-    public static float angleInDegrees(Vector3 v1, Vector3 v2)
     {
         return (float) Math.toDegrees(angleInRadians(v1, v2));
     }

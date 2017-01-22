@@ -33,7 +33,8 @@ public abstract class AbstractRoom implements IUpdate, IDraw, IHasScreenSize, IC
 
         camera.maxZoom = (float) Launcher.conf.getDouble("resolution.camera.maxZoom");
         camera.minZoom = (float) Launcher.conf.getDouble("resolution.camera.minZoom");
-        camera.snapSpeed = (float) Launcher.conf.getDouble("resolution.camera.snapSpeed");
+//        camera.snapSpeed = (float) Launcher.conf.getDouble("resolution.camera.snapSpeed");
+        camera.snapSpeed = 1;
         camera.buffer = 100;
     }
 
@@ -59,7 +60,9 @@ public abstract class AbstractRoom implements IUpdate, IDraw, IHasScreenSize, IC
 
     @Override
     public void draw(SpriteBatch spriteBatch) {
+        systemManager.preDraw(spriteBatch, camera);
         systemManager.draw(spriteBatch, camera);
+        systemManager.postDraw(spriteBatch, camera);
     }
 
     @Override

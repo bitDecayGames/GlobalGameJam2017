@@ -1,9 +1,11 @@
 package com.bitdecay.game.system;
 
 import com.badlogic.gdx.Input;
-import com.bitdecay.game.component.DesiredRotationComponent;
+import com.bitdecay.game.component.DesiredDirectionComponent;
 import com.bitdecay.game.component.PlayerInputComponent;
+import com.bitdecay.game.component.PositionComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
+import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.system.abstracted.AbstractUpdatableSystem;
 import com.bitdecay.game.util.InputHelper;
@@ -17,7 +19,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
 
     @Override
     protected boolean validateGob(MyGameObject gob) {
-        return gob.hasComponents(PlayerInputComponent.class, DesiredRotationComponent.class);
+        return gob.hasComponents(PlayerInputComponent.class, DesiredDirectionComponent.class);
     }
 
     @Override
@@ -27,7 +29,9 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
         else if (InputHelper.isKeyPressed(Input.Keys.S, Input.Keys.DOWN)) rotationDirection = 1;
         if (rotationDirection != 0) {
             final float rotationDirectionFinal = rotationDirection;
-            gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi -> gob.forEachComponentDo(DesiredRotationComponent.class, rot -> rot.degrees += rotationDirectionFinal * pi.rotationAmountPerStep)));
+            gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi ->
+                    gob.forEachComponentDo(DesiredDirectionComponent.class, rot ->
+                            rot.addDegrees(rotationDirectionFinal * pi.rotationAmountPerStep))));
         }
 
         if (InputHelper.isKeyJustPressed(Input.Keys.SPACE, Input.Keys.ENTER)) {
@@ -35,6 +39,10 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             // maybe something like:
             // gobs.forEach(gob -> gob.addComponent(SonarPingComponent))
             // which then gets removed when the SonarPingSystem finds it and triggers the ping?
+            log.debug("ADDING PING");
+            gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
+                this.room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
+            }));
         }
     }
 }
