@@ -7,7 +7,6 @@ import com.bitdecay.game.component.*;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.util.VectorMath;
 import com.typesafe.config.Config;
-import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,6 +89,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/jelly/0").setReactsToSonar(true));
+        t.addComponent(new AnimationComponent(t, "enemies/jelly", 0.2f));
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
@@ -179,6 +179,7 @@ public final class MyGameObjectFactory {
         StaticImageComponent imageComponent = new StaticImageComponent(t, "player/torpedo/0");
         imageComponent.reactsToSonar = true;
         t.addComponent(imageComponent);
+        t.addComponent(new AnimationComponent(t, "player/torpedo", .1f));
         RotationComponent rotationComponent = new RotationComponent(t, rot);
         rotationComponent.rotationFromVelocity = false;
         t.addComponent(rotationComponent);

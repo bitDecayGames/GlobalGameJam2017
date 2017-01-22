@@ -1,7 +1,6 @@
 package com.bitdecay.game.system;
 
 import com.badlogic.gdx.Input;
-import com.bitdecay.game.MyGame;
 import com.bitdecay.game.component.*;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
@@ -55,7 +54,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             if (canPing(gobs)) {
                 gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
                     room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
-                    gob.addComponent(new AnimationComponent(gob, "img/packable/main/player/sub_charging_anim.png").setReactsToSonar(true));
+                    gob.addComponent(new AnimationComponent(gob, "player/charge", 0.5f));
 
                 }));
             }
