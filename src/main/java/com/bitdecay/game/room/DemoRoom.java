@@ -50,6 +50,7 @@ public class DemoRoom extends AbstractRoom {
         gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500));
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.mine());
+        gobs.add(MyGameObjectFactory.jelly());
         gobs.addAll(MyGameObjectFactory.demoBackgrounds(Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds")));
 
         // this is required to be at the end here so that the systems have the latest gobs
