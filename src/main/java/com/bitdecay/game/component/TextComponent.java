@@ -25,6 +25,9 @@ public class TextComponent extends AbstractComponent {
         long totalTimeSpentOnScreenMs = System.currentTimeMillis() - timeOfInitialization;
         long floatLong = Math.min(durationMs - totalTimeSpentOnScreenMs, 1000);
         fade = convertMilisecondsToSeconds(floatLong);
+        if (fade <= 0) {
+            obj.addComponent(new RemoveNowComponent(obj));
+        }
     }
 
     private float convertMilisecondsToSeconds(long miliseconds) {

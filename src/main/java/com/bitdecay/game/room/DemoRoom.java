@@ -42,14 +42,16 @@ public class DemoRoom extends AbstractRoom {
         new GlobalInputSystem(this);
         new ImpulseSystem(this);
         new DragSystem(this);
+        new ManageAnimationSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
         gobs.add(MyGameObjectFactory.ship());
-        gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500));
+        gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500, 10, 10));
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.mine());
+        camera.maxZoom = 0.1f;
         gobs.add(MyGameObjectFactory.jelly());
         gobs.addAll(MyGameObjectFactory.demoBackgrounds(Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds")));
 

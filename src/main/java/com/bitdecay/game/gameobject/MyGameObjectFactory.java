@@ -44,8 +44,8 @@ public final class MyGameObjectFactory {
         t.addComponent(new CameraFollowComponent(t));
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
-        t.addComponent(new VelocityComponent(t, (float) conf.getDouble("moveSpeed"), 0));
         t.addComponent(new StaticImageComponent(t, conf.getString("imagePath")).setReactsToSonar(true));
+        t.addComponent(new VelocityComponent(t, (float) conf.getDouble("moveSpeed"), 0));
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
@@ -90,9 +90,9 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject splashText(String text, int textSizeMultiplier, int durationMs) {
+    public static MyGameObject splashText(String text, int textSizeMultiplier, int durationMs, int x, int y) {
         MyGameObject t = new MyGameObject();
-        t.addComponent(new PositionComponent(t, 10, 10));
+        t.addComponent(new PositionComponent(t, x, y));
         t.addComponent(new TextComponent(t, text, textSizeMultiplier, durationMs));
         return t;
     }

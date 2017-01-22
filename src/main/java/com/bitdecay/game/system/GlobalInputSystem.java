@@ -2,6 +2,8 @@ package com.bitdecay.game.system;
 
 import com.badlogic.gdx.Input;
 import com.bitdecay.game.component.GlobalInputComponent;
+import com.bitdecay.game.component.PlayerInputComponent;
+import com.bitdecay.game.component.PositionComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.room.AbstractRoom;
@@ -23,7 +25,11 @@ public class GlobalInputSystem extends AbstractUpdatableSystem {
     @Override
     public void update(float delta) {
         if (InputHelper.isKeyJustPressed(Input.Keys.P)) {
-            room.gobs.add(MyGameObjectFactory.splashText("P Text!", 3, 1000));
+            room.gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi -> {
+                gob.forEachComponentDo(PositionComponent.class, pos -> {
+                    room.gobs.add(MyGameObjectFactory.splashText("P Text!", 3, 1000, (int) pos.x, (int) pos.y));
+                });
+            }));
         }
     }
 }
