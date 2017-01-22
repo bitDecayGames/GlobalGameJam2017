@@ -204,6 +204,21 @@ public final class MyGameObjectFactory {
         return t;
     }
 
+    public static MyGameObject shipExplode (Vector2 position) {
+        MyGameObject t = new MyGameObject();
+        t.addComponent(new ObjectNameComponent(t,GameObjectNames.SHIP_EXPLOSION));
+        t.addComponent(new DespawnableComponent(t));
+        t.addComponent(new PositionComponent(t, position));
+        SizeComponent size = new SizeComponent(t, 57 * 2, 103 * 2);
+        size.addSelfToGameObject();
+        t.addComponent(new OriginComponent(t, 0.5f, 0.3f));
+        t.addComponent(new AnimationComponent(t, "player/playerExplode", .07f, Animation.PlayMode.NORMAL));
+        t.addComponent(new StaticImageComponent(t, "player/playerExplode/0"));
+        t.addComponent(new TimerComponent(t, 1, obj -> obj.addComponent(new RemoveNowComponent(obj))));
+
+        return t;
+    }
+
     public static List<MyGameObject> _____RELEASE___THE___KRAKEN_____(MyGameObject player){
         MyGameObject o = new MyGameObject();
         KrakenComponent k = new KrakenComponent(o);
