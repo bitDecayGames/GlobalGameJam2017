@@ -9,25 +9,39 @@ import com.bitdecay.game.system.abstracted.AbstractUpdatableSystem;
 import com.bitdecay.game.util.InputHelper;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This system will handle player keyboard input to modify the rotation of the player
  */
 public class PlayerInputSystem extends AbstractUpdatableSystem {
 
+    public static final float PING_DELAY = 5.75f;
+
     public PlayerInputSystem(AbstractRoom room) { super(room); }
 
     private boolean canPing(List<MyGameObject> gobs) {
-        return ! gobs.stream().anyMatch(gameObj -> gameObj.hasComponent(SonarPingComponent.class));
+        final AtomicBoolean ableToPing = new AtomicBoolean(false);
+        for (MyGameObject gob : gobs) {
+            gob.forEachComponentDo(CanPingComponent.class, cpc -> {
+                if (cpc.timer <= 0) {
+                    ableToPing.set(true);
+                }
+            });
+        }
+        return ableToPing.get();
     }
 
     @Override
     protected boolean validateGob(MyGameObject gob) {
-        return gob.hasComponents(PlayerInputComponent.class, DesiredDirectionComponent.class) || gob.hasComponent(SonarPingComponent.class);
+        return gob.hasComponents(PlayerInputComponent.class, DesiredDirectionComponent.class);
     }
 
     @Override
     public void update(float delta) {
+
+        updateCanPing(delta);
+
         float rotationDirection = 0;
         if (InputHelper.isKeyPressed(Input.Keys.W, Input.Keys.UP, Input.Keys.RIGHT)) rotationDirection = -1;
         else if (InputHelper.isKeyPressed(Input.Keys.S, Input.Keys.DOWN, Input.Keys.LEFT)) rotationDirection = 1;
@@ -61,6 +75,9 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
                     gob.addComponent(new AnimationComponent(gob, "player/charge", 0.5f));
 
                 }));
+                gobs.forEach(gob-> gob.forEachComponentDo(CanPingComponent.class, cpc ->{
+                    cpc.timer = PING_DELAY;
+                }));
             }
         }
 
@@ -76,13 +93,21 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
                             coords[2] = rota.degrees);
                     this.room.getGameObjects().add(MyGameObjectFactory.torpedo(coords[0], coords[1], coords[2]));
                     gob.removeComponent(CanShootComponent.class);
-                    gob.addComponent(new TimerComponent (gob, 2f, myGameObject -> {
+                    gob.addComponent(new RemovableTimerComponent (gob, 2f, myGameObject -> {
                         myGameObject.addComponent(new CanShootComponent(myGameObject));
-                        myGameObject.removeComponent(TimerComponent.class);
                     }));
                 });
             }));
 //            this.room.gobs.add(MyGameObjectFactory.splashText("Torpedo!!", 4, 1000, (int)coords[0], (int)coords[1]));
         }
+    }
+
+    private void updateCanPing(float delta) {
+        gobs.forEach(gob -> gob.forEachComponentDo(CanPingComponent.class, cpc -> {
+            cpc.timer -= delta;
+            if (cpc.timer <= 0) {
+                cpc.timer = 0;
+            }
+        }));
     }
 }

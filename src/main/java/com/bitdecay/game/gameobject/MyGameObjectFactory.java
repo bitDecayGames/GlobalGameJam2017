@@ -11,6 +11,7 @@ import com.typesafe.config.Config;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * The idea here is to provide a single place for you to add your game objects.  You know that the "Player" game object will have a PositionComponent, a SizeComponent, and a CameraFollowComponent.  So in a static method (maybe called buildPlayer) you want to create a generic MyGameObject and populate it with the correct components.
@@ -48,6 +49,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new StaticImageComponent(t, conf.getString("imagePath")).setReactsToSonar(true));
         t.addComponent(new VelocityComponent(t, (float) conf.getDouble("moveSpeed"), 0));
         t.addComponent(new CollisionComponent(t));
+        t.addComponent(new CanPingComponent(t));
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
         t.addComponent(new CanShootComponent(t));
@@ -77,21 +79,26 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject jelly() {
+    public static MyGameObject jelly(int x, int y) {
         MyGameObject t = new MyGameObject();
         t.addComponent(new ObjectNameComponent(t, "jelly"));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, 300, 300));
+        t.addComponent(new PositionComponent(t, x, x));
         t.addComponent(new SizeComponent(t, 27, 20));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
-        collision.collisionCircles.add(new Circle(0, 0, 6));
+        collision.collisionCircles.add(new Circle(0, 4, 5));
         t.addComponent(collision);
         t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/jelly/0").setReactsToSonar(true));
         t.addComponent(new AnimationComponent(t, "enemies/jelly", 0.2f));
         t.addComponent(new CollisionComponent(t));
-        t.addComponent(new VelocityComponent(t));
+        Random r = new Random();
+        int low = 45;
+        int high = 135;
+        int results = r.nextInt(high-low) + low;
+        Vector2 targetV = VectorMath.degreesToVector2(results).scl(0.5f);
+        t.addComponent(new VelocityComponent(t,targetV.x,targetV.y));
         t.addComponent(new AccelerationComponent(t));
         return t;
     }

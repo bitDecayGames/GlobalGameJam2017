@@ -20,11 +20,12 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
             gob.addComponent(new RemoveNowComponent(gob));
         });
 
-        gob.forEachComponentDo(CollisionResponseComponent.class, colRep ->{
+        gob.forEachComponentDo(CollisionResponseComponent.class, colRep ->
+            gob.forEachComponentDo(ObjectNameComponent.class, gobName -> {
                if(colRep.collidedWith.isEmpty()) {
                   return;
                }
-               for(MyGameObject collidedGob :colRep.collidedWith ){
+               for(MyGameObject collidedGob : colRep.collidedWith){
                    collidedGob.forEachComponentDo(ObjectNameComponent.class, nameComp ->{
                        switch (nameComp.objectName){
                            case "mine":
@@ -33,16 +34,24 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                                //remove player from game ie.death
                                gob.addComponent(new RemoveNowComponent(gob));
                                break;
-//                           case "torpedo":
+                           case "torpedo":
 //                               //remove torpedo from the game, ie.SPLOSION!!
-//                               collidedGob.addComponent(new RemoveNowComponent(collidedGob));
+                               if(gobName.objectName != "ship") {
+                                   collidedGob.addComponent(new RemoveNowComponent(collidedGob));
 //                               //remove mine from game ie.death
-//                               gob.addComponent(new RemoveNowComponent(gob));
-//                               break;
+                                   gob.addComponent(new RemoveNowComponent(gob));
+                               }
+                               break;
+                           case "jelly":
+                               if(gobName.objectName == "ship"){
+                                   gob.forEachComponentDo(CanPingComponent.class, cpc -> cpc.timer = PlayerInputSystem.PING_DELAY);
+                               }
+                               break;
+
                        }
                    });
-               };
-            }
+               }
+            })
         );
     }
 
