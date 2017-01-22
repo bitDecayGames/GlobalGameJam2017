@@ -1,7 +1,9 @@
 package com.bitdecay.game.room;
 
 
+import com.badlogic.gdx.Gdx;
 import com.bitdecay.game.Launcher;
+import com.bitdecay.game.camera.FollowOrthoSnapHeightCamera;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.screen.GameScreen;
 import com.bitdecay.game.system.*;
@@ -12,7 +14,7 @@ import com.bitdecay.game.system.*;
 public class DemoRoom extends AbstractRoom {
 
     public DemoRoom(GameScreen gameScreen) {
-        super(gameScreen);
+        super(gameScreen, new FollowOrthoSnapHeightCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), (float) Launcher.conf.getDouble("resolution.camera.zoom"), 600, 0, (float) Launcher.conf.getDouble("resolution.camera.snapSpeed")));
 
         // ////////////////////////////////////////////////
         // systems must be added before game objects
@@ -20,7 +22,7 @@ public class DemoRoom extends AbstractRoom {
         new InitializationSystem(this);
         new TimerSystem(this);
         new CameraUpdateSystem(this);
-        new CameraPredictiveSystem(this, 500);
+        new CameraPredictiveSystem(this, 400);
         new RespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DrawSystem(this);
@@ -51,7 +53,6 @@ public class DemoRoom extends AbstractRoom {
         gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500, 10, 10));
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.mine());
-        camera.maxZoom = 0.1f;
         gobs.add(MyGameObjectFactory.jelly());
         gobs.addAll(MyGameObjectFactory.demoBackgrounds(Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds")));
 

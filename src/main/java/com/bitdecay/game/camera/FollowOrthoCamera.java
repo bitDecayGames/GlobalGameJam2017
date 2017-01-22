@@ -1,6 +1,5 @@
 package com.bitdecay.game.camera;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -11,7 +10,7 @@ import java.util.List;
 /**
  * The FollowOrthoCamera will try and follow a list of points.  As the points spread out, the camera will zoom out.  As they get closer together, the camera will zoom in.  You have to give the camera a new list of points to follow every update step.
  */
-public class FollowOrthoCamera extends OrthographicCamera {
+public class FollowOrthoCamera extends AbstractFollowOrthoCamera {
     public float maxZoom = 0.05f;
     public float minZoom = 0.1f;
     public float buffer = 10;
