@@ -16,9 +16,6 @@ import com.bitdecay.game.util.VectorMath;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Monday on 1/21/2017.
- */
 public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
     List<MyGameObject> collisionObjects = new ArrayList<>();
 

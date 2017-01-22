@@ -20,7 +20,12 @@ public class RespawnSystem extends AbstractForEachUpdatableSystem {
     @Override
     protected boolean validateGob(MyGameObject gob) {
         if (gob.hasComponents(RespawnRecorderComponent.class, RemoveNowComponent.class)){
-            gob.forEachComponentDo(RespawnRecorderComponent.class, rec -> room.getGameObjects().add(MyGameObjectFactory.ship(room, rec.lastPos(), rec.lastVel(), rec.lastDesiredRotation())));
+               gob.forEachComponentDo(RespawnRecorderComponent.class, rec -> {
+                   if (rec.lastPos() != null) {
+                        room.getGameObjects().add(MyGameObjectFactory.ship(room, rec.lastPos(), rec.lastVel(), rec.lastDesiredRotation()));
+                   }
+            });
+
         }
         return gob.hasComponents(RespawnRecorderComponent.class, PositionComponent.class); // just no op
     }
