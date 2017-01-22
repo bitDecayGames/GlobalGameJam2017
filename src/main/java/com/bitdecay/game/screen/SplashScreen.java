@@ -67,7 +67,8 @@ public class SplashScreen implements Screen {
 
     @Override
     public void show() {
-        SoundLibrary.loopMusic(Launcher.conf.getString("splash.music"));
+        // TODO Get splash music in.
+//        SoundLibrary.loopMusic(Launcher.conf.getString("splash.music"));
     }
 
     @Override

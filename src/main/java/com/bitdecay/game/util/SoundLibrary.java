@@ -78,7 +78,7 @@ public class SoundLibrary {
             sound = sounds.get(name);
             if (sound == null) throw new RuntimeException("Could not find configured sound: " + name + ".  You must define it in the sounds.conf file.");
             if (sound.sound == null) {
-                sound.sound = Gdx.audio.newSound(Gdx.files.classpath("sound/fx/" + name + ".wav"));
+                sound.sound = Gdx.audio.newSound(Gdx.files.classpath("sound/fx/" + name + ".ogg"));
             }
 
             return sound;
@@ -103,8 +103,7 @@ public class SoundLibrary {
             music = musics.get(name);
             if (music == null) throw new RuntimeException("Could not find configured music: " + name + ". You must define it in the sounds.conf file.");
             if (music.music == null) {
-                FileHandle musicFile = Gdx.files.classpath("sound/music/" + name + ".mp3");
-                if (!musicFile.exists()) musicFile = Gdx.files.classpath("sound/music/" + name + ".wav");
+                FileHandle musicFile = Gdx.files.classpath("sound/music/" + name + ".ogg");
                 music.music = Gdx.audio.newMusic(musicFile);
                 musics.put(name, music);
             }
