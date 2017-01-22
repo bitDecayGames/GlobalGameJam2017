@@ -337,4 +337,27 @@ public class VectorMath
     public static Vector2 degreesToVector2(float degrees){
         return VectorMath.rotatePointByDegreesAroundZero(1, 0, degrees);
     }
+
+    /**
+     * Given a working point and a reference point, rotate the working point by
+     * the given angle around the reference point.
+     */
+    public static Vector2 getRotatedPoint(float x, float y, float angle, Vector2 around) {
+        Vector2 rotated = new Vector2(x, y);
+        double s = Math.sin(angle);
+        double c = Math.cos(angle);
+
+        // translate point back to origin:
+        rotated.x -= around.x;
+        rotated.y -= around.y;
+
+        // rotate point
+        double xnew = rotated.x * c - rotated.y * s;
+        double ynew = rotated.x * s + rotated.y * c;
+
+        // translate point back:
+        rotated.x = (float) (xnew + around.x);
+        rotated.y = (float) (ynew + around.y);
+        return rotated;
+    }
 }

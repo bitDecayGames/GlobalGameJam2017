@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is the menu screen.  It should be fairly easy to add new options by using the previous options as templates.  A lot of the parts of the menu are constructed using the conf values in the /resources/conf/application.conf file.  If you make any changes, consider making them such that you can use the conf files to change them in the future.
+ * This is the pause screen.  It is a copy/paste of the main menu.  Keeps a reference to the gameScreen to go back to it after pausing.
  */
-public class MainMenuScreen implements Screen {
+public class PauseScreen implements Screen {
 
     private MyGame game;
     private Stage stage = new Stage();
@@ -39,8 +39,11 @@ public class MainMenuScreen implements Screen {
 
     private int menuSelection;
 
-    public MainMenuScreen(MyGame game) {
+    private GameScreen gameScreen;
+
+    public PauseScreen(MyGame game, GameScreen gameScreen) {
         this.game = game;
+        this.gameScreen = gameScreen;
 
         menuSelection = 0;
 
@@ -55,8 +58,7 @@ public class MainMenuScreen implements Screen {
         // ////////////////////////////////////////////////
         // Here is where you add more menu options
         // ////////////////////////////////////////////////
-        menu.add(buildNewMenuOption("Start", this::gotoGame)).height(60).padBottom(20).padTop(150).row();
-        menu.add(buildNewMenuOption("Credits", this::gotoCredits)).height(60).padBottom(20).row();
+        menu.add(buildNewMenuOption("Resume", this::resumeGame)).height(60).padBottom(20).padTop(150).row();
         menu.add(buildNewMenuOption("Quit", this::exitGame)).height(60).padBottom(20).row();
 
         menu.align(Align.center);
@@ -86,8 +88,6 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
-        // TODO: maybe play music here if the music from the intro is not still playing
-
         // animate the main menu when entering
         Action fadeIn = Actions.sequence(Actions.alpha(0),
                 Actions.delay(0.25f),
@@ -114,12 +114,8 @@ public class MainMenuScreen implements Screen {
         else if (InputHelper.isKeyJustPressed(Input.Keys.ENTER, Input.Keys.SPACE)) makeSelection();
     }
 
-    private void gotoGame() {
-        game.setScreen(new GameScreen(game));
-    }
-
-    private void gotoCredits() {
-        game.setScreen(new CreditsScreen(game));
+    private void resumeGame() {
+        game.setScreen(gameScreen);
     }
 
     private void exitGame() {

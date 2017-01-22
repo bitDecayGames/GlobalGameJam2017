@@ -1,5 +1,7 @@
 package com.bitdecay.game.room;
 
+
+import com.bitdecay.game.Launcher;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.screen.GameScreen;
 import com.bitdecay.game.system.*;
@@ -18,7 +20,7 @@ public class DemoRoom extends AbstractRoom {
         new InitializationSystem(this);
         new TimerSystem(this);
         new CameraUpdateSystem(this);
-        new CameraPredictiveSystem(this, 200);
+        new CameraPredictiveSystem(this, 500);
         new RespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DrawSystem(this);
@@ -33,6 +35,8 @@ public class DemoRoom extends AbstractRoom {
         new RotationFromVelocitySystem(this);
         new ShapeDrawSystem(this);
         new CollisionCircleSystem(this);
+        new CircleLevelCollisionSystem(this);
+        new CollisionResolutionSystem(this);
         new RandomOrbitSystem(this);
         new TextDrawSystem(this);
         new GlobalInputSystem(this);
@@ -43,14 +47,12 @@ public class DemoRoom extends AbstractRoom {
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
-        gobs.addAll(MyGameObjectFactory.demoBackgrounds());
         gobs.add(MyGameObjectFactory.ship());
         gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500, 10, 10));
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.mine());
-        gobs.addAll(MyGameObjectFactory.demoBackgrounds());
-
         camera.maxZoom = 0.1f;
+        gobs.addAll(MyGameObjectFactory.demoBackgrounds(Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds")));
 
         // this is required to be at the end here so that the systems have the latest gobs
         systemManager.cleanup();
