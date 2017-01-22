@@ -15,7 +15,7 @@ import com.bitdecay.game.system.abstracted.AbstractDrawableSystem;
  */
 public class SonarPingSystem extends AbstractDrawableSystem {
     public float propagationSpeed = 6f;
-    public float maxSonarRange = 2000f;
+    public float maxSonarRange = 4000f;
 
     public SonarPingSystem(AbstractRoom room) {
         super(room);
@@ -32,10 +32,12 @@ public class SonarPingSystem extends AbstractDrawableSystem {
         gobs.forEach(gob -> {
             gob.forEachComponentDo(SonarPingComponent.class, ping -> {
                 ping.radius += propagationSpeed;
-                if (ping.radius > maxSonarRange){
+                if (ping.radius <= maxSonarRange){
+                    DrawSystem.pingShader.setUniformf("f_sweepRadius", ping.radius);
+                } else {
                     gob.addComponent(new RemoveNowComponent(gob));
+                    DrawSystem.pingShader.setUniformf("f_sweepRadius", 0);
                 }
-                DrawSystem.pingShader.setUniformf("f_sweepRadius", ping.radius);
             });
 
             gob.forEachComponentDo(PositionComponent.class, pos -> {

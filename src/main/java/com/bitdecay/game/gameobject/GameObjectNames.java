@@ -1,5 +1,8 @@
 package com.bitdecay.game.gameobject;
 
-public class GameObjectNames {
-    final public static String JELLY = "jelly";
+public enum GameObjectNames {
+    JELLY,
+    SHIP,
+    TORPEDO,
+    MINE
 }
