@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bitdecay.game.component.PositionComponent;
+import com.bitdecay.game.component.RemoveNowComponent;
 import com.bitdecay.game.component.RotationComponent;
 import com.bitdecay.game.component.TextComponent;
 import com.bitdecay.game.gameobject.MyGameObject;

@@ -47,7 +47,7 @@ public class DrawSystem extends AbstractDrawableSystem {
 
     @Override
     protected boolean validateGob(MyGameObject gob) {
-        return gob.hasComponents(DrawableComponent.class, PositionComponent.class, SizeComponent.class);
+        return gob.hasComponents(DrawableComponent.class, PositionComponent.class, SizeComponent.class) || gob.hasComponents(AnimationComponent.class, PositionComponent.class, SizeComponent.class);
     }
 
     @Override
@@ -70,6 +70,12 @@ public class DrawSystem extends AbstractDrawableSystem {
                                     gob.forEachComponentDo(OriginComponent.class, org -> drawPos.add(size.w * org.x, size.h * org.y, 0));
                                     gob.forEachComponentDo(RotationComponent.class, rot -> drawPos.z = rot.degrees);
                                     spriteBatch.draw(drawable.image(), pos.x - drawPos.x, pos.y - drawPos.y, drawPos.x, drawPos.y, size.w, size.h, 1, 1, drawPos.z);
+                                    gob.forEachComponentDo(AnimationComponent.class, anim -> {
+                                        Vector3 drawPosAnim = new Vector3();
+                                        gob.forEachComponentDo(OriginComponent.class, org -> drawPosAnim.add(size.w * org.x, size.h * org.y, 0));
+                                        gob.forEachComponentDo(RotationComponent.class, rot -> drawPosAnim.z = rot.degrees);
+                                        spriteBatch.draw(anim.animationFrames.getKeyFrame(anim.elapsedTime, true), pos.x - drawPosAnim.x, pos.y - drawPosAnim.y, drawPosAnim.x, drawPosAnim.y, size.w, size.h, 1, 1, drawPosAnim.z);
+                                    });
                                 })
                         );
                     }
@@ -91,6 +97,13 @@ public class DrawSystem extends AbstractDrawableSystem {
                                     gob.forEachComponentDo(OriginComponent.class, org -> drawPos.add(size.w * org.x, size.h * org.y, 0));
                                     gob.forEachComponentDo(RotationComponent.class, rot -> drawPos.z = rot.degrees);
                                     spriteBatch.draw(drawable.image(), pos.x - drawPos.x, pos.y - drawPos.y, drawPos.x, drawPos.y, size.w, size.h, 1, 1, drawPos.z);
+
+                                        gob.forEachComponentDo(AnimationComponent.class, anim -> {
+                                        Vector3 drawPosAnim = new Vector3();
+                                        gob.forEachComponentDo(OriginComponent.class, org -> drawPosAnim.add(size.w * org.x, size.h * org.y, 0));
+                                        gob.forEachComponentDo(RotationComponent.class, rot -> drawPosAnim.z = rot.degrees);
+                                        spriteBatch.draw(anim.animationFrames.getKeyFrame(anim.elapsedTime, true), pos.x - drawPosAnim.x, pos.y - drawPosAnim.y, drawPosAnim.x, drawPosAnim.y, size.w, size.h, 1, 1, drawPosAnim.z);
+                                    });
                                 })
                         );
                     }
