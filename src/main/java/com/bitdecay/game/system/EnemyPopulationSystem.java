@@ -48,6 +48,11 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
 
         int segmentAheadOfSub = findImageIndexAheadOfSub((int) subPos.x);
         if (checkIfAllowedToPopulateEnemies(segmentAheadOfSub)) {
+            if (segmentAheadOfSub > levelSegments.size() - 1) {
+                log.debug("Not spawning enemies, out of segments.");
+                return;
+            }
+
             StaticImageComponent levelSegment = levelSegments.get(segmentAheadOfSub);
             cleanupOldEnemies(segmentAheadOfSub, levelSegment);
             for (int i = 0; i < jellyfishPerSegment; i++) {
