@@ -33,7 +33,6 @@ public class SonarPingSystem extends AbstractDrawableSystem {
             gob.forEachComponentDo(SonarPingComponent.class, ping -> {
                 ping.radius += propagationSpeed;
                 if (ping.radius > maxSonarRange){
-                    log.debug("Removing PING");
                     gob.addComponent(new RemoveNowComponent(gob));
                 }
                 DrawSystem.pingShader.setUniformf("f_sweepRadius", ping.radius);
