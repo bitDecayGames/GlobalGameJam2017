@@ -45,6 +45,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
+        t.addComponent(new CanShootComponent(t));
         return t;
     }
 
@@ -102,8 +103,7 @@ public final class MyGameObjectFactory {
         MyGameObject t = new MyGameObject();
         Vector2 direction = VectorMath.degreesToVector2(rot).nor();
         Vector2 perp = new Vector2(direction.y, -direction.x);
-        System.out.println("Perper: " + perp + "  direciton: " + direction);
-        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.RED, 25));
+//        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.RED, 25));
         t.addComponent(new DespawnableComponent(t));
         t.addComponent(new PositionComponent(t, x, y));
         t.addComponent(new SizeComponent(t, 21, 4));
@@ -118,7 +118,7 @@ public final class MyGameObjectFactory {
             myGameObject.forEachComponentDo(RotationComponent.class, rotat -> {
                 myGameObject.addComponent(new AccelerationComponent(myGameObject, rotat.toVector2().scl(0.45f)));
                 myGameObject.addComponent(new ImpulseComponent(myGameObject, perp.cpy().scl(-2.5f)));
-                    }
+            }
         )));
         t.addComponent(new DragComponent(t, 0.09f, 0.4f));
         t.addComponent(new ImpulseComponent(t, perp.cpy().scl(4)));
