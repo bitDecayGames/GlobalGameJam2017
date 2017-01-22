@@ -23,7 +23,12 @@ public class RotationFromVelocitySystem extends AbstractForEachUpdatableSystem {
 
     @Override
     protected void forEach(float delta, MyGameObject gob) {
-        gob.forEachComponentDo(VelocityComponent.class, vel -> gob.forEachComponentDo(RotationComponent.class, rot -> rot.degrees = VectorMath.angleInDegrees(new Vector2(1, 0), vel.toVector2().nor())));
+        gob.forEachComponentDo(VelocityComponent.class, vel ->
+                gob.forEachComponentDo(RotationComponent.class, rot -> {
+                    if(rot.rotationFromVelocity){
+                        rot.degrees = VectorMath.angleInDegrees(new Vector2(1, 0), vel.toVector2().nor());
+                    }
+                }));
     }
 
 }
