@@ -20,13 +20,6 @@ import java.util.Random;
 public final class MyGameObjectFactory {
     private MyGameObjectFactory(){}
 
-    public static MyGameObject demoThing(){
-        MyGameObject t = new MyGameObject();
-        t.addComponent(new PositionComponent(t, 0, 0));
-        t.addComponent(new SizeComponent(t, 10, 10));
-        return t;
-    }
-
     public static MyGameObject ship(AbstractRoom room){
         Config conf = Launcher.conf.getConfig("player");
         MyGameObject t = new MyGameObject();
@@ -61,7 +54,7 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject mine(){
+    public static MyGameObject mine() {
         MyGameObject t = new MyGameObject();
         t.addComponent(new ObjectNameComponent(t,"mine"));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
@@ -116,6 +109,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new GlobalInputComponent(t, room));
         return t;
     }
+
     public static MyGameObject ping(Vector2 startPos) {
         MyGameObject pingObj = new MyGameObject();
         pingObj.addComponent(new PositionComponent(pingObj, startPos.x, startPos.y));
@@ -126,7 +120,7 @@ public final class MyGameObjectFactory {
         return pingObj;
     }
 
-    public static List<MyGameObject> demoBackgrounds(int numberOfBackgrounds){
+    public static List<MyGameObject> demoBackgrounds(int numberOfBackgrounds) {
         List<MyGameObject> gobs = new ArrayList<>();
         List<String> newbNames = new ArrayList<>();
         List<String> names = new ArrayList<>();
@@ -175,7 +169,7 @@ public final class MyGameObjectFactory {
         return gobs;
     }
 
-    public static MyGameObject torpedo(float x, float y, float rot){
+    public static MyGameObject torpedo (float x, float y, float rot) {
         MyGameObject t = new MyGameObject();
         t.addComponent(new ObjectNameComponent(t,"torpedo"));
         Vector2 direction = VectorMath.degreesToVector2(rot).nor();
@@ -209,6 +203,15 @@ public final class MyGameObjectFactory {
         t.addComponent(new DragComponent(t, 0.09f, 0.4f));
         t.addComponent(new ImpulseComponent(t, perp.cpy().scl(4)));
 
+
+        return t;
+    }
+
+    public static MyGameObject releaseTheKraken() {
+        MyGameObject t = new MyGameObject();
+        t.addComponent(new CameraFollowComponent(t));
+        t.addComponent(new StaticImageComponent(t, ""));
+        t.addComponent(new VelocityComponent(t, 0.3f, 0));
 
         return t;
     }
