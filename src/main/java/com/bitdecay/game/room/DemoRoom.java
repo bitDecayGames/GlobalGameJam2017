@@ -1,6 +1,6 @@
 package com.bitdecay.game.room;
 
-
+import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.component.RandomOrbitComponent;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.screen.GameScreen;
@@ -24,6 +24,7 @@ public class DemoRoom extends AbstractRoom {
         new RespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DrawSystem(this);
+        new RemovalSystem(this);
         new PlayerInputSystem(this);
         new DesiredDirectionSystem(this);
         new VelocitySystem(this);
@@ -34,6 +35,8 @@ public class DemoRoom extends AbstractRoom {
         new RotationFromVelocitySystem(this);
         new ShapeDrawSystem(this);
         new RandomOrbitSystem(this);
+        new TextDrawSystem(this);
+        new GlobalInputSystem(this);
         new ImpulseSystem(this);
         new DragSystem(this);
 
@@ -41,6 +44,8 @@ public class DemoRoom extends AbstractRoom {
         // put game objects here
         // ////////////////////////////////////////////////
         gobs.add(MyGameObjectFactory.ship());
+        gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500));
+        gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.mine());
         gobs.addAll(MyGameObjectFactory.demoBackgrounds());
 

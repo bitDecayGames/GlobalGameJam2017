@@ -2,6 +2,7 @@ package com.bitdecay.game.gameobject;
 
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.component.*;
+import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.util.VectorMath;
 
 import java.util.ArrayList;
@@ -53,7 +54,18 @@ public final class MyGameObjectFactory {
         t.addComponent(new AccelerationComponent(t));
         return t;
     }
+    public static MyGameObject splashText(String text, int textSizeMultiplier, int durationMs) {
+        MyGameObject t = new MyGameObject();
+        t.addComponent(new PositionComponent(t, 10, 10));
+        t.addComponent(new TextComponent(t, text, textSizeMultiplier, durationMs));
+        return t;
+    }
 
+    public static MyGameObject globalInputListener(AbstractRoom room) {
+        MyGameObject t = new MyGameObject();
+        t.addComponent(new GlobalInputComponent(t, room));
+        return t;
+    }
     public static MyGameObject ping(Vector2 startPos) {
         MyGameObject pingObj = new MyGameObject();
         pingObj.addComponent(new PositionComponent(pingObj, startPos.x, startPos.y));
