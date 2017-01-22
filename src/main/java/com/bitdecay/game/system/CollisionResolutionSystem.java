@@ -78,7 +78,6 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
     }
 
     private void explodePlayer(MyGameObject gob) {
-        log.debug("BOOM");
         gob.removeComponent(AnimationComponent.class);
         gob.addComponent(new AnimationComponent(gob, "player/playerExplode", .05f, Animation.PlayMode.NORMAL));
 //         this is changing the size of the ship. If we need to restart the level, make sure it's a brand new ship
