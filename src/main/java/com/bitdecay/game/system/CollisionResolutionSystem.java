@@ -64,7 +64,11 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                                        GameUtil.generateDirection(gob);
                                        break;
                                    case SHIP:
-                                       gob.forEachComponentDo(CanPingComponent.class, cpc -> cpc.timer = PlayerInputSystem.PING_DELAY);
+                                       gob.forEachComponentDo(CanPingComponent.class, cpc -> {
+                                           cpc.timer = PlayerInputSystem.PING_DELAY;
+                                           cpc.justLostSonar = true;
+                                       });
+
                                        break;
                                    default:
                                        // no-op

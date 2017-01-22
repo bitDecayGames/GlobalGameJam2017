@@ -75,12 +75,10 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             if (canPing(gobs)) {
                 gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
                     room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
-                    gob.removeComponent(AnimationComponent.class);
-                    gob.addComponent(new AnimationComponent(gob, "player/charge", 0.5f, Animation.PlayMode.LOOP));
-
                 }));
                 gobs.forEach(gob-> gob.forEachComponentDo(CanPingComponent.class, cpc ->{
                     cpc.timer = PING_DELAY;
+                    cpc.justLostSonar = true;
                 }));
             }
         }
@@ -106,11 +104,17 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
 
     private void updateCanPing(float delta) {
         gobs.forEach(gob -> gob.forEachComponentDo(CanPingComponent.class, cpc -> {
-            boolean startedUnable = cpc.timer > 0;
+            boolean timerNotExpired = cpc.timer > 0;
+            if (timerNotExpired && cpc.justLostSonar) {
+                cpc.justLostSonar = false;
+                gob.removeComponent(AnimationComponent.class);
+                gob.addComponent(new AnimationComponent(gob, "player/charge", 0.5f, Animation.PlayMode.LOOP));
+            }
+
             cpc.timer -= delta;
             if (cpc.timer <= 0) {
                 cpc.timer = 0;
-                if (startedUnable) {
+                if (timerNotExpired) {
                     // player just gained ping
                     // play a sound so they know?
                     gob.removeComponent(AnimationComponent.class);
