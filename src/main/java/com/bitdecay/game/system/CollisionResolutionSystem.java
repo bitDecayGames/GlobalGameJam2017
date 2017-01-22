@@ -1,5 +1,6 @@
 package com.bitdecay.game.system;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.bitdecay.game.component.*;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;
@@ -17,7 +18,15 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
     @Override
     protected void forEach(float delta, MyGameObject gob) {
         gob.forEachComponentDo(CollidedWithLevelComponent.class, colLevel -> {
-            gob.addComponent(new RemoveNowComponent(gob));
+            gob.forEachComponentDo(ObjectNameComponent.class, objectNameComponent -> {
+               switch (objectNameComponent.objectName) {
+                   case "ship":
+                       explodePlayer(gob);
+                       break;
+                   default:
+                       gob.addComponent(new RemoveNowComponent(gob));
+               }
+            });
         });
 
         gob.forEachComponentDo(CollisionResponseComponent.class, colRep ->
@@ -32,7 +41,7 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                                //remove mine from the game, ie.SPLOSION!!
                                collidedGob.addComponent(new RemoveNowComponent(collidedGob));
                                //remove player from game ie.death
-                               gob.addComponent(new RemoveNowComponent(gob));
+                               explodePlayer(gob);
                                break;
                            case "torpedo":
 //                               //remove torpedo from the game, ie.SPLOSION!!
@@ -53,6 +62,20 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                }
             })
         );
+    }
+
+    private void explodePlayer(MyGameObject gob) {
+        gob.removeComponent(AnimationComponent.class);
+        gob.addComponent(new AnimationComponent(gob, "player/playerExplode", .05f, Animation.PlayMode.NORMAL));
+        // this is changing the size of the ship. If we need to restart the level, make sure it's a brand new ship
+        gob.forEachComponentDo(SizeComponent.class, size -> size.h *= 1.5);
+
+        gob.removeComponent(CollisionCirclesComponent.class);
+        gob.removeComponent(CollidedWithLevelComponent.class);
+        gob.removeComponent(VelocityComponent.class);
+        gob.removeComponent(PlayerInputComponent.class);
+
+        gob.addComponent(new TimerComponent(gob, 2, gameobj -> gameobj.addComponent(new RemoveNowComponent(gameobj))));
     }
 
     @Override

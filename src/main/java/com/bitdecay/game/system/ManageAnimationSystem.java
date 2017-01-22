@@ -21,7 +21,7 @@ public class ManageAnimationSystem extends AbstractForEachUpdatableSystem {
     protected void forEach(float delta, MyGameObject gob) {
         gob.forEachComponentDo(AnimationComponent.class, animation -> {
             gob.forEachComponentDo(PositionComponent.class, pos -> {
-                animation.elapsedTime += Gdx.graphics.getDeltaTime();
+                animation.elapsedTime += delta;
                 gob.forEachComponentDo(StaticImageComponent.class, image -> {
                     image.image = animation.animationFrames.getKeyFrame(animation.elapsedTime);
                 });
