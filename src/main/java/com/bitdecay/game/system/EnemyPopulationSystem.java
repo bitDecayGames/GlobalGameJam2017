@@ -16,7 +16,8 @@ import java.util.HashSet;
 public class EnemyPopulationSystem extends AbstractUpdatableSystem {
 
     HashSet<Integer> populatedSegments = new HashSet<>();
-    int enemiesPerSegment = 20;
+    int jellyfishPerSegment = 20;
+    int minesPerSegment = 10;
 
     public EnemyPopulationSystem(AbstractRoom room) {
         super(room);
@@ -48,9 +49,13 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
         if (checkIfAllowedToPopulateEnemies(segmentAheadOfSub)) {
             StaticImageComponent levelSegment = levelSegments.get(segmentAheadOfSub);
             cleanupOldEnemies(segmentAheadOfSub, levelSegment);
-            for (int i = 0; i < enemiesPerSegment; i++) {
+            for (int i = 0; i < jellyfishPerSegment; i++) {
                 Vector2 coordinatesToAddEnemy = getValidSegmentCoordinates(segmentAheadOfSub, levelSegment);
-                addEnemyToRoom(coordinatesToAddEnemy);
+                addJellyToRoom(coordinatesToAddEnemy);
+            }
+            for (int i = 0; i < minesPerSegment; i++) {
+                Vector2 coordinatesToAddEnemy = getValidSegmentCoordinates(segmentAheadOfSub, levelSegment);
+                addMineToRoom(coordinatesToAddEnemy);
             }
         }
     }
@@ -72,10 +77,16 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
         return false;
     }
 
-    public void addEnemyToRoom(Vector2 coordinatesToAddEnemy) {
+    public void addJellyToRoom(Vector2 coordinatesToAddEnemy) {
         MyGameObject jelly = MyGameObjectFactory.jelly((int)coordinatesToAddEnemy.x, (int)coordinatesToAddEnemy.y);
         jelly.cleanup();
         room.gobs.add(jelly);
+    }
+
+    public void addMineToRoom(Vector2 coordinatesToAddEnemy) {
+        MyGameObject mine = MyGameObjectFactory.mine((int)coordinatesToAddEnemy.x, (int)coordinatesToAddEnemy.y);
+        mine.cleanup();
+        room.gobs.add(mine);
     }
 
     public Vector2 getValidSegmentCoordinates(int segmentIndex, StaticImageComponent levelSegment) {
@@ -93,7 +104,7 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
         room.gobs.forEach(gob -> {
             gob.forEachComponentDo(ObjectNameComponent.class, obName -> {
                 gob.forEachComponentDo(PositionComponent.class, pos -> {
-                    if(obName.objectName.equals("jelly")){
+                    if(obName.objectName.equals("jelly") || obName.objectName.equals("mine")){
                         if (pos.x <= xCutoff) {
                             gob.addComponent(new RemoveNowComponent(gob));
                         }
