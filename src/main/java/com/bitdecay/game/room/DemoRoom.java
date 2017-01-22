@@ -17,6 +17,7 @@ import com.bitdecay.game.system.*;
 public class DemoRoom extends AbstractRoom {
 
     public static MyGameObject player;
+    public static DemoRoom instance;
 
     public DemoRoom(GameScreen gameScreen) {
         super(gameScreen, new FollowOrthoSnapHeightCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), (float) Launcher.conf.getDouble("resolution.camera.zoom"), 600, 0, (float) Launcher.conf.getDouble("resolution.camera.snapSpeed")));
@@ -68,8 +69,11 @@ public class DemoRoom extends AbstractRoom {
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.jelly(300,300));
 
+
         // this is required to be at the end here so that the systems have the latest gobs
         systemManager.cleanup();
+
+        instance = this;
     }
 
     @Override

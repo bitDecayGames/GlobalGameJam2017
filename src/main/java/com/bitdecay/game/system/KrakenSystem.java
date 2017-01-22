@@ -1,7 +1,9 @@
 package com.bitdecay.game.system;
 
+import com.bitdecay.game.Launcher;
 import com.bitdecay.game.component.KrakenComponent;
 import com.bitdecay.game.component.PlayerInputComponent;
+import com.bitdecay.game.component.PositionComponent;
 import com.bitdecay.game.component.RelativePositionComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
@@ -11,12 +13,18 @@ import com.bitdecay.game.system.abstracted.AbstractUpdatableSystem;
 
 public class KrakenSystem extends AbstractUpdatableSystem {
 
+    private boolean isKrakenAdded = false;
+
     public KrakenSystem(AbstractRoom room){
         super(room);
     }
 
     private void addKraken() {
-        gobs.addAll(MyGameObjectFactory._____RELEASE___THE___KRAKEN_____(DemoRoom.player));
+        log.debug("Spawning Kraken");
+
+        DemoRoom.instance.gobs.addAll(MyGameObjectFactory._____RELEASE___THE___KRAKEN_____(DemoRoom.player));
+
+        isKrakenAdded = true;
     }
 
     @Override
@@ -26,6 +34,14 @@ public class KrakenSystem extends AbstractUpdatableSystem {
 
     @Override
     public void update(float delta) {
+        int numSegments = Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds");
+        float playerX = DemoRoom.player.getComponent(PositionComponent.class).get().toVector2().x;
+        if (playerX > (numSegments + 1) * 600) {
+            if (!isKrakenAdded) {
+                addKraken();
+            }
+        }
+
         gobs.stream().filter(gob -> gob.hasComponent(PlayerInputComponent.class)).findFirst().ifPresent(playerObj -> gobs.forEach(gob -> gob.forEachComponentDo(KrakenComponent.class, kraken -> gob.forEachComponentDo(RelativePositionComponent.class, rel ->{
             rel.other = playerObj;
             kraken.player = playerObj;

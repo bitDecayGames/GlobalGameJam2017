@@ -22,7 +22,8 @@ public class RespawnSystem extends AbstractForEachUpdatableSystem {
         if (gob.hasComponents(RespawnRecorderComponent.class, RemoveNowComponent.class)){
                gob.forEachComponentDo(RespawnRecorderComponent.class, rec -> {
                    if (rec.lastPos() != null) {
-                        room.getGameObjects().add(MyGameObjectFactory.ship(room, rec.lastPos(), rec.lastVel(), rec.lastDesiredRotation()));
+                       MyGameObject player = MyGameObjectFactory.ship(room, rec.lastPos(), rec.lastVel(), rec.lastDesiredRotation());
+                       room.getGameObjects().add(player);
                    }
             });
 
