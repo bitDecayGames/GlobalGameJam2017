@@ -2,6 +2,7 @@ package com.bitdecay.game.room;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.Launcher;
 import com.bitdecay.game.camera.FollowOrthoSnapHeightCamera;
@@ -31,7 +32,7 @@ public class DemoRoom extends AbstractRoom {
         new CameraPredictiveSystem(this, 400);
         new RespawnSystem(this);
         new DespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
-        new DrawSystem(this);
+        new DrawSystem(this, false);
         new PlayerInputSystem(this);
         new DesiredDirectionSystem(this);
         new VelocitySystem(this);
@@ -69,5 +70,10 @@ public class DemoRoom extends AbstractRoom {
 
         // this is required to be at the end here so that the systems have the latest gobs
         systemManager.cleanup();
+    }
+
+    @Override
+    public void setScreen(Screen screen) {
+
     }
 }

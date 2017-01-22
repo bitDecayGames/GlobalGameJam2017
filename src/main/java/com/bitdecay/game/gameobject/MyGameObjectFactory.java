@@ -1,11 +1,14 @@
 package com.bitdecay.game.gameobject;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.Launcher;
 import com.bitdecay.game.component.*;
 import com.bitdecay.game.room.AbstractRoom;
+import com.bitdecay.game.screen.CutsceneScreen;
+import com.bitdecay.game.screen.GameScreen;
 import com.bitdecay.game.util.GameUtil;
 import com.bitdecay.game.util.VectorMath;
 import com.typesafe.config.Config;
@@ -219,6 +222,49 @@ public final class MyGameObjectFactory {
         t.addComponent(new TimerComponent(t, 1, obj -> obj.addComponent(new RemoveNowComponent(obj))));
 
         return t;
+    }
+
+    public static List<MyGameObject> cutscenes(CutsceneScreen screen){
+        //screen.setRoom(new DemoRoom(screen));
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+
+        MyGameObject _1 = new MyGameObject();
+        new TimerComponent(_1, 1, cs -> {
+            new PositionComponent(cs).addSelfToGameObject();
+            new OriginComponent(cs).addSelfToGameObject();
+            new AnimationComponent(cs, "cutscene/first", 0.1f, Animation.PlayMode.REVERSED).addSelfToGameObject();
+            new StaticImageComponent(cs, "cutscene/first/0").addSelfToGameObject();
+            new SizeComponent(cs, w, h).addSelfToGameObject();
+            new TimerComponent(cs, 4, gob -> gob.addComponent(RemoveNowComponent.class)).addSelfToGameObject();
+        }).addSelfToGameObject();
+
+        MyGameObject _2 = new MyGameObject();
+        new TimerComponent(_2, 5, cs -> {
+            new PositionComponent(cs).addSelfToGameObject();
+            new OriginComponent(cs).addSelfToGameObject();
+            new AnimationComponent(cs, "cutscene/second", 0.1f, Animation.PlayMode.REVERSED).addSelfToGameObject();
+            new StaticImageComponent(cs, "cutscene/second/0").addSelfToGameObject();
+            new SizeComponent(cs, w, h).addSelfToGameObject();
+            new TimerComponent(cs, 4, gob -> gob.addComponent(RemoveNowComponent.class)).addSelfToGameObject();
+        }).addSelfToGameObject();
+
+        MyGameObject _3 = new MyGameObject();
+        new TimerComponent(_3, 9, cs -> {
+            new PositionComponent(cs).addSelfToGameObject();
+            new OriginComponent(cs).addSelfToGameObject();
+            new AnimationComponent(cs, "cutscene/third", 0.1f, Animation.PlayMode.REVERSED).addSelfToGameObject();
+            new StaticImageComponent(cs, "cutscene/third/0").addSelfToGameObject();
+            new SizeComponent(cs, w, h).addSelfToGameObject();
+        }).addSelfToGameObject();
+
+        MyGameObject _4 = new MyGameObject();
+        new TimerComponent(_4, 14, cs -> {
+            screen.game.setScreen(new GameScreen(screen.game));
+
+        }).addSelfToGameObject();
+
+        return Arrays.asList(_1, _2, _3, _4);
     }
 
     public static List<MyGameObject> _____RELEASE___THE___KRAKEN_____(MyGameObject player){

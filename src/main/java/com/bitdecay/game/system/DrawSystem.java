@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.bitdecay.game.Launcher;
 import com.bitdecay.game.component.*;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;
@@ -25,12 +24,14 @@ public class DrawSystem extends AbstractDrawableSystem {
     public static ShaderProgram proximityShader;
     public static ShaderProgram pingShader;
 
+    public boolean turnOffShader = false;
 
     FrameBuffer sonarBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     FrameBuffer proximityBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 
-    public DrawSystem(AbstractRoom room) {
+    public DrawSystem(AbstractRoom room, boolean turnOffShader) {
         super(room);
+        this.turnOffShader = turnOffShader;
         String vertexShader = Gdx.files.internal("shader/vertex_passthrough.glsl").readString();
         String fragShader = Gdx.files.internal("shader/frag_proximity.glsl").readString();
         proximityShader = new ShaderProgram(vertexShader, fragShader);
@@ -134,7 +135,7 @@ public class DrawSystem extends AbstractDrawableSystem {
         proximitySprite.flip(false, true);
 
         spriteBatch.begin();
-        if (!Launcher.conf.getBoolean("turnOffShader")) spriteBatch.setShader(proximityShader);
+        if (!turnOffShader) spriteBatch.setShader(proximityShader);
         proximitySprite.draw(spriteBatch);
         spriteBatch.end();
         spriteBatch.setShader(null);
@@ -145,7 +146,7 @@ public class DrawSystem extends AbstractDrawableSystem {
         sonarSprite.flip(false, true);
 
         spriteBatch.begin();
-        if (!Launcher.conf.getBoolean("turnOffShader")) spriteBatch.setShader(getConfiguredShader());
+        if (!turnOffShader) spriteBatch.setShader(getConfiguredShader());
         sonarSprite.draw(spriteBatch);
         spriteBatch.end();
         spriteBatch.setShader(null);
