@@ -56,6 +56,7 @@ public class MainMenuScreen implements Screen {
         // Here is where you add more menu options
         // ////////////////////////////////////////////////
         menu.add(buildNewMenuOption("Start", this::gotoGame)).height(60).padBottom(20).padTop(150).row();
+        menu.add(buildNewMenuOption("Controls", this::gotoControls)).height(60).padBottom(20).row();
         menu.add(buildNewMenuOption("Credits", this::gotoCredits)).height(60).padBottom(20).row();
         menu.add(buildNewMenuOption("Quit", this::exitGame)).height(60).padBottom(20).row();
 
@@ -120,6 +121,10 @@ public class MainMenuScreen implements Screen {
 
     private void gotoCredits() {
         game.setScreen(new CreditsScreen(game));
+    }
+
+    private void gotoControls() {
+        game.setScreen(new ControlScreen(game));
     }
 
     private void exitGame() {

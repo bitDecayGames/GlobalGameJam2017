@@ -84,7 +84,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             }
         }
 
-        if (InputHelper.isKeyJustPressed(Input.Keys.CONTROL_RIGHT)){
+        if (InputHelper.isKeyJustPressed(Input.Keys.CONTROL_RIGHT) || InputHelper.isKeyJustPressed(Input.Keys.CONTROL_LEFT)){
             float[] coords = new float[3];
             gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi -> {
                 gob.forEachComponentDo(CanShootComponent.class, shooter -> {
