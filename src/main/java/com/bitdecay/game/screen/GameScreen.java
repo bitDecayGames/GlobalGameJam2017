@@ -41,12 +41,14 @@ public class GameScreen implements Screen, IHasScreenSize, ICanSetScreen, ICanSe
         if (isPaused){
             isPaused = false;
         } else {
-            SoundLibrary.stopMusic(Launcher.conf.getString("splash.music"));
-            SoundLibrary.loopMusic(Launcher.conf.getString("game.music"));
+            // TODO Add back in music
+//            SoundLibrary.stopMusic(Launcher.conf.getString("splash.music"));
+//            SoundLibrary.loopMusic(Launcher.conf.getString("game.music"));
 
             // TODO: this could maybe be like a chain of looping ambient noise clips
-            List<String> ambientMusicToChain = Launcher.conf.getStringList("game.ambient");
-            SoundLibrary.loopMusic(ambientMusicToChain.get(0));
+            // TODO Add something back in.
+//            List<String> ambientMusicToChain = Launcher.conf.getStringList("game.ambient");
+//            SoundLibrary.loopMusic(ambientMusicToChain.get(0));
         }
     }
 
