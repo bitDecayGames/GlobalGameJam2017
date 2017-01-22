@@ -1,7 +1,5 @@
 package com.bitdecay.game.room;
 
-import com.bitdecay.game.gameobject.MyGameObject;
-import com.bitdecay.game.component.RandomOrbitComponent;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.screen.GameScreen;
 import com.bitdecay.game.system.*;
@@ -34,6 +32,7 @@ public class DemoRoom extends AbstractRoom {
         new RemovalSystem(this);
         new RotationFromVelocitySystem(this);
         new ShapeDrawSystem(this);
+        new CollisionCircleSystem(this);
         new RandomOrbitSystem(this);
         new TextDrawSystem(this);
         new GlobalInputSystem(this);
@@ -44,6 +43,7 @@ public class DemoRoom extends AbstractRoom {
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
+        gobs.addAll(MyGameObjectFactory.demoBackgrounds());
         gobs.add(MyGameObjectFactory.ship());
         gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500, 10, 10));
         gobs.add(MyGameObjectFactory.globalInputListener(this));
