@@ -17,8 +17,8 @@ import java.util.HashSet;
 public class EnemyPopulationSystem extends AbstractUpdatableSystem {
 
     HashSet<Integer> populatedSegments = new HashSet<>();
-    int jellyfishPerSegment = 6;
-    int minesPerSegment = 3;
+    int jellyfishPerSegment = 10;
+    int minesPerSegment = 10;
 
     public EnemyPopulationSystem(AbstractRoom room) {
         super(room);
@@ -51,11 +51,11 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
             StaticImageComponent levelSegment = levelSegments.get(segmentAheadOfSub);
             cleanupOldEnemies(segmentAheadOfSub, levelSegment);
             for (int i = 0; i < jellyfishPerSegment; i++) {
-                Vector2 coordinatesToAddEnemy = getValidSegmentCoordinates(segmentAheadOfSub, levelSegment);
+                Vector2 coordinatesToAddEnemy = getValidSegmentCoordinates(segmentAheadOfSub);
                 addJellyToRoom(coordinatesToAddEnemy);
             }
             for (int i = 0; i < minesPerSegment; i++) {
-                Vector2 coordinatesToAddEnemy = getValidSegmentCoordinates(segmentAheadOfSub, levelSegment);
+                Vector2 coordinatesToAddEnemy = getValidSegmentCoordinates(segmentAheadOfSub);
                 addMineToRoom(coordinatesToAddEnemy);
             }
         }
@@ -79,22 +79,25 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
     }
 
     public void addJellyToRoom(Vector2 coordinatesToAddEnemy) {
+        System.out.println("Adding a jelly at " + coordinatesToAddEnemy.x + ", " + coordinatesToAddEnemy.y);
         MyGameObject jelly = MyGameObjectFactory.jelly((int)coordinatesToAddEnemy.x, (int)coordinatesToAddEnemy.y);
         jelly.cleanup();
         room.gobs.add(jelly);
     }
 
     public void addMineToRoom(Vector2 coordinatesToAddEnemy) {
+        System.out.println("Adding a mine at " + coordinatesToAddEnemy.x + ", " + coordinatesToAddEnemy.y);
         MyGameObject mine = MyGameObjectFactory.mine((int)coordinatesToAddEnemy.x, (int)coordinatesToAddEnemy.y);
         mine.cleanup();
         room.gobs.add(mine);
     }
 
-    public Vector2 getValidSegmentCoordinates(int segmentIndex, StaticImageComponent levelSegment) {
-        double x = Math.random() * levelSegment.image().getRegionWidth();
-        double y = Math.random() * levelSegment.image().getRegionHeight();
+    public Vector2 getValidSegmentCoordinates(int segmentIndex) {
 
-        x = x + (segmentIndex * levelSegment.image().getRegionWidth());
+        double x = Math.random() * 600;
+        double y = Math.random() * 600;
+
+        x = x + (segmentIndex * 600);
 
         return new Vector2((float)x, (float)y);
     }
@@ -107,7 +110,10 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
                 gob.forEachComponentDo(PositionComponent.class, pos -> {
                     if(obName.objectName.equals(GameObjectNames.JELLY) || obName.objectName.equals(GameObjectNames.MINE)){
                         if (pos.x <= xCutoff) {
+                            System.out.println("REMOVING " + obName.objectName.name());
                             gob.addComponent(new RemoveNowComponent(gob));
+                        } else {
+                            System.out.println("Object position: " + pos.x + ". Cutoff: " + xCutoff);
                         }
                     }
                 });
