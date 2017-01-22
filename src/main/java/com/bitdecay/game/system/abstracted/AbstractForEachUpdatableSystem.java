@@ -14,7 +14,17 @@ public abstract class AbstractForEachUpdatableSystem extends AbstractUpdatableSy
 
     @Override
     public void update(float delta) {
+        before();
         gobs.forEach(gob -> forEach(delta, gob));
+        after();
+    }
+
+    public void before() {
+        // override to implement
+    }
+
+    public void after() {
+        // override to implement
     }
 
     protected abstract void forEach(float delta, MyGameObject gob);

@@ -41,7 +41,7 @@ public class SonarPingSystem extends AbstractDrawableSystem {
             });
 
             gob.forEachComponentDo(PositionComponent.class, pos -> {
-                Vector3 projected = camera.project(new Vector3(pos.x + 20, pos.y, 0));
+                Vector3 projected = camera.project(new Vector3(pos.x, pos.y, 0));
                 DrawSystem.pingShader.setUniformf("v_center",projected.x, projected.y);
             });
         });

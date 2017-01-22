@@ -32,6 +32,7 @@ public class DemoRoom extends AbstractRoom {
         new RemovalSystem(this);
         new RotationFromVelocitySystem(this);
         new ShapeDrawSystem(this);
+        new CollisionImageSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here
