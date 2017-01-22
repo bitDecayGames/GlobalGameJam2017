@@ -45,6 +45,7 @@ public class DemoRoom extends AbstractRoom {
         new ImpulseSystem(this);
         new DragSystem(this);
         new ManageAnimationSystem(this);
+        new RelativePositionSystem(this);
         new ParticleSystem(this);
 
         // ////////////////////////////////////////////////

@@ -11,6 +11,7 @@ import com.bitdecay.game.util.VectorMath;
 import com.typesafe.config.Config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -211,5 +212,51 @@ public final class MyGameObjectFactory {
         t.addComponent(new VelocityComponent(t, 0.3f, 0));
 
         return t;
+    }
+
+    public static List<MyGameObject> _____RELEASE___THE___KRAKEN_____(MyGameObject player){
+        MyGameObject o = new MyGameObject();
+        KrakenComponent k = new KrakenComponent(o);
+        k.addSelfToGameObject();
+        k.player = player;
+        new PositionComponent(o).addSelfToGameObject();
+        new RelativePositionComponent(o, k.player).addSelfToGameObject();
+
+        // face
+        k.face = new MyGameObject();
+        new PositionComponent(k.face).addSelfToGameObject();
+        new RelativePositionComponent(k.face, o).addSelfToGameObject();
+        new StaticImageComponent(k.face, "enemies/face/0").addSelfToGameObject();
+        new SizeComponent(k.face, 100, 100).addSelfToGameObject();
+
+        // head
+        k.head = new MyGameObject();
+        new PositionComponent(k.head).addSelfToGameObject();
+        new RelativePositionComponent(k.head, o).addSelfToGameObject();
+        new StaticImageComponent(k.head, "enemies/head/0").addSelfToGameObject();
+        new SizeComponent(k.head, 100, 100).addSelfToGameObject();
+
+        // tentacles
+        k.leftTentacle = new MyGameObject();
+        new PositionComponent(k.leftTentacle).addSelfToGameObject();
+        new RelativePositionComponent(k.leftTentacle, o).addSelfToGameObject();
+        new StaticImageComponent(k.leftTentacle, "enemies/tentacles/0").addSelfToGameObject();
+        new SizeComponent(k.leftTentacle, 100, 100).addSelfToGameObject();
+
+        // tentacles
+        k.rightTentacle = new MyGameObject();
+        new PositionComponent(k.rightTentacle).addSelfToGameObject();
+        new RelativePositionComponent(k.rightTentacle, o).addSelfToGameObject();
+        new StaticImageComponent(k.rightTentacle, "enemies/tentacles/0").addSelfToGameObject();
+        new SizeComponent(k.rightTentacle, 100, 100).addSelfToGameObject();
+
+        // tentacles
+        k.shortTentacles = new MyGameObject();
+        new PositionComponent(k.shortTentacles).addSelfToGameObject();
+        new RelativePositionComponent(k.shortTentacles, o).addSelfToGameObject();
+        new StaticImageComponent(k.shortTentacles, "enemies/tentacles/0").addSelfToGameObject();
+        new SizeComponent(k.shortTentacles, 100, 100).addSelfToGameObject();
+
+        return Arrays.asList(o, k.face, k.head, k.leftTentacle, k.rightTentacle, k.shortTentacles);
     }
 }
