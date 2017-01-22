@@ -23,7 +23,6 @@ public class KrakenSystem extends AbstractForEachUpdatableSystem{
                 gob.forEachComponentDo(RelativePositionComponent.class, relPos -> {
                     kraken.speed += kraken.acceleration;
                     relPos.y += kraken.speed;
-                    System.out.println("" + relPos.y + " " + kraken.direction + " " + kraken.speed);
                     if (kraken.direction > 0 && kraken.speed > kraken.maxSpeed) kraken.speed = kraken.maxSpeed;
                     else if(kraken.direction < 0 && kraken.speed < -kraken.maxSpeed) kraken.speed = -kraken.maxSpeed;
 
