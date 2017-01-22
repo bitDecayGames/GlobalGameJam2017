@@ -49,9 +49,6 @@ public final class MyGameObjectFactory {
         t.addComponent(new AccelerationComponent(t));
         t.addComponent(new CanShootComponent(t));
 
-        // Add initial starting ping.
-        room.getGameObjects().add(MyGameObjectFactory.ping(positionComp.toVector2()));
-
         return t;
     }
 
