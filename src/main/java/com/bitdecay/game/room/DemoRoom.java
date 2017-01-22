@@ -20,7 +20,7 @@ public class DemoRoom extends AbstractRoom {
         new InitializationSystem(this);
         new TimerSystem(this);
         new CameraUpdateSystem(this);
-        new CameraPredictiveSystem(this, 100);
+        new CameraPredictiveSystem(this, 200);
         new RespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DrawSystem(this);
@@ -41,10 +41,13 @@ public class DemoRoom extends AbstractRoom {
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
-        this.gobs.add(MyGameObjectFactory.ship());
-        this.gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500));
-        this.gobs.add(MyGameObjectFactory.globalInputListener(this));
-        this.gobs.add(MyGameObjectFactory.mine());
+        gobs.add(MyGameObjectFactory.ship());
+        gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500));
+        gobs.add(MyGameObjectFactory.globalInputListener(this));
+        gobs.add(MyGameObjectFactory.mine());
+        gobs.addAll(MyGameObjectFactory.demoBackgrounds());
+
+        camera.maxZoom = 0.1f;
 
         // this is required to be at the end here so that the systems have the latest gobs
         systemManager.cleanup();
