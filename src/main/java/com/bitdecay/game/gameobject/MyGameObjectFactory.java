@@ -1,5 +1,6 @@
 package com.bitdecay.game.gameobject;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.component.*;
 import com.bitdecay.game.room.AbstractRoom;
@@ -25,10 +26,16 @@ public final class MyGameObjectFactory {
         MyGameObject t = new MyGameObject();
         t.addComponent(new PlayerInputComponent(t, 0.75f));
 //        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, 10, 20));
+        t.addComponent(new PositionComponent(t, 10, 100));
         t.addComponent(new RotationComponent(t, 0));
         t.addComponent(new DesiredDirectionComponent(t, 0, 0.01f));
         t.addComponent(new SizeComponent(t, 49, 26));
+        CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
+        collision.collisionCircles.add(new Circle(16, 1.5f, 8));
+        collision.collisionCircles.add(new Circle(4, 0, 11));
+        collision.collisionCircles.add(new Circle(-10, -1, 8));
+        t.addComponent(collision);
+        t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new OriginComponent(t));
         t.addComponent(new CameraFollowComponent(t));
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
@@ -44,12 +51,16 @@ public final class MyGameObjectFactory {
     public static MyGameObject mine(){
         MyGameObject t = new MyGameObject();
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, 50, 20));
+        t.addComponent(new PositionComponent(t, 100, 20));
         t.addComponent(new SizeComponent(t, 12, 14 ));
+        CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
+        collision.collisionCircles.add(new Circle(0, 0, 7));
+        t.addComponent(collision);
+        t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/mine/mine").setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
-        t.addComponent(new RandomOrbitComponent(t, 50, 20 , 2.5f ));
+        t.addComponent(new RandomOrbitComponent(t, 100, 20 , 2.5f ));
         t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
