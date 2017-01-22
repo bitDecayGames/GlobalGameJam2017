@@ -1,7 +1,5 @@
 package com.bitdecay.game.room;
 
-import com.bitdecay.game.gameobject.MyGameObject;
-import com.bitdecay.game.component.RandomOrbitComponent;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.screen.GameScreen;
 import com.bitdecay.game.system.*;
@@ -43,11 +41,11 @@ public class DemoRoom extends AbstractRoom {
         // ////////////////////////////////////////////////
         // put game objects here
         // ////////////////////////////////////////////////
+        gobs.addAll(MyGameObjectFactory.demoBackgrounds());
         gobs.add(MyGameObjectFactory.ship());
         gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500));
         gobs.add(MyGameObjectFactory.globalInputListener(this));
         gobs.add(MyGameObjectFactory.mine());
-        gobs.addAll(MyGameObjectFactory.demoBackgrounds());
 
         camera.maxZoom = 0.1f;
 

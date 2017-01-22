@@ -2,12 +2,13 @@ package com.bitdecay.game.system;
 
 import com.badlogic.gdx.Input;
 import com.bitdecay.game.component.*;
-import com.badlogic.gdx.utils.Array;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.system.abstracted.AbstractUpdatableSystem;
 import com.bitdecay.game.util.InputHelper;
+
+import java.util.List;
 
 /**
  * This system will handle player keyboard input to modify the rotation of the player
@@ -16,9 +17,13 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
 
     public PlayerInputSystem(AbstractRoom room) { super(room); }
 
+    private boolean canPing(List<MyGameObject> gobs) {
+        return ! gobs.stream().anyMatch(gameObj -> gameObj.hasComponent(SonarPingComponent.class));
+    }
+
     @Override
     protected boolean validateGob(MyGameObject gob) {
-        return gob.hasComponents(PlayerInputComponent.class, DesiredDirectionComponent.class);
+        return gob.hasComponents(PlayerInputComponent.class, DesiredDirectionComponent.class) || gob.hasComponent(SonarPingComponent.class);
     }
 
     @Override
@@ -38,10 +43,12 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             // maybe something like:
             // gobs.forEach(gob -> gob.addComponent(SonarPingComponent))
             // which then gets removed when the SonarPingSystem finds it and triggers the ping?
-            log.debug("ADDING PING");
-            gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
-                this.room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
-            }));
+            if (canPing(gobs)) {
+                log.debug("ADDING PING");
+                gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
+                    room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
+                }));
+            }
         }
 
         if (InputHelper.isKeyJustPressed(Input.Keys.CONTROL_RIGHT)){
@@ -56,7 +63,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
 
                 }));
 
-            this.room.getGameObjects().add(MyGameObjectFactory.torpedo(coords[0], coords[1], coords[2]));
+            room.getGameObjects().add(MyGameObjectFactory.torpedo(coords[0], coords[1], coords[2]));
         }
     }
 }
