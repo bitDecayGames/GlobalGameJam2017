@@ -1,6 +1,7 @@
 package com.bitdecay.game.system;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.bitdecay.game.component.*;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PlayerInputSystem extends AbstractUpdatableSystem {
 
     public static final float PING_DELAY = 5.75f;
+    private static final float TORPEDO_DELAY = 2f;
 
     public PlayerInputSystem(AbstractRoom room) { super(room); }
 
@@ -41,6 +43,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
     public void update(float delta) {
 
         updateCanPing(delta);
+        updateCanShoot(delta);
 
         float rotationDirection = 0;
         if (InputHelper.isKeyPressed(Input.Keys.W, Input.Keys.UP, Input.Keys.RIGHT)) rotationDirection = -1;
@@ -59,7 +62,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
         if (canPing(gobs)) {
             gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pos -> {
                 if (gob.hasComponent(AnimationComponent.class)) {
-                    gob.removeComponent(AnimationComponent.class);
+//                    gob.removeComponent(AnimationComponent.class);
                 }
             }));
         }
@@ -72,7 +75,7 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             if (canPing(gobs)) {
                 gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
                     room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
-                    gob.addComponent(new AnimationComponent(gob, "player/charge", 0.5f));
+                    gob.addComponent(new AnimationComponent(gob, "player/charge", 0.5f, Animation.PlayMode.LOOP));
 
                 }));
                 gobs.forEach(gob-> gob.forEachComponentDo(CanPingComponent.class, cpc ->{
@@ -81,29 +84,36 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             }
         }
 
-        if (InputHelper.isKeyJustPressed(Input.Keys.CONTROL_RIGHT)){
+        if (InputHelper.isKeyJustPressed(Input.Keys.CONTROL_RIGHT) || InputHelper.isKeyJustPressed(Input.Keys.CONTROL_LEFT)){
             float[] coords = new float[3];
             gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi -> {
                 gob.forEachComponentDo(CanShootComponent.class, shooter -> {
-                    gob.forEachComponentDo(PositionComponent.class, pos -> {
-                        coords[0] = pos.x - 2;
-                        coords[1] = pos.y - 5;
-                    });
-                    gob.forEachComponentDo(RotationComponent.class, rota ->
-                            coords[2] = rota.degrees);
-                    this.room.getGameObjects().add(MyGameObjectFactory.torpedo(coords[0], coords[1], coords[2]));
-                    gob.removeComponent(CanShootComponent.class);
-                    gob.addComponent(new RemovableTimerComponent (gob, 2f, myGameObject -> {
-                        myGameObject.addComponent(new CanShootComponent(myGameObject));
-                    }));
+                    if (shooter.timer <= 0) {
+                        shooter.timer = TORPEDO_DELAY;
+                        gob.forEachComponentDo(PositionComponent.class, pos -> {
+                            coords[0] = pos.x - 2;
+                            coords[1] = pos.y - 5;
+                        });
+                        gob.forEachComponentDo(RotationComponent.class, rota ->
+                                coords[2] = rota.degrees);
+                        this.room.getGameObjects().add(MyGameObjectFactory.torpedo(coords[0], coords[1], coords[2]));
+                    }
                 });
             }));
-//            this.room.gobs.add(MyGameObjectFactory.splashText("Torpedo!!", 4, 1000, (int)coords[0], (int)coords[1]));
         }
     }
 
     private void updateCanPing(float delta) {
         gobs.forEach(gob -> gob.forEachComponentDo(CanPingComponent.class, cpc -> {
+            cpc.timer -= delta;
+            if (cpc.timer <= 0) {
+                cpc.timer = 0;
+            }
+        }));
+    }
+
+    private void updateCanShoot(float delta) {
+        gobs.forEach(gob -> gob.forEachComponentDo(CanShootComponent.class, cpc -> {
             cpc.timer -= delta;
             if (cpc.timer <= 0) {
                 cpc.timer = 0;

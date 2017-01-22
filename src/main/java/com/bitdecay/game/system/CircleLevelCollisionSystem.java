@@ -63,6 +63,7 @@ public class CircleLevelCollisionSystem extends AbstractForEachUpdatableSystem {
         PositionComponent circleGobPos;
         RotationComponent rot;
         CollisionCirclesComponent circleComp = circleGob.getComponent(CollisionCirclesComponent.class).get();
+
         circleGobPos = circleGob.getComponent(PositionComponent.class).get();
         for (Circle circle : circleComp.collisionCircles) {
             Circle workingCircle = new Circle(circle);

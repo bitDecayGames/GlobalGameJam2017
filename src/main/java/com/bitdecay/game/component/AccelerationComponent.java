@@ -3,9 +3,6 @@ package com.bitdecay.game.component;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.gameobject.MyGameObject;
 
-/**
- * Created by Luke on 1/21/2017.
- */
 public class AccelerationComponent extends AbstractComponent {
     public float x = 0;
     public float y = 0;
