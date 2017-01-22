@@ -138,7 +138,9 @@ public final class MyGameObjectFactory {
         for (int i = 0; i < maxC; i++) names.add("C/" + i);
         for (int i = 0; i < maxCB; i++) names.add("CB/" + i);
         Collections.shuffle(names);
-        for (int i = 0; i < maxNewb; i++) newbNames.add("Newb/" + i);
+        // last newb needs to be a specific image
+        for (int i = 0; i < maxNewb - 1; i++) newbNames.add("Newb/" + i);
+        newbNames.add("Newb/10");
 
         String name = "";
         for (int i = 0; i < actualNumberOfBackgrounds; i ++){
