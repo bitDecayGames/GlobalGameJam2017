@@ -107,8 +107,8 @@ public class DrawSystem extends AbstractDrawableSystem {
         defaultProjMatrix.setToOrtho2D(0.0F, 0.0F, (float)Gdx.graphics.getWidth(), (float)Gdx.graphics.getHeight());
         spriteBatch.setProjectionMatrix(defaultProjMatrix);
 
-        renderProximityBuffer(spriteBatch);
         renderSonarBuffer(spriteBatch);
+        renderProximityBuffer(spriteBatch);
     }
 
     private void renderProximityBuffer(SpriteBatch spriteBatch) {

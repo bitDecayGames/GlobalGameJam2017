@@ -186,7 +186,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new VelocityComponent(t, 0.1f, 0f));
         t.addComponent(new TimerComponent(t, 0.25f, myGameObject ->
             myGameObject.forEachComponentDo(RotationComponent.class, rotat -> {
-                myGameObject.addComponent(new AccelerationComponent(myGameObject, rotat.toVector2().scl(0.45f)));
+                myGameObject.addComponent(new AccelerationComponent(myGameObject, rotat.toVector2().scl(0.45f), 5f));
                 myGameObject.addComponent(new ImpulseComponent(myGameObject, perp.cpy().scl(-2.5f)));
             }
         )));
