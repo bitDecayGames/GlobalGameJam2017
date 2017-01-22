@@ -10,6 +10,7 @@ import com.typesafe.config.ConfigList;
 import com.typesafe.config.ConfigObject;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
@@ -48,6 +49,18 @@ public class SoundLibrary {
                 func.accept(name, volume);
             }
         });
+    }
+
+    public static ArrayList<String> GetSoundList(String confLocation){
+        ConfigList conf = Launcher.conf.getList(confLocation);
+        ArrayList<String> listSoundNames = new ArrayList<>();
+        conf.forEach(configValue -> {
+            if (configValue instanceof ConfigObject){
+                Config sound = ((ConfigObject) configValue).toConfig();
+                listSoundNames.add(sound.getString("name"));
+            }
+        });
+        return listSoundNames;
     }
 
     public static synchronized Sound playSound(String name) {

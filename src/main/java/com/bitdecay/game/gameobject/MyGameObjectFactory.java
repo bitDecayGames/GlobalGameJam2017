@@ -3,6 +3,8 @@ package com.bitdecay.game.gameobject;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.component.*;
+import com.bitdecay.game.room.AbstractRoom;
+import com.bitdecay.game.util.VectorMath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +65,18 @@ public final class MyGameObjectFactory {
         t.addComponent(new AccelerationComponent(t));
         return t;
     }
+    public static MyGameObject splashText(String text, int textSizeMultiplier, int durationMs) {
+        MyGameObject t = new MyGameObject();
+        t.addComponent(new PositionComponent(t, 10, 10));
+        t.addComponent(new TextComponent(t, text, textSizeMultiplier, durationMs));
+        return t;
+    }
 
+    public static MyGameObject globalInputListener(AbstractRoom room) {
+        MyGameObject t = new MyGameObject();
+        t.addComponent(new GlobalInputComponent(t, room));
+        return t;
+    }
     public static MyGameObject ping(Vector2 startPos) {
         MyGameObject pingObj = new MyGameObject();
         pingObj.addComponent(new PositionComponent(pingObj, startPos.x, startPos.y));
@@ -84,5 +97,32 @@ public final class MyGameObjectFactory {
             gobs.add(o);
         }
         return gobs;
+    }
+    public static MyGameObject torpedo(float x, float y, float rot){
+        MyGameObject t = new MyGameObject();
+        Vector2 direction = VectorMath.degreesToVector2(rot).nor();
+        Vector2 perp = new Vector2(direction.y, -direction.x);
+        System.out.println("Perper: " + perp + "  direciton: " + direction);
+        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.RED, 25));
+        t.addComponent(new DespawnableComponent(t));
+        t.addComponent(new PositionComponent(t, x, y));
+        t.addComponent(new SizeComponent(t, 21, 4));
+        StaticImageComponent imageComponent = new StaticImageComponent(t, "player/torpedo/0");
+        imageComponent.reactsToSonar = true;
+        t.addComponent(imageComponent);
+        RotationComponent rotationComponent = new RotationComponent(t, rot);
+        rotationComponent.rotationFromVelocity = false;
+        t.addComponent(rotationComponent);
+        t.addComponent(new VelocityComponent(t, 0.1f, 0f));
+        t.addComponent(new TimerComponent(t, 0.25f, myGameObject ->
+            myGameObject.forEachComponentDo(RotationComponent.class, rotat -> {
+                myGameObject.addComponent(new AccelerationComponent(myGameObject, rotat.toVector2().scl(0.45f)));
+                myGameObject.addComponent(new ImpulseComponent(myGameObject, perp.cpy().scl(-2.5f)));
+                    }
+        )));
+        t.addComponent(new DragComponent(t, 0.09f, 0.4f));
+        t.addComponent(new ImpulseComponent(t, perp.cpy().scl(4)));
+
+        return t;
     }
 }
