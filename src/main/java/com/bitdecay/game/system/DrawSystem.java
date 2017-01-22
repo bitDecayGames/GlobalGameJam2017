@@ -58,58 +58,58 @@ public class DrawSystem extends AbstractDrawableSystem {
 
 
         sonarBuffer.begin();
-        Gdx.gl.glClearColor(0.5f, 0.f, 0.0f, 0f); //transparent black
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); //transparent black
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT); //clear the color buffer
         spriteBatch.begin();
-        gobs.forEach(gob ->
-                gob.forEachComponentDo(DrawableComponent.class, drawable -> {
-
-                    if (drawable.reactsToSonar) {
-                        gob.forEachComponentDo(PositionComponent.class, pos ->
-                                gob.forEachComponentDo(SizeComponent.class, size -> {
-                                    Vector3 drawPos = new Vector3();
-                                    gob.forEachComponentDo(OriginComponent.class, org -> drawPos.add(size.w * org.x, size.h * org.y, 0));
-                                    gob.forEachComponentDo(RotationComponent.class, rot -> drawPos.z = rot.degrees);
+        gobs.forEach(gob -> {
+            gob.forEachComponentDo(DrawableComponent.class, drawable -> {
+                if (drawable.reactsToSonar) {
+                    gob.forEachComponentDo(PositionComponent.class, pos ->
+                            gob.forEachComponentDo(SizeComponent.class, size -> {
+                                Vector3 drawPos = new Vector3();
+                                gob.forEachComponentDo(OriginComponent.class, org -> drawPos.add(size.w * org.x, size.h * org.y, 0));
+                                gob.forEachComponentDo(RotationComponent.class, rot -> drawPos.z = rot.degrees);
+                                if (drawable.image() != null) {
                                     spriteBatch.draw(drawable.image(), pos.x - drawPos.x, pos.y - drawPos.y, drawPos.x, drawPos.y, size.w, size.h, 1, 1, drawPos.z);
-                                    gob.forEachComponentDo(AnimationComponent.class, anim -> {
-                                        Vector3 drawPosAnim = new Vector3();
-                                        gob.forEachComponentDo(OriginComponent.class, org -> drawPosAnim.add(size.w * org.x, size.h * org.y, 0));
-                                        gob.forEachComponentDo(RotationComponent.class, rot -> drawPosAnim.z = rot.degrees);
-                                        spriteBatch.draw(anim.animationFrames.getKeyFrame(anim.elapsedTime, true), pos.x - drawPosAnim.x, pos.y - drawPosAnim.y, drawPosAnim.x, drawPosAnim.y, size.w, size.h, 1, 1, drawPosAnim.z);
-                                    });
-                                })
-                        );
-                    }
-                })
-        );
+                                }
+                            })
+                    );
+                }
+            });
+            gob.forEachComponentDo(SelfDrawComponent.class, selfDrawComponent -> {
+                if (selfDrawComponent.reactsToSonar) {
+                    selfDrawComponent.drawToBatch(spriteBatch);
+                }
+            });
+        });
         spriteBatch.end();
         sonarBuffer.end();
 
         proximityBuffer.begin();
-        Gdx.gl.glClearColor(0f, 0f, 0f, 0f); //transparent black
+        Gdx.gl.glClearColor(0.0f, 0.1f, 0.15f, 1.0f);
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT); //clear the color buffer
         spriteBatch.begin();
-        gobs.forEach(gob ->
-                gob.forEachComponentDo(DrawableComponent.class, drawable -> {
-                    if (drawable.proximityRender) {
-                        gob.forEachComponentDo(PositionComponent.class, pos ->
-                                gob.forEachComponentDo(SizeComponent.class, size -> {
-                                    Vector3 drawPos = new Vector3();
-                                    gob.forEachComponentDo(OriginComponent.class, org -> drawPos.add(size.w * org.x, size.h * org.y, 0));
-                                    gob.forEachComponentDo(RotationComponent.class, rot -> drawPos.z = rot.degrees);
+        gobs.forEach(gob -> {
+            gob.forEachComponentDo(DrawableComponent.class, drawable -> {
+                if (drawable.proximityRender) {
+                    gob.forEachComponentDo(PositionComponent.class, pos ->
+                            gob.forEachComponentDo(SizeComponent.class, size -> {
+                                Vector3 drawPos = new Vector3();
+                                gob.forEachComponentDo(OriginComponent.class, org -> drawPos.add(size.w * org.x, size.h * org.y, 0));
+                                gob.forEachComponentDo(RotationComponent.class, rot -> drawPos.z = rot.degrees);
+                                if (drawable.image() != null) {
                                     spriteBatch.draw(drawable.image(), pos.x - drawPos.x, pos.y - drawPos.y, drawPos.x, drawPos.y, size.w, size.h, 1, 1, drawPos.z);
-
-                                        gob.forEachComponentDo(AnimationComponent.class, anim -> {
-                                        Vector3 drawPosAnim = new Vector3();
-                                        gob.forEachComponentDo(OriginComponent.class, org -> drawPosAnim.add(size.w * org.x, size.h * org.y, 0));
-                                        gob.forEachComponentDo(RotationComponent.class, rot -> drawPosAnim.z = rot.degrees);
-                                        spriteBatch.draw(anim.animationFrames.getKeyFrame(anim.elapsedTime, true), pos.x - drawPosAnim.x, pos.y - drawPosAnim.y, drawPosAnim.x, drawPosAnim.y, size.w, size.h, 1, 1, drawPosAnim.z);
-                                    });
-                                })
-                        );
-                    }
-                })
-        );
+                                }
+                            })
+                    );
+                }
+            });
+            gob.forEachComponentDo(SelfDrawComponent.class, selfDrawComponent -> {
+                if (selfDrawComponent.proximityRender) {
+                    selfDrawComponent.drawToBatch(spriteBatch);
+                }
+            });
+        });
         spriteBatch.end();
         proximityBuffer.end();
     }
@@ -120,11 +120,8 @@ public class DrawSystem extends AbstractDrawableSystem {
         defaultProjMatrix.setToOrtho2D(0.0F, 0.0F, (float)Gdx.graphics.getWidth(), (float)Gdx.graphics.getHeight());
         spriteBatch.setProjectionMatrix(defaultProjMatrix);
 
-
         renderSonarBuffer(spriteBatch);
-
         renderProximityBuffer(spriteBatch);
-
     }
 
     private void renderProximityBuffer(SpriteBatch spriteBatch) {

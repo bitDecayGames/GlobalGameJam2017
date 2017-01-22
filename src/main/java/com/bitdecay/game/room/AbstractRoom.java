@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.Launcher;
+import com.bitdecay.game.camera.AbstractFollowOrthoCamera;
 import com.bitdecay.game.camera.FollowOrthoCamera;
 import com.bitdecay.game.gameobject.MyGameObjects;
 import com.bitdecay.game.screen.GameScreen;
@@ -26,16 +27,22 @@ public abstract class AbstractRoom implements IUpdate, IDraw, IHasScreenSize, IC
 
     public final SpriteBatch spriteBatch = new SpriteBatch();
     public final ShapeRenderer shapeRenderer = new ShapeRenderer();
-    public final FollowOrthoCamera camera = new FollowOrthoCamera(Launcher.conf.getInt("resolution.camera.width"), Launcher.conf.getInt("resolution.camera.height"));
+    public final AbstractFollowOrthoCamera camera;
 
     public AbstractRoom(GameScreen gameScreen){
         this.gameScreen = gameScreen;
 
-        camera.maxZoom = (float) Launcher.conf.getDouble("resolution.camera.maxZoom");
-        camera.minZoom = (float) Launcher.conf.getDouble("resolution.camera.minZoom");
-//        camera.snapSpeed = (float) Launcher.conf.getDouble("resolution.camera.snapSpeed");
-        camera.snapSpeed = 1;
-        camera.buffer = 100;
+        FollowOrthoCamera cam = new FollowOrthoCamera(Launcher.conf.getInt("resolution.camera.width"), Launcher.conf.getInt("resolution.camera.height"));
+        cam.maxZoom = (float) Launcher.conf.getDouble("resolution.camera.maxZoom");
+        cam.minZoom = (float) Launcher.conf.getDouble("resolution.camera.minZoom");
+        cam.snapSpeed = 1;
+        cam.buffer = 100;
+        camera = cam;
+    }
+
+    public AbstractRoom(GameScreen gameScreen, AbstractFollowOrthoCamera cameraReplacement){
+        this.gameScreen = gameScreen;
+        this.camera = cameraReplacement;
     }
 
     public MyGameObjects getGameObjects(){

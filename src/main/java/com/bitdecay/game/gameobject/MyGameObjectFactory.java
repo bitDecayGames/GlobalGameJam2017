@@ -1,10 +1,12 @@
 package com.bitdecay.game.gameobject;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.Launcher;
 import com.bitdecay.game.component.*;
 import com.bitdecay.game.room.AbstractRoom;
+import com.bitdecay.game.util.GameUtil;
 import com.bitdecay.game.util.VectorMath;
 import com.typesafe.config.Config;
 
@@ -18,18 +20,12 @@ import java.util.List;
 public final class MyGameObjectFactory {
     private MyGameObjectFactory(){}
 
-    public static MyGameObject demoThing(){
-        MyGameObject t = new MyGameObject();
-        t.addComponent(new PositionComponent(t, 0, 0));
-        t.addComponent(new SizeComponent(t, 10, 10));
-        return t;
-    }
-
-    public static MyGameObject ship(){
+    public static MyGameObject ship(AbstractRoom room){
         Config conf = Launcher.conf.getConfig("player");
         MyGameObject t = new MyGameObject();
-        t.addComponent(new PlayerInputComponent(t, (float) conf.getDouble("desiredDegreeRotationAmountPerStep")));
-        t.addComponent(new PositionComponent(t, conf.getInt("startingPosition.x"), conf.getInt("startingPosition.y")));
+        PositionComponent positionComp = new PositionComponent(t, conf.getInt("startingPosition.x"), conf.getInt("startingPosition.y"));
+        t.addComponent(new PlayerInputComponent(t, (float) conf.getDouble("desiredDegreeRotationAmountPerStep"), (float) conf.getDouble("maxDegrees"), (float) conf.getDouble("minDegrees")));
+        t.addComponent(positionComp);
         t.addComponent(new RotationComponent(t));
         t.addComponent(new DesiredDirectionComponent(t, 0, (float) conf.getDouble("actualRotationSpeedScalar")));
         t.addComponent(new SizeComponent(t, conf.getInt("size.w"), conf.getInt("size.h")));
@@ -47,17 +43,22 @@ public final class MyGameObjectFactory {
         t.addComponent(new StaticImageComponent(t, conf.getString("imagePath")).setReactsToSonar(true));
         t.addComponent(new VelocityComponent(t, (float) conf.getDouble("moveSpeed"), 0));
         t.addComponent(new CollisionComponent(t));
+        t.addComponent(new CanPingComponent(t));
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
         t.addComponent(new CanShootComponent(t));
+
+        // Add initial starting ping.
+        room.getGameObjects().add(MyGameObjectFactory.ping(positionComp.toVector2()));
+
         return t;
     }
 
-    public static MyGameObject mine(){
+    public static MyGameObject mine() {
         MyGameObject t = new MyGameObject();
         t.addComponent(new ObjectNameComponent(t,"mine"));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, -200, 20));
+        t.addComponent(new PositionComponent(t, 350,300 ));
         t.addComponent(new SizeComponent(t, 12, 14 ));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(0, 0, 7));
@@ -66,27 +67,30 @@ public final class MyGameObjectFactory {
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/mine/mine").setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
-        t.addComponent(new RandomOrbitComponent(t, -200, 20 , 2.5f ));
+        t.addComponent(new RandomOrbitComponent(t, 350, 300 , 2.5f ));
         t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
     }
 
-    public static MyGameObject jelly() {
+    public static MyGameObject jelly(int x, int y) {
         MyGameObject t = new MyGameObject();
-        t.addComponent(new ObjectNameComponent(t, "jelly"));
+        t.addComponent(new ObjectNameComponent(t, GameObjectNames.JELLY));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, 300, 300));
+        t.addComponent(new PositionComponent(t, x, y));
         t.addComponent(new SizeComponent(t, 27, 20));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
-        collision.collisionCircles.add(new Circle(0, 0, 6));
+        collision.collisionCircles.add(new Circle(0, 4, 5));
         t.addComponent(collision);
         t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/jelly/0").setReactsToSonar(true));
+        t.addComponent(new AnimationComponent(t, "enemies/jelly", 0.2f, Animation.PlayMode.LOOP));
         t.addComponent(new CollisionComponent(t));
-        t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
+
+        GameUtil.generateDirection(t);
+
         return t;
     }
 
@@ -102,6 +106,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new GlobalInputComponent(t, room));
         return t;
     }
+
     public static MyGameObject ping(Vector2 startPos) {
         MyGameObject pingObj = new MyGameObject();
         pingObj.addComponent(new PositionComponent(pingObj, startPos.x, startPos.y));
@@ -112,7 +117,7 @@ public final class MyGameObjectFactory {
         return pingObj;
     }
 
-    public static List<MyGameObject> demoBackgrounds(int numberOfBackgrounds){
+    public static List<MyGameObject> demoBackgrounds(int numberOfBackgrounds) {
         List<MyGameObject> gobs = new ArrayList<>();
         List<String> newbNames = new ArrayList<>();
         List<String> names = new ArrayList<>();
@@ -162,7 +167,7 @@ public final class MyGameObjectFactory {
         return gobs;
     }
 
-    public static MyGameObject torpedo(float x, float y, float rot){
+    public static MyGameObject torpedo (float x, float y, float rot) {
         MyGameObject t = new MyGameObject();
         t.addComponent(new ObjectNameComponent(t,"torpedo"));
         Vector2 direction = VectorMath.degreesToVector2(rot).nor();
@@ -174,14 +179,19 @@ public final class MyGameObjectFactory {
         StaticImageComponent imageComponent = new StaticImageComponent(t, "player/torpedo/0");
         imageComponent.reactsToSonar = true;
         t.addComponent(imageComponent);
+        t.addComponent(new AnimationComponent(t, "player/torpedo", .1f, Animation.PlayMode.LOOP));
         RotationComponent rotationComponent = new RotationComponent(t, rot);
         rotationComponent.rotationFromVelocity = false;
         t.addComponent(rotationComponent);
         t.addComponent(new VelocityComponent(t, 0.1f, 0f));
         t.addComponent(new TimerComponent(t, 0.25f, myGameObject ->
             myGameObject.forEachComponentDo(RotationComponent.class, rotat -> {
-                myGameObject.addComponent(new AccelerationComponent(myGameObject, rotat.toVector2().scl(0.45f)));
+                myGameObject.addComponent(new AccelerationComponent(myGameObject, rotat.toVector2().scl(0.45f), 5f));
                 myGameObject.addComponent(new ImpulseComponent(myGameObject, perp.cpy().scl(-2.5f)));
+                ParticleEffectComponent particle = new ParticleEffectComponent(myGameObject, "particle/bubbleJet2.p", "particle");
+                particle.fx.scaleEffect(.1f);
+                particle.offset = new Vector2(-20, 0);
+                myGameObject.addComponent(particle);
             }
         )));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
@@ -190,6 +200,16 @@ public final class MyGameObjectFactory {
         t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new DragComponent(t, 0.09f, 0.4f));
         t.addComponent(new ImpulseComponent(t, perp.cpy().scl(4)));
+
+
+        return t;
+    }
+
+    public static MyGameObject releaseTheKraken() {
+        MyGameObject t = new MyGameObject();
+        t.addComponent(new CameraFollowComponent(t));
+        t.addComponent(new StaticImageComponent(t, ""));
+        t.addComponent(new VelocityComponent(t, 0.3f, 0));
 
         return t;
     }

@@ -11,5 +11,6 @@
 **.iml
 classes
 dependency-reduced-pom.xml
+**/*.log
 
 src/main/resources/img/packed/

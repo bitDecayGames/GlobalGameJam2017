@@ -3,12 +3,10 @@ package com.bitdecay.game.component;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.gameobject.MyGameObject;
 
-/**
- * Created by Luke on 1/21/2017.
- */
 public class AccelerationComponent extends AbstractComponent {
     public float x = 0;
     public float y = 0;
+    public float maxVelocity = Float.NEGATIVE_INFINITY;
 
     public AccelerationComponent(MyGameObject obj){super(obj);}
     public AccelerationComponent(MyGameObject obj, float x, float y){
@@ -16,8 +14,9 @@ public class AccelerationComponent extends AbstractComponent {
         this.x = x;
         this.y = y;
     }
-    public AccelerationComponent(MyGameObject obj, Vector2 vector2){
+    public AccelerationComponent(MyGameObject obj, Vector2 vector2, float maxVelocity){
         this(obj, vector2.x, vector2.y);
+        this.maxVelocity = maxVelocity;
     }
 
     /**

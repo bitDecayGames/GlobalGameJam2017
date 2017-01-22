@@ -11,7 +11,7 @@ import com.bitdecay.game.util.PixmapCache;
  */
 public class StaticImageComponent extends DrawableComponent {
 
-    private TextureRegion image;
+    public TextureRegion image;
     public Pixmap pixmap;
 
     public StaticImageComponent(MyGameObject obj, String name) {

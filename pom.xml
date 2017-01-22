@@ -4,9 +4,9 @@
 
     <groupId>com.bitdecay</groupId>
     <!-- TODO -->
-    <artifactId>project-name</artifactId>
+    <artifactId>deep</artifactId>
     <version>1.0</version>
-    <name>project-name</name>
+    <name>deep</name>
     <description>project description...</description>
 
     <packaging>jar</packaging>
