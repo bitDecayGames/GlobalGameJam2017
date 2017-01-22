@@ -53,7 +53,9 @@ public class CircleLevelCollisionSystem extends AbstractForEachUpdatableSystem {
 
             for (MyGameObject circleGob : circleColliders) {
                 if (checkCircleGobCollision(imageComp.pixmap, imagePosition, imageSize, imageComp, circleGob)) {
-                    circleGob.addComponent(new CollidedWithLevelComponent(circleGob));
+                    if (!circleGob.hasComponent(CollidedWithLevelComponent.class)) {
+                        circleGob.addComponent(new CollidedWithLevelComponent(circleGob));
+                    }
                 }
             }
         }
