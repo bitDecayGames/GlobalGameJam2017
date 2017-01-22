@@ -22,8 +22,9 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
             gob.forEachComponentDo(ObjectNameComponent.class, objectNameComponent -> {
                 switch (objectNameComponent.objectName) {
                     case JELLY:
-                       GameUtil.generateDirection(gob);
-                       break;
+                        gob.removeComponent(CollidedWithLevelComponent.class);
+                        GameUtil.generateDirection(gob);
+                        break;
                     case SHIP:
                         if (!playerExploded) {
                             playerExploded = true;
