@@ -21,7 +21,7 @@ public abstract class AbstractRoom implements IUpdate, IDraw, IHasScreenSize, IC
 
     protected final GameScreen gameScreen;
     public final SystemManager systemManager = new SystemManager();
-    protected final MyGameObjects gobs = new MyGameObjects(systemManager);
+    public final MyGameObjects gobs = new MyGameObjects(systemManager);
     protected final List<ICleanup> cleanupables = Arrays.asList(systemManager, gobs);
 
     public final SpriteBatch spriteBatch = new SpriteBatch();

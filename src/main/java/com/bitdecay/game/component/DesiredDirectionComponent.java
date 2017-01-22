@@ -42,6 +42,6 @@ public class DesiredDirectionComponent extends AbstractComponent {
     }
 
     public Vector2 toVector2(){
-        return VectorMath.rotatePointByDegreesAroundZero(1, 0, degrees);
+        return VectorMath.degreesToVector2(degrees);
     }
 }
