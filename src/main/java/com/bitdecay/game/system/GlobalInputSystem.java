@@ -1,9 +1,7 @@
 package com.bitdecay.game.system;
 
 import com.badlogic.gdx.Input;
-import com.bitdecay.game.component.DesiredRotationComponent;
 import com.bitdecay.game.component.GlobalInputComponent;
-import com.bitdecay.game.component.PlayerInputComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.gameobject.MyGameObjectFactory;
 import com.bitdecay.game.room.AbstractRoom;
