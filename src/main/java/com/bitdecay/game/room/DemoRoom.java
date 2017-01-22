@@ -55,7 +55,7 @@ public class DemoRoom extends AbstractRoom {
         new KrakenSystem(this);
         new ParticleSystem(this);
         new SoundEffectSystem(this);
-        new DebugOutputSystem(this);
+//        new DebugOutputSystem(this);
 
         // ////////////////////////////////////////////////
         // put game objects here

@@ -79,14 +79,12 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
     }
 
     public void addJellyToRoom(Vector2 coordinatesToAddEnemy) {
-        System.out.println("Adding a jelly at " + coordinatesToAddEnemy.x + ", " + coordinatesToAddEnemy.y);
         MyGameObject jelly = MyGameObjectFactory.jelly((int)coordinatesToAddEnemy.x, (int)coordinatesToAddEnemy.y);
         jelly.cleanup();
         room.gobs.add(jelly);
     }
 
     public void addMineToRoom(Vector2 coordinatesToAddEnemy) {
-        System.out.println("Adding a mine at " + coordinatesToAddEnemy.x + ", " + coordinatesToAddEnemy.y);
         MyGameObject mine = MyGameObjectFactory.mine((int)coordinatesToAddEnemy.x, (int)coordinatesToAddEnemy.y);
         mine.cleanup();
         room.gobs.add(mine);
@@ -110,10 +108,7 @@ public class EnemyPopulationSystem extends AbstractUpdatableSystem {
                 gob.forEachComponentDo(PositionComponent.class, pos -> {
                     if(obName.objectName.equals(GameObjectNames.JELLY) || obName.objectName.equals(GameObjectNames.MINE)){
                         if (pos.x <= xCutoff) {
-                            System.out.println("REMOVING " + obName.objectName.name());
                             gob.addComponent(new RemoveNowComponent(gob));
-                        } else {
-                            System.out.println("Object position: " + pos.x + ". Cutoff: " + xCutoff);
                         }
                     }
                 });
