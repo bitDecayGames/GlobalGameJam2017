@@ -1,5 +1,7 @@
 package com.bitdecay.game.component;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.bitdecay.game.MyGame;
 import com.bitdecay.game.gameobject.MyGameObject;
@@ -10,6 +12,7 @@ import com.bitdecay.game.gameobject.MyGameObject;
 public class StaticImageComponent extends DrawableComponent {
 
     private TextureRegion image;
+    public Pixmap pixmap;
 
     public StaticImageComponent(MyGameObject obj, String name) {
         super(obj);
@@ -19,5 +22,12 @@ public class StaticImageComponent extends DrawableComponent {
     @Override
     public TextureRegion image() {
         return image;
+    }
+
+    // USE WITH CAUTION YA SCALLYWAGS
+    public void prepareData() {
+        TextureData textureData = image.getTexture().getTextureData();
+        textureData.prepare();
+        pixmap = textureData.consumePixmap();
     }
 }

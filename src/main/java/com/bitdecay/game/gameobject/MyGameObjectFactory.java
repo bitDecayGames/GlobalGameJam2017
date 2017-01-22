@@ -51,7 +51,7 @@ public final class MyGameObjectFactory {
     public static MyGameObject mine(){
         MyGameObject t = new MyGameObject();
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, 100, 20));
+        t.addComponent(new PositionComponent(t, -200, 20));
         t.addComponent(new SizeComponent(t, 12, 14 ));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(0, 0, 7));
@@ -60,7 +60,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/mine/mine").setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
-        t.addComponent(new RandomOrbitComponent(t, 100, 20 , 2.5f ));
+        t.addComponent(new RandomOrbitComponent(t, -200, 20 , 2.5f ));
         t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
@@ -87,13 +87,17 @@ public final class MyGameObjectFactory {
         return pingObj;
     }
 
-    public static List<MyGameObject> demoBackgrounds(){
+    public static List<MyGameObject> demoBackgrounds() {
         List<MyGameObject> gobs = new ArrayList<>();
         for (int i = 0; i < 11; i ++){
             MyGameObject o = new MyGameObject();
             o.addComponent(new PositionComponent(o, 600 * i, 0));
             o.addComponent(new SizeComponent(o, 600, 600));
-            o.addComponent(new StaticImageComponent(o, "levelSegments/A/" + i).setReactsToSonar(true));
+            StaticImageComponent backgroundImage = new StaticImageComponent(o, "levelSegments/A/" + i);
+            backgroundImage.setReactsToSonar(true);
+            backgroundImage.prepareData();
+            o.addComponent(backgroundImage);
+            o.addComponent(new ImageCollisionComponent(o));
             gobs.add(o);
         }
         return gobs;

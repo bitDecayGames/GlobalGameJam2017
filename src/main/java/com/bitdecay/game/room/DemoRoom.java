@@ -33,6 +33,7 @@ public class DemoRoom extends AbstractRoom {
         new RotationFromVelocitySystem(this);
         new ShapeDrawSystem(this);
         new CollisionCircleSystem(this);
+        new CircleLevelCollisionSystem(this);
         new RandomOrbitSystem(this);
         new TextDrawSystem(this);
         new GlobalInputSystem(this);
