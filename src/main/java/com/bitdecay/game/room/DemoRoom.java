@@ -2,6 +2,7 @@ package com.bitdecay.game.room;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.Launcher;
 import com.bitdecay.game.camera.FollowOrthoSnapHeightCamera;
 import com.bitdecay.game.gameobject.MyGameObject;
@@ -20,21 +21,21 @@ public class DemoRoom extends AbstractRoom {
         // ////////////////////////////////////////////////
         // systems must be added before game objects
         // ////////////////////////////////////////////////
+        new RemovalSystem(this);
+
         new InitializationSystem(this);
         new TimerSystem(this);
         new CameraUpdateSystem(this);
         new CameraPredictiveSystem(this, 400);
-        new RespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
+        new RespawnSystem(this);
         new DespawnSystem(this, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, Integer.MAX_VALUE);
         new DrawSystem(this);
-        new RemovalSystem(this);
         new PlayerInputSystem(this);
         new DesiredDirectionSystem(this);
         new VelocitySystem(this);
         new SonarPingSystem(this);
         new ProximityIlluminationSystem(this);
         new AccelerationSystem(this);
-        new RemovalSystem(this);
         new RotationFromVelocitySystem(this);
         new ShapeDrawSystem(this);
         new CollisionCircleSystem(this);
@@ -56,7 +57,7 @@ public class DemoRoom extends AbstractRoom {
         // put game objects here
         // ////////////////////////////////////////////////
         gobs.addAll(MyGameObjectFactory.demoBackgrounds(Launcher.conf.getInt("levelSegments.totalNumberOfBackgrounds")));
-        MyGameObject player = MyGameObjectFactory.ship(this);
+        MyGameObject player = MyGameObjectFactory.ship(this, new Vector2(Launcher.conf.getInt("player.startingPosition.x"), Launcher.conf.getInt("player.startingPosition.y")));
         gobs.add(player);
 //        gobs.addAll(MyGameObjectFactory._____RELEASE___THE___KRAKEN_____(player));
         gobs.add(MyGameObjectFactory.splashText("GO", 10, 1500, 10, 10));

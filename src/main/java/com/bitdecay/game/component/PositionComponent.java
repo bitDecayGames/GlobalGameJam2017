@@ -11,6 +11,7 @@ public class PositionComponent extends AbstractComponent {
     public float y = 0;
 
     public PositionComponent(MyGameObject obj){super(obj);}
+    public PositionComponent(MyGameObject obj, Vector2 pos){this(obj, pos.x, pos.y);}
     public PositionComponent(MyGameObject obj, float x, float y){
         super(obj);
         this.x = x;

@@ -1,12 +1,13 @@
 package com.bitdecay.game.system;
 
 import com.bitdecay.game.component.KrakenComponent;
+import com.bitdecay.game.component.PlayerInputComponent;
 import com.bitdecay.game.component.RelativePositionComponent;
 import com.bitdecay.game.gameobject.MyGameObject;
 import com.bitdecay.game.room.AbstractRoom;
-import com.bitdecay.game.system.abstracted.AbstractForEachUpdatableSystem;
+import com.bitdecay.game.system.abstracted.AbstractUpdatableSystem;
 
-public class KrakenSystem extends AbstractForEachUpdatableSystem{
+public class KrakenSystem extends AbstractUpdatableSystem {
 
     public KrakenSystem(AbstractRoom room){
         super(room);
@@ -14,16 +15,20 @@ public class KrakenSystem extends AbstractForEachUpdatableSystem{
 
     @Override
     protected boolean validateGob(MyGameObject gob) {
-        return gob.hasComponents(KrakenComponent.class);
+        return gob.hasComponents(KrakenComponent.class) || gob.hasComponent(PlayerInputComponent.class);
     }
 
+
     @Override
-    protected void forEach(float delta, MyGameObject gob) {
-        gob.forEachComponentDo(KrakenComponent.class, kraken ->
+    public void update(float delta) {
+        gobs.stream().filter(gob -> gob.hasComponent(PlayerInputComponent.class)).findFirst().ifPresent(playerObj -> gobs.forEach(gob -> gob.forEachComponentDo(KrakenComponent.class, kraken -> gob.forEachComponentDo(RelativePositionComponent.class, rel ->{
+            rel.other = playerObj;
+            kraken.player = playerObj;
+        }))));
+        gobs.forEach(gob -> gob.forEachComponentDo(KrakenComponent.class, kraken ->
                 gob.forEachComponentDo(RelativePositionComponent.class, relPos -> {
                     kraken.speed += kraken.acceleration;
                     relPos.y += kraken.speed;
-//                    System.out.println("" + relPos.y + " " + kraken.direction + " " + kraken.speed);
                     if (kraken.direction > 0 && kraken.speed > kraken.maxSpeed) kraken.speed = kraken.maxSpeed;
                     else if(kraken.direction < 0 && kraken.speed < -kraken.maxSpeed) kraken.speed = -kraken.maxSpeed;
 
@@ -34,6 +39,6 @@ public class KrakenSystem extends AbstractForEachUpdatableSystem{
                         kraken.direction = 1;
                         kraken.acceleration *= -1;
                     }
-                }));
+                })));
     }
 }
