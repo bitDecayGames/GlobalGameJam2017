@@ -1,5 +1,6 @@
 package com.bitdecay.game.gameobject;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.Launcher;
@@ -64,7 +65,7 @@ public final class MyGameObjectFactory {
         MyGameObject t = new MyGameObject();
         t.addComponent(new ObjectNameComponent(t,"mine"));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, -200, 20));
+        t.addComponent(new PositionComponent(t, 350,300 ));
         t.addComponent(new SizeComponent(t, 12, 14 ));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(0, 0, 7));
@@ -73,7 +74,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/mine/mine").setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
-        t.addComponent(new RandomOrbitComponent(t, -200, 20 , 2.5f ));
+        t.addComponent(new RandomOrbitComponent(t, 350, 300 , 2.5f ));
         t.addComponent(new VelocityComponent(t));
         t.addComponent(new AccelerationComponent(t));
         return t;
@@ -91,7 +92,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new OriginComponent(t));
         t.addComponent(new StaticImageComponent(t, "enemies/jelly/0").setReactsToSonar(true));
-        t.addComponent(new AnimationComponent(t, "enemies/jelly", 0.2f));
+        t.addComponent(new AnimationComponent(t, "enemies/jelly", 0.2f, Animation.PlayMode.LOOP));
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new AccelerationComponent(t));
 
@@ -183,7 +184,7 @@ public final class MyGameObjectFactory {
         StaticImageComponent imageComponent = new StaticImageComponent(t, "player/torpedo/0");
         imageComponent.reactsToSonar = true;
         t.addComponent(imageComponent);
-        t.addComponent(new AnimationComponent(t, "player/torpedo", .1f));
+        t.addComponent(new AnimationComponent(t, "player/torpedo", .1f, Animation.PlayMode.LOOP));
         RotationComponent rotationComponent = new RotationComponent(t, rot);
         rotationComponent.rotationFromVelocity = false;
         t.addComponent(rotationComponent);
@@ -192,6 +193,10 @@ public final class MyGameObjectFactory {
             myGameObject.forEachComponentDo(RotationComponent.class, rotat -> {
                 myGameObject.addComponent(new AccelerationComponent(myGameObject, rotat.toVector2().scl(0.45f), 5f));
                 myGameObject.addComponent(new ImpulseComponent(myGameObject, perp.cpy().scl(-2.5f)));
+                ParticleEffectComponent particle = new ParticleEffectComponent(myGameObject, "particle/bubbleJet2.p", "particle");
+                particle.fx.scaleEffect(.1f);
+                particle.offset = new Vector2(-20, 0);
+                myGameObject.addComponent(particle);
             }
         )));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
@@ -200,6 +205,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new DragComponent(t, 0.09f, 0.4f));
         t.addComponent(new ImpulseComponent(t, perp.cpy().scl(4)));
+
 
         return t;
     }
