@@ -2,11 +2,14 @@ package com.bitdecay.game.gameobject;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.bitdecay.game.Launcher;
 import com.bitdecay.game.component.*;
 import com.bitdecay.game.room.AbstractRoom;
 import com.bitdecay.game.util.VectorMath;
+import com.typesafe.config.Config;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,13 +26,14 @@ public final class MyGameObjectFactory {
     }
 
     public static MyGameObject ship(){
+        Config conf = Launcher.conf.getConfig("player");
         MyGameObject t = new MyGameObject();
-        t.addComponent(new PlayerInputComponent(t, 0.75f));
-//        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
-        t.addComponent(new PositionComponent(t, 10, 100));
-        t.addComponent(new RotationComponent(t, 0));
-        t.addComponent(new DesiredDirectionComponent(t, 0, 0.01f));
-        t.addComponent(new SizeComponent(t, 49, 26));
+        t.addComponent(new PlayerInputComponent(t, (float) conf.getDouble("desiredDegreeRotationAmountPerStep")));
+        t.addComponent(new PositionComponent(t, conf.getInt("startingPosition.x"), conf.getInt("startingPosition.y")));
+        t.addComponent(new RotationComponent(t));
+        t.addComponent(new DesiredDirectionComponent(t, 0, (float) conf.getDouble("actualRotationSpeedScalar")));
+        t.addComponent(new SizeComponent(t, conf.getInt("size.w"), conf.getInt("size.h")));
+        t.addComponent(new ObjectNameComponent(t,"ship"));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(16, 1.5f, 8));
         collision.collisionCircles.add(new Circle(4, 0, 11));
@@ -40,16 +44,18 @@ public final class MyGameObjectFactory {
         t.addComponent(new CameraFollowComponent(t));
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
         t.addComponent(new PredictiveCameraFollowComponent(t)); // need two of these
-        t.addComponent(new VelocityComponent(t,0.3f,0));
-        t.addComponent(new StaticImageComponent(t, "player/sub").setReactsToSonar(true));
+        t.addComponent(new VelocityComponent(t, (float) conf.getDouble("moveSpeed"), 0));
+        t.addComponent(new StaticImageComponent(t, conf.getString("imagePath")).setReactsToSonar(true));
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new ProximityIlluminationComponent(t));
         t.addComponent(new AccelerationComponent(t));
+        t.addComponent(new CanShootComponent(t));
         return t;
     }
 
     public static MyGameObject mine(){
         MyGameObject t = new MyGameObject();
+        t.addComponent(new ObjectNameComponent(t,"mine"));
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
         t.addComponent(new PositionComponent(t, -200, 20));
         t.addComponent(new SizeComponent(t, 12, 14 ));
@@ -87,27 +93,60 @@ public final class MyGameObjectFactory {
         return pingObj;
     }
 
-    public static List<MyGameObject> demoBackgrounds() {
+    public static List<MyGameObject> demoBackgrounds(int numberOfBackgrounds){
         List<MyGameObject> gobs = new ArrayList<>();
-        for (int i = 0; i < 11; i ++){
+        List<String> newbNames = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        Config conf = Launcher.conf.getConfig("levelSegments");
+        int maxA = conf.getInt("maxA");
+        int maxAB = conf.getInt("maxAB");
+        int maxB = conf.getInt("maxB");
+        int maxBA = conf.getInt("maxBA");
+        int maxBC = conf.getInt("maxBC");
+        int maxC = conf.getInt("maxC");
+        int maxCB = conf.getInt("maxCB");
+        int maxNewb = conf.getInt("maxNewb");
+        int actualNumberOfBackgrounds = Math.max(maxNewb, numberOfBackgrounds);
+        for (int i = 0; i < maxA; i++) names.add("A/" + i);
+        for (int i = 0; i < maxAB; i++) names.add("AB/" + i);
+        for (int i = 0; i < maxB; i++) names.add("B/" + i);
+        for (int i = 0; i < maxBA; i++) names.add("BA/" + i);
+        for (int i = 0; i < maxBC; i++) names.add("BC/" + i);
+        for (int i = 0; i < maxC; i++) names.add("C/" + i);
+        for (int i = 0; i < maxCB; i++) names.add("CB/" + i);
+        Collections.shuffle(names);
+        for (int i = 0; i < maxNewb; i++) newbNames.add("Newb/" + i);
+
+        String name = "";
+        for (int i = 0; i < actualNumberOfBackgrounds; i ++){
             MyGameObject o = new MyGameObject();
             o.addComponent(new PositionComponent(o, 600 * i, 0));
             o.addComponent(new SizeComponent(o, 600, 600));
-            StaticImageComponent backgroundImage = new StaticImageComponent(o, "levelSegments/A/" + i);
-            backgroundImage.setReactsToSonar(true);
-            backgroundImage.prepareData();
-            o.addComponent(backgroundImage);
-            o.addComponent(new ImageCollisionComponent(o));
+
+            if (maxNewb > 0) {
+                maxNewb--;
+                name = newbNames.get(i);
+            } else if (name.startsWith("Newb/")) name = names.stream().filter(s -> s.startsWith("A/")).findFirst().get();
+            else if (name.startsWith("A/")) name = names.stream().filter(s -> s.startsWith("A/") || s.startsWith("AB/")).findFirst().get();
+            else if (name.startsWith("AB/")) name = names.stream().filter(s -> s.startsWith("B/")).findFirst().get();
+            else if (name.startsWith("B/")) name = names.stream().filter(s -> s.startsWith("B/") || s.startsWith("BA/") || s.startsWith("BC/")).findFirst().get();
+            else if (name.startsWith("BA/")) name = names.stream().filter(s -> s.startsWith("A/")).findFirst().get();
+            else if (name.startsWith("BC/")) name = names.stream().filter(s -> s.startsWith("C/")).findFirst().get();
+            else if (name.startsWith("C/")) name = names.stream().filter(s -> s.startsWith("C/") || s.startsWith("CB/")).findFirst().get();
+            else if (name.startsWith("CB/")) name = names.stream().filter(s -> s.startsWith("B/")).findFirst().get();
+            o.addComponent(new StaticImageComponent(o, "levelSegments/" + name).setReactsToSonar(true));
             gobs.add(o);
+            Collections.shuffle(names);
         }
         return gobs;
     }
+
     public static MyGameObject torpedo(float x, float y, float rot){
         MyGameObject t = new MyGameObject();
+        t.addComponent(new ObjectNameComponent(t,"torpedo"));
         Vector2 direction = VectorMath.degreesToVector2(rot).nor();
         Vector2 perp = new Vector2(direction.y, -direction.x);
-        System.out.println("Perper: " + perp + "  direciton: " + direction);
-        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.RED, 25));
+//        t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.RED, 25));
         t.addComponent(new DespawnableComponent(t));
         t.addComponent(new PositionComponent(t, x, y));
         t.addComponent(new SizeComponent(t, 21, 4));
@@ -122,8 +161,12 @@ public final class MyGameObjectFactory {
             myGameObject.forEachComponentDo(RotationComponent.class, rotat -> {
                 myGameObject.addComponent(new AccelerationComponent(myGameObject, rotat.toVector2().scl(0.45f)));
                 myGameObject.addComponent(new ImpulseComponent(myGameObject, perp.cpy().scl(-2.5f)));
-                    }
+            }
         )));
+        CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
+        collision.collisionCircles.add(new Circle(17, 2, 4));
+        t.addComponent(collision);
+        t.addComponent(new CollisionResponseComponent(t));
         t.addComponent(new DragComponent(t, 0.09f, 0.4f));
         t.addComponent(new ImpulseComponent(t, perp.cpy().scl(4)));
 

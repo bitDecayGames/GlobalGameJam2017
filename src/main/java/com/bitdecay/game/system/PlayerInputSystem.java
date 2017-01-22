@@ -44,7 +44,6 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
             // gobs.forEach(gob -> gob.addComponent(SonarPingComponent))
             // which then gets removed when the SonarPingSystem finds it and triggers the ping?
             if (canPing(gobs)) {
-                log.debug("ADDING PING");
                 gobs.forEach(gob -> gob.forEachComponentDo(PositionComponent.class, pos -> {
                     room.getGameObjects().add(MyGameObjectFactory.ping(pos.toVector2()));
                 }));
@@ -52,18 +51,23 @@ public class PlayerInputSystem extends AbstractUpdatableSystem {
         }
 
         if (InputHelper.isKeyJustPressed(Input.Keys.CONTROL_RIGHT)){
-            float[] coords = new float[5];
+            float[] coords = new float[3];
             gobs.forEach(gob -> gob.forEachComponentDo(PlayerInputComponent.class, pi -> {
-                gob.forEachComponentDo(PositionComponent.class, pos -> {
-                    coords[0] = pos.x - 2;
-                    coords[1] = pos.y - 5;
+                gob.forEachComponentDo(CanShootComponent.class, shooter -> {
+                    gob.forEachComponentDo(PositionComponent.class, pos -> {
+                        coords[0] = pos.x - 2;
+                        coords[1] = pos.y - 5;
+                    });
+                    gob.forEachComponentDo(RotationComponent.class, rota ->
+                            coords[2] = rota.degrees);
+                    this.room.getGameObjects().add(MyGameObjectFactory.torpedo(coords[0], coords[1], coords[2]));
+                    gob.removeComponent(CanShootComponent.class);
+                    gob.addComponent(new TimerComponent (gob, 2f, myGameObject -> {
+                        myGameObject.addComponent(new CanShootComponent(myGameObject));
+                        myGameObject.removeComponent(TimerComponent.class);
+                    }));
                 });
-                gob.forEachComponentDo(RotationComponent.class, rota ->
-                    coords[2] = rota.degrees);
-
-                }));
-
-            room.getGameObjects().add(MyGameObjectFactory.torpedo(coords[0], coords[1], coords[2]));
+            }));
         }
     }
 }

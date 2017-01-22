@@ -48,7 +48,7 @@ public class CircleLevelCollisionSystem extends AbstractForEachUpdatableSystem {
     public void after() {
         for (MyGameObject imageGob : imageColliders) {
             PositionComponent imagePosition = imageGob.getComponent(PositionComponent.class).get();
-            SizeComponent imageSiz = imageGob.getComponent(SizeComponent.class).get();
+            SizeComponent imageSize = imageGob.getComponent(SizeComponent.class).get();
             StaticImageComponent imageComp = imageGob.getComponent(StaticImageComponent.class).get();
 
             for (MyGameObject circleGob : circleColliders) {

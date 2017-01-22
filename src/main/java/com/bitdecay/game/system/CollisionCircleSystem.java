@@ -27,14 +27,14 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
     @Override
     public void before() {
         collisionObjects.clear();
-        room.shapeRenderer.setProjectionMatrix(room.camera.combined);
-        room.shapeRenderer.begin();
+//        room.shapeRenderer.setProjectionMatrix(room.camera.combined);
+//        room.shapeRenderer.begin();
     }
 
     @Override
     protected void forEach(float delta, MyGameObject gob) {
         collisionObjects.add(gob);
-        gob.forEachComponentDo(CollisionResponseComponent.class, colRep -> colRep.collidedWith.clear());
+        gob.forEachComponentDo(CollisionResponseComponent.class, colRep ->colRep.collidedWith.clear());
     }
 
     @Override
@@ -49,7 +49,7 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
                 }
             }
         }
-        room.shapeRenderer.end();
+//        room.shapeRenderer.end();
     }
 
     private boolean checkCollision(MyGameObject object1, MyGameObject object2) {
@@ -89,7 +89,7 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
             circle1.x += pos1.x;
             circle1.y += pos1.y;
 
-            room.shapeRenderer.circle(circle1.x, circle1.y, circle1.radius);
+//            room.shapeRenderer.circle(circle1.x, circle1.y, circle1.radius);
 
             for (Circle circle2 : geom2.collisionCircles) {
                 circle2 = new Circle(circle2);
@@ -101,7 +101,7 @@ public class CollisionCircleSystem extends AbstractForEachUpdatableSystem {
                 circle2.x += pos2.x;
                 circle2.y += pos2.y;
 
-                room.shapeRenderer.circle(circle2.x, circle2.y, circle2.radius);
+//                room.shapeRenderer.circle(circle2.x, circle2.y, circle2.radius);
 
                 if (new Vector2(circle1.x, circle1.y).sub(circle2.x, circle2.y).len() < circle1.radius + circle2.radius) {
                     collisionFound = true;

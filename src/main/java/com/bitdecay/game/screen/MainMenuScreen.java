@@ -60,7 +60,7 @@ public class MainMenuScreen implements Screen {
         menu.add(buildNewMenuOption("Quit", this::exitGame)).height(60).padBottom(20).row();
 
         menu.align(Align.center);
-        menu.padLeft(300);
+        menu.padLeft(200);
         menu.padBottom(200);
 
         stage.addActor(background);
