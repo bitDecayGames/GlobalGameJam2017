@@ -34,6 +34,7 @@ public class GameScreen implements Screen, IHasScreenSize, ICanSetScreen, ICanSe
     public void show() {
         SoundLibrary.stopMusic(Launcher.conf.getString("splash.music"));
         SoundLibrary.loopMusic(Launcher.conf.getString("game.music"));
+        SoundLibrary.loopMusic(Launcher.conf.getString("game.bubbling"));
     }
 
     @Override
