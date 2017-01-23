@@ -33,6 +33,8 @@ public class ProximityIlluminationSystem extends AbstractDrawableSystem {
         List<Float> fadeRadii = new ArrayList<>();
         gobs.forEach(gob -> {
             gob.forEachComponentDo(PositionComponent.class, pos -> {
+//                Vector2 workingPos = pos.toVector2();
+//                gob.forEachComponentDo(OriginComponent.class);
                 gob.forEachComponentDo(ProximityIlluminationComponent.class, prox -> {
                     Vector3 projected = camera.project(new Vector3(pos.x + 20, pos.y, 0));
 //                    DrawSystem.proximityShader.setUniformf("v_center", projected.x, projected.y);
