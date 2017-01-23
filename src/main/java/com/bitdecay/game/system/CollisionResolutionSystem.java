@@ -100,7 +100,7 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
 
     private void explodePlayer(MyGameObject gob) {
         gob.forEachComponentDo(PositionComponent.class, pos -> {
-            room.getGameObjects().add(MyGameObjectFactory.shipExplode(pos.toVector2()));
+            room.getGameObjects().add(MyGameObjectFactory.explosion(pos.toVector2()));
         });
         gob.removeComponent(AnimationComponent.class);
         gob.removeComponent(StaticImageComponent.class);
@@ -113,11 +113,7 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
     }
 
     private void exploderTorpedo(MyGameObject gob) {
-        gob.removeComponent(AnimationComponent.class);
-        gob.removeComponent(VelocityComponent.class);
-        gob.removeComponent(CollidedWithLevelComponent.class);
-        gob.addComponent(new SoundEffectComponent(gob, "asplosion", (long)1.5));
-        gob.addComponent(new TimerComponent(gob, 2, myGameObject -> myGameObject.addComponent(new RemoveNowComponent(myGameObject))));
+        room.getGameObjects().add(MyGameObjectFactory.explosion(gob.getComponent(PositionComponent.class).get().toVector2()));
     }
 
     @Override
