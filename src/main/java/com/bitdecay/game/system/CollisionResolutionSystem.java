@@ -29,11 +29,9 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                         // Need to return to prevent adding removal component.
                         return;
                     case SHIP:
-                        if (!playerExploded) {
-                            playerExploded = true;
-                            explodePlayer(gob);
-                        }
-                       break;
+                        gob.removeComponent(CollidedWithLevelComponent.class);
+                        explodePlayer(gob);
+                        break;
                     case TORPEDO:
                         gob.addComponent(new RemoveNowComponent(gob));
                         exploderTorpedo(gob);
