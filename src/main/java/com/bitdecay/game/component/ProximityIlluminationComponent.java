@@ -9,10 +9,4 @@ public class ProximityIlluminationComponent extends AbstractComponent {
     public ProximityIlluminationComponent(MyGameObject obj) {
         super(obj);
     }
-
-    public ProximityIlluminationComponent(MyGameObject obj, float clear, float fade) {
-        super(obj);
-        fullBrightnessRadius = clear;
-        fadeRange = fade;
-    }
 }
