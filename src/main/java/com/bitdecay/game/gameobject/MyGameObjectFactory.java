@@ -81,6 +81,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new DebugCircleComponent(t, com.badlogic.gdx.graphics.Color.GREEN, 25));
         t.addComponent(new PositionComponent(t, x, y));
         t.addComponent(new SizeComponent(t, 27, 20));
+//        t.addComponent(new ProximityIlluminationComponent(t));
         CollisionCirclesComponent collision = new CollisionCirclesComponent(t);
         collision.collisionCircles.add(new Circle(0, 4, 5));
         t.addComponent(collision);
@@ -209,16 +210,18 @@ public final class MyGameObjectFactory {
         return t;
     }
 
-    public static MyGameObject shipExplode (Vector2 position) {
+    public static MyGameObject explosion(Vector2 position) {
         MyGameObject t = new MyGameObject();
         t.addComponent(new ObjectNameComponent(t,GameObjectNames.SHIP_EXPLOSION));
         t.addComponent(new DespawnableComponent(t));
         t.addComponent(new PositionComponent(t, position));
+        t.addComponent(new ProximityIlluminationComponent(t));
         SizeComponent size = new SizeComponent(t, 57 * 2, 103 * 2);
         size.addSelfToGameObject();
         t.addComponent(new OriginComponent(t, 0.5f, 0.3f));
         t.addComponent(new AnimationComponent(t, "player/playerExplode", .07f, Animation.PlayMode.NORMAL));
         t.addComponent(new StaticImageComponent(t, "player/playerExplode/0"));
+        t.addComponent(new SoundEffectComponent(t, "asplosion", (long)1.5));
         t.addComponent(new TimerComponent(t, 1, obj -> obj.addComponent(new RemoveNowComponent(obj))));
 
         return t;
