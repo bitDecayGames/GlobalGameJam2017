@@ -83,7 +83,7 @@ public class CollisionResolutionSystem extends AbstractForEachUpdatableSystem{
                                            }
                                        });
                                        if(!hasJellySonarSound.get()) {
-                                           gob.addComponent(new SoundEffectComponent(gob, "FishesTakeMaSonar", 1));
+                                           gob.addComponent(new SoundEffectComponent(gob, "FishesTakeMaSonar", 1, 1));
                                        }
 
                                        break;

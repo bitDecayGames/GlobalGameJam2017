@@ -3,6 +3,7 @@ package com.bitdecay.game.gameobject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.bitdecay.game.Launcher;
 import com.bitdecay.game.component.*;
@@ -22,14 +23,18 @@ import java.util.List;
  * The idea here is to provide a single place for you to add your game objects.  You know that the "Player" game object will have a PositionComponent, a SizeComponent, and a CameraFollowComponent.  So in a static method (maybe called buildPlayer) you want to create a generic MyGameObject and populate it with the correct components.
  */
 public final class MyGameObjectFactory {
+    // this is here so we can scale audio based on distance from the ship
+    private static PositionComponent lastShipPosition;
+
     private MyGameObjectFactory(){}
 
     public static MyGameObject ship(AbstractRoom room, Vector2 position, Vector2 velocity, float rotation){
         Config conf = Launcher.conf.getConfig("player");
         MyGameObject t = new MyGameObject();
         PositionComponent positionComp = new PositionComponent(t, position);
-        t.addComponent(new PlayerInputComponent(t, (float) conf.getDouble("desiredDegreeRotationAmountPerStep"), (float) conf.getDouble("maxDegrees"), (float) conf.getDouble("minDegrees")));
         t.addComponent(positionComp);
+        lastShipPosition = positionComp;
+        t.addComponent(new PlayerInputComponent(t, (float) conf.getDouble("desiredDegreeRotationAmountPerStep"), (float) conf.getDouble("maxDegrees"), (float) conf.getDouble("minDegrees")));
         t.addComponent(new RotationComponent(t, rotation));
         t.addComponent(new DesiredDirectionComponent(t, rotation, (float) conf.getDouble("actualRotationSpeedScalar")));
         t.addComponent(new SizeComponent(t, conf.getInt("size.w"), conf.getInt("size.h")));
@@ -221,7 +226,8 @@ public final class MyGameObjectFactory {
         t.addComponent(new OriginComponent(t, 0.5f, 0.3f));
         t.addComponent(new AnimationComponent(t, "player/playerExplode", .07f, Animation.PlayMode.NORMAL));
         t.addComponent(new StaticImageComponent(t, "player/playerExplode/0"));
-        t.addComponent(new SoundEffectComponent(t, "asplosion", (long)1.5));
+        float volScalar = MathUtils.clamp(1 - (lastShipPosition.toVector2().sub(position).len() / 600), 0, 1);
+        t.addComponent(new SoundEffectComponent(t, "asplosion", volScalar, 1));
         t.addComponent(new TimerComponent(t, 1, obj -> obj.addComponent(new RemoveNowComponent(obj))));
 
         return t;

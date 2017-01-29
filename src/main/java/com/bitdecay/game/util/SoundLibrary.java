@@ -63,8 +63,12 @@ public class SoundLibrary {
         return listSoundNames;
     }
 
-    public static synchronized Sound playSound(String name) {
-        return getSound(name).play();
+    public static Sound playSound(String name) {
+        return playSound(name, 1);
+    }
+
+    public static synchronized Sound playSound(String name, float volumeScale) {
+        return getSound(name).play(volumeScale);
     }
 
     public static synchronized Sound stopSound(String name) {
@@ -133,7 +137,11 @@ public class SoundLibrary {
         }
 
         public Sound play() {
-            this.sound.play(this.volume);
+            return play(1);
+        }
+
+        public Sound play(float volumeScale) {
+            this.sound.play(this.volume * volumeScale);
             return this.sound;
         }
 

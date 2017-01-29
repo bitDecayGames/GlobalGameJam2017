@@ -20,7 +20,7 @@ public class SoundEffectSystem extends AbstractForEachUpdatableSystem{
     protected void forEach(float delta, MyGameObject gob) {
         gob.forEachComponentDo(SoundEffectComponent.class, sound -> {
             if(gob.hasComponent(SoundEffectComponent.class) && !sound.played) {
-                SoundLibrary.playSound(sound.name);
+                SoundLibrary.playSound(sound.name, sound.volumeScale);
                 sound.played = true;
                 gob.addComponent(new RemovableTimerComponent(gob, sound.duration, myGameObject ->
                 myGameObject.removeComponent(sound)));
