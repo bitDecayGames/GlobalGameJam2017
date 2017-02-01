@@ -53,7 +53,7 @@ public final class MyGameObjectFactory {
         t.addComponent(new VelocityComponent(t, velocity));
         t.addComponent(new CollisionComponent(t));
         t.addComponent(new CanPingComponent(t));
-        t.addComponent(new ProximityIlluminationComponent(t));
+        t.addComponent(new ProximityIlluminationComponent(t, 0));
         t.addComponent(new AccelerationComponent(t));
         t.addComponent(new CanShootComponent(t));
         t.addComponent(new RespawnRecorderComponent(t, conf.getInt("respawnSecondsBack")));
@@ -220,13 +220,17 @@ public final class MyGameObjectFactory {
         t.addComponent(new ObjectNameComponent(t,GameObjectNames.SHIP_EXPLOSION));
         t.addComponent(new DespawnableComponent(t));
         t.addComponent(new PositionComponent(t, position));
-        t.addComponent(new ProximityIlluminationComponent(t));
+        t.addComponent(new ProximityIlluminationComponent(t, 2f));
         SizeComponent size = new SizeComponent(t, 57 * 2, 103 * 2);
         size.addSelfToGameObject();
         t.addComponent(new OriginComponent(t, 0.5f, 0.3f));
         t.addComponent(new AnimationComponent(t, "player/playerExplode", .07f, Animation.PlayMode.NORMAL));
         t.addComponent(new StaticImageComponent(t, "player/playerExplode/0"));
-        float volScalar = MathUtils.clamp(1 - (lastShipPosition.toVector2().sub(position).len() / 600), 0, 1);
+        float distanceFromPlayer = lastShipPosition.toVector2().sub(position).len();
+        float buffer = 300;
+        distanceFromPlayer -= buffer;
+        float volScalar = MathUtils.clamp(1 - (distanceFromPlayer / 600), 0, 1);
+        System.out.println("Volume Scalar: " + volScalar);
         t.addComponent(new SoundEffectComponent(t, "asplosion", volScalar, 1));
         t.addComponent(new TimerComponent(t, 1, obj -> obj.addComponent(new RemoveNowComponent(obj))));
 

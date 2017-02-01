@@ -1,5 +1,6 @@
 package com.bitdecay.game.system;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -34,13 +35,20 @@ public class ProximityIlluminationSystem extends AbstractDrawableSystem {
         gobs.forEach(gob -> {
             gob.forEachComponentDo(PositionComponent.class, pos -> {
                 gob.forEachComponentDo(ProximityIlluminationComponent.class, prox -> {
+                    if (prox.fadeOutTime > 0) {
+                        prox.fadeOutElapsed += Gdx.graphics.getDeltaTime();
+                        if (prox.fadeOutElapsed >= prox.fadeOutTime) {
+                            gob.removeComponent(ProximityIlluminationComponent.class);
+                        }
+                    }
                     Vector3 projected = camera.project(new Vector3(pos.x + 20, pos.y, 0));
 //                    DrawSystem.proximityShader.setUniformf("v_center", projected.x, projected.y);
                     points.add(projected.x);
                     points.add(projected.y);
 
-                    clearRadii.add(prox.fullBrightnessRadius);
-                    fadeRadii.add(prox.fadeRange);
+                    float fullScalar = prox.fadeOutTime > 0 ? 1 - (prox.fadeOutElapsed / prox.fadeOutTime) : 1;
+                    clearRadii.add(prox.fullBrightnessRadius * fullScalar);
+                    fadeRadii.add(prox.fadeRange * fullScalar);
                 });
             });
         });
